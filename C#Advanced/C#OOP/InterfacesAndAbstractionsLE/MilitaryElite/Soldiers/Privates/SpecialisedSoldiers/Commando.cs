@@ -1,0 +1,39 @@
+﻿namespace MilitaryElite.Soldiers.Privates.SpecialisedSoldiers
+{
+    using MilitaryElite.Interfaces;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
+    public class Commando : SpecialisedSoldiers, ICommando
+    {
+        private List<IMission> missions;
+
+        public Commando(string id, string firstName, string lastName, decimal salary, string corps, IEnumerable<IMission> missions) 
+            : base(id, firstName, lastName, salary, corps)
+        {
+            this.missions = new List<IMission>(missions);
+        }
+
+        public IReadOnlyList<IMission> Missions
+        {
+            get
+            {
+                return this.missions as IReadOnlyList<IMission>;
+            }
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine(base.ToString())
+                .AppendLine("Missions:")
+                .Append("  ")
+                .Append(string.Join($"  {Environment.NewLine}", this.missions.Select(m => $"  {m.ToString()}")));
+
+            return sb.ToString().Trim();
+        }
+    }
+}

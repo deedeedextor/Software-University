@@ -1,0 +1,13 @@
+﻿namespace _4.HotelReservationL
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    public enum Discount
+    {
+        None,
+        SecondVisit = 10,
+        VIP = 20
+    }
+}
