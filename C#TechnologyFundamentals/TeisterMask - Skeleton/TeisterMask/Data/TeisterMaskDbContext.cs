@@ -5,7 +5,7 @@ namespace TeisterMask.Data
 {
     public class TeisterMaskDbContext : DbContext
     {
-        private const string ConnectionString = @"Server=.\SQLEXPRESS;Database=TeisterMaskDb;Integrated Security=True";
+        private const string ConnectionString = @"Server=.\SQLEXPRESS;Database=TeisterMaskDb;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
