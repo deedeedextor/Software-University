@@ -5,7 +5,7 @@ namespace ToDoList.Data
 {
     public class ToDoDbContext : DbContext
     {
-        private const string ConnectionString = @"Server=.\SQLEXPRESS;Database=ToDoListDb;Integrated Security=True";
+        private const string ConnectionString = @"Server=.\SQLEXPRESS;Database=ToDoListDb;IS";
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
