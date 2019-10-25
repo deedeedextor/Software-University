@@ -116,7 +116,7 @@ GROUP BY e.FirstName, e.LastName
 ORDER BY COUNT(u.Id) DESC, [FullName] 
 
 ---Problem 10
-SELECT ISNULL(CONCAT(e.FirstName, ' ', e.LastName), 'None') AS [Employee],
+SELECT ISNULL(e.FirstName + ' ' + e.LastName, 'None') AS [Employee],
        ISNULL(d.Name, 'None') AS [Department],
 	   ISNULL(c.Name, 'None') AS [Category],
 	   ISNULL(r.[Description], 'None') AS [Description],
@@ -124,11 +124,11 @@ SELECT ISNULL(CONCAT(e.FirstName, ' ', e.LastName), 'None') AS [Employee],
 	   ISNULL(s.Label, 'None') AS [Status],
 	   ISNULL(u.Name, 'None') AS [User]
 FROM Reports AS r
-LEFT JOIN Users AS u ON r.UserId = u.Id
-LEFT JOIN Employees AS e ON r.EmployeeId = e.Id 
+LEFT JOIN Employees AS e ON r.EmployeeId = e.Id
+LEFT JOIN Departments AS d ON e.DepartmentId = d.Id
 LEFT JOIN Categories AS c ON r.CategoryId = c.Id
-LEFT JOIN Departments AS d ON c.DepartmentId = d.Id
 LEFT JOIN Status AS s ON r.StatusId = s.Id
+LEFT JOIN Users AS u ON r.UserId = u.Id
 ORDER BY e.FirstName DESC, e.LastName DESC, [Department], [Category], 
          [Description], CAST(OpenDate AS DATE), [Status], [User]
 GO
