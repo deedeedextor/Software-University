@@ -6,6 +6,6 @@ namespace SoftUni
 {
     public class Configuration
     {
-        public static string connectionString = "Server=;Database=;Integrated Security=;";
+        public static string connectionString = "Server=;Database=;Integrated Security;";
     }
 }
