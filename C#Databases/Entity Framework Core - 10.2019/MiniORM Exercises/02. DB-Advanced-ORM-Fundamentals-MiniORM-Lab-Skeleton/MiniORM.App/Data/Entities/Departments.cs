@@ -5,7 +5,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Text;
 
-    public class Department
+    public class Departments
     {
         [Key]
         public int Id { get; set; }
@@ -13,6 +13,6 @@
         [Required]
         public string Name { get; set; }
 
-        public ICollection<Employee> Employees { get; }
+        public ICollection<Employees> Employees { get; }
     }
 }

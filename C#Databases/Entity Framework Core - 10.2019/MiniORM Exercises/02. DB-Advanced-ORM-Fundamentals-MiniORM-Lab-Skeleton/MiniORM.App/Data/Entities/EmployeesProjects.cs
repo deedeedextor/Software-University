@@ -6,7 +6,7 @@
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Text;
 
-    public class EmployeeProject
+    public class EmployeesProjects
     {
         [Key]
         [ForeignKey(nameof(Project))]
@@ -16,8 +16,8 @@
         [ForeignKey(nameof(Employee))]
         public int EmployeeId { get; set; }
 
-        public Employee Employee { get; set; }
+        public Employees Employee { get; set; }
 
-        public Project Project { get; set; }
+        public Projects Project { get; set; }
     }
 }

@@ -6,7 +6,7 @@
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Text;
 
-    public class Employee
+    public class Employees
     {
         [Key]
         public int Id { get; set; }
@@ -23,8 +23,8 @@
 
         [ForeignKey(nameof(Department))]
         public int DepartmentId { get; set; }
-        public Department Department { get; set; }
+        public Departments Department { get; set; }
 
-        public ICollection<EmployeeProject> EmployeeProjects { get; }
+        public ICollection<EmployeesProjects> EmployeeProjects { get; }
     }
 }

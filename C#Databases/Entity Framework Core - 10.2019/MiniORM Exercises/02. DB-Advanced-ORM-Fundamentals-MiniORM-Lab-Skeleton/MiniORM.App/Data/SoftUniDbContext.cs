@@ -13,9 +13,9 @@
 
         }
 
-        public DbSet<Employee> Employees { get; set; }
-        public DbSet<Department> Departments { get; set; }
-        public DbSet<Project> Projects { get; set; }
-        public DbSet<EmployeeProject> EmployeesProjects { get; set; }
+        public DbSet<Employees> Employees { get; set; }
+        public DbSet<Departments> Departments { get; set; }
+        public DbSet<Projects> Projects { get; set; }
+        public DbSet<EmployeesProjects> EmployeesProjects { get; set; }
     }
 }
