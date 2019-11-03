@@ -47,13 +47,33 @@
                 .Entity<Doctor>()
                 .Property(p => p.Name)
                 .HasMaxLength(100)
+                .IsRequired()
                 .IsUnicode();
+
+            modelBuilder
+                .Entity<Doctor>()
+                .Property(p => p.Email)
+                .HasMaxLength(80)
+                .IsRequired();
+
+            modelBuilder
+                .Entity<Doctor>()
+                .Property(p => p.Password)
+                .HasMaxLength(15)
+                .IsRequired();
 
             modelBuilder
                 .Entity<Doctor>()
                 .Property(p => p.Specialty)
                 .HasMaxLength(100)
+                .IsRequired()
                 .IsUnicode();
+
+            modelBuilder
+                .Entity<Doctor>()
+                .HasMany(v => v.Visitations)
+                .WithOne(d => d.Doctor)
+                .HasForeignKey(k => k.DoctorId);
         }
 
         private static void ConfigurationOnPatientMedicament(ModelBuilder modelBuilder)
