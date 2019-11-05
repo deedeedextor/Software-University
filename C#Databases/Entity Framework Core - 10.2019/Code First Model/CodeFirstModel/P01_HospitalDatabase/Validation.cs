@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class Validation
+    internal class Validation
     {
         public string ValidateAnswer()
         {
@@ -14,14 +14,14 @@
             throw new ArgumentException("Incorrect password!");
         }
 
-        public string ValidateEmail()
-        {
-            throw new ArgumentException("Incorrect email!");
-        }
+        //public string ValidateEmail()
+        //{
+        //    throw new ArgumentException("Incorrect email!");
+        //}
 
-        public string ValidateName()
+        public string ValidatePatient()
         {
-            throw new ArgumentException("Incorrect name!");
+            throw new ArgumentException("There is no such patient in the system!");
         }
     }
 }

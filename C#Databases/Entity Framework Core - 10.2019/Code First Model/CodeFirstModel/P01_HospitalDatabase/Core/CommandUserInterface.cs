@@ -8,11 +8,11 @@
 
     internal class CommandUserInterface
     {
-        Validation validator = new Validation();
+        private readonly Validation validator = new Validation();
 
         public void Register(HospitalContext context)
         {
-            Console.WriteLine("Please, register!");
+            Console.WriteLine("Hello, guest!");
 
             List<string> doctorData = this.InputDoctorData();
 
@@ -32,7 +32,6 @@
 
         public void Login(HospitalContext context)
         {
-            Console.WriteLine("Please, login!");
             Console.Write("Please, enter your email: ");
             string emailLogin = Console.ReadLine();
 
@@ -57,31 +56,31 @@
                 {
                     var doctor = context
                         .Doctors
-                        .Select(d => new
+                        .Select(d => new DoctorResultModel
                         {
-                            d.Name,
-                            d.Specialty,
-                            d.Email
+                            Name = d.Name,
+                            Email = d.Email,
+                            Password = d.Password
                         })
-                        .FirstOrDefault(d => d.Email == emailLogin);
+                        .SingleOrDefault(d => d.Email == emailLogin && d.Password == passwordLogin);
 
-                    Console.WriteLine($"Welcome, Dr. {doctor.Name} with {doctor.Specialty}");
-                    Console.Write($"Please, choose C to Create Patient, S to Select Patient or E to Edit Patient: ");
+                    Console.WriteLine($"Welcome, Dr. {doctor.Name}!");
+                    Console.WriteLine($"Please, choose C to Create, S to Select or D to Delete Patient: ");
                     string answer = Console.ReadLine();
 
                     if (answer.ToUpper() == "C")
                     {
-                        this.CreatePatient(context);
+                        this.CreatePatient(doctor, context);
                     }
 
                     else if (answer.ToUpper() == "S")
                     {
-                        this.SelectPatient(context);
+                        this.SelectPatient(doctor, context);
                     }
 
-                    else if (answer.ToUpper() == "E")
+                    else if (answer.ToUpper() == "D")
                     {
-                        this.EditPatient(context);
+                        this.DeletePatient(context);
                     }
 
                     else
@@ -98,26 +97,129 @@
 
             else
             {
-                validator.ValidateEmail();
+                Console.WriteLine("You are not registered!");
+                this.Register(context);
             }
         }
 
-        private void EditPatient(HospitalContext context)
+        private void DeletePatient(HospitalContext context)
         {
             //TO DO
             throw new NotImplementedException();
         }
 
-        private void SelectPatient(HospitalContext context)
+        private void EditPatient(Patient patient, HospitalContext context)
         {
             //TO DO
             throw new NotImplementedException();
         }
 
-        private void CreatePatient(HospitalContext context)
+        private void SelectPatient(DoctorResultModel doctor, HospitalContext context)
         {
-            //TO DO
-            throw new NotImplementedException();
+            Console.Write("Please, enter patient's Id Number: ");
+            int patientId = int.Parse(Console.ReadLine());
+
+            var patient = context.Patients.Find(patientId);
+
+            if (patient != null)
+            {
+                Console.Write($"Please, enter R to read or E to edit patient {patient.FirstName} {patient.LastName}: ");
+                string answer = Console.ReadLine();
+
+                if (answer == "R")
+                {
+                    ReadPatient(patient, context);
+                }
+
+                else if (answer == "E")
+                {
+                    EditPatient(patient, context);
+                }
+
+                else
+                {
+                    validator.ValidateAnswer();
+                }
+            }
+
+            else
+            {
+                validator.ValidatePatient();
+            }
+        }
+
+        private void ReadPatient(Patient patient, HospitalContext context)
+        {
+            Console.WriteLine($"Name: {patient.FirstName} {patient.LastName}");
+            Console.WriteLine($"Address: {patient.Address}");
+            Console.WriteLine($"Email: {patient.Email}");
+
+            if (patient.HasInsurance)
+            {
+                Console.WriteLine("Insurance: Yes");
+            }
+            else
+            {
+                Console.WriteLine("Insurance: No");
+            }
+
+            Console.WriteLine();
+
+            foreach (var visitation in patient.Visitations)
+            {
+                var doctor = context.Doctors.FirstOrDefault(d => d.DoctorId == visitation.DoctorId);
+
+                Console.WriteLine($"Date: {visitation.Date}");
+                Console.WriteLine($"Comments: {visitation.Comments}");
+                Console.WriteLine($"Doctor: {doctor.Name} - {doctor.Specialty}");
+                Console.WriteLine();
+            }
+
+            foreach (var diagnose in patient.Diagnoses)
+            {
+                Console.WriteLine($"Name: {diagnose.Name}");
+                Console.WriteLine($"Comments: {diagnose.Comments}");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("Prescription list: ");
+            foreach (var prescription in patient.Prescriptions)
+            {
+                var medicament = context.Medicaments.FirstOrDefault(m => m.MedicamentId == prescription.MedicamentId);
+
+                Console.WriteLine($"---{medicament.Name}");
+            }
+        }
+
+        private void CreatePatient(DoctorResultModel doctor,HospitalContext context)
+        {
+            List<string> patientData = InputPatientData();
+
+            var patient = new Patient();
+            patient.FirstName = patientData[0];
+            patient.LastName = patientData[1];
+            patient.Address = patientData[2];
+            patient.Email = patientData[3];
+
+            if (patientData[4] == "Y")
+            {
+                patient.HasInsurance = true;
+            }
+
+            else if (patientData[4] == "N")
+            {
+                patient.HasInsurance = false;
+            }
+
+            else
+            {
+                validator.ValidateAnswer();
+            }
+
+            context.Patients.Add(patient);
+            context.SaveChanges();
+
+            this.SelectPatient(doctor, context);
         }
 
         private List<string> InputDoctorData()
@@ -145,8 +247,29 @@
 
         private List<string> InputPatientData()
         {
-            //TO DO
-            throw new NotImplementedException();
+            List<string> data = new List<string>();
+
+            Console.Write("Please, enter patient's first name: ");
+            string firstName = Console.ReadLine();
+            data.Add(firstName);
+
+            Console.Write("Please, enter patient's last name: ");
+            string lastName = Console.ReadLine();
+            data.Add(lastName);
+
+            Console.Write("Please, enter patient's address: ");
+            string address = Console.ReadLine();
+            data.Add(address);
+
+            Console.Write("Please, enter patient's email: ");
+            string email = Console.ReadLine();
+            data.Add(email);
+
+            Console.Write("Please, enter Y if patient has insurance or N if he does not: ");
+            string insurance = Console.ReadLine();
+            data.Add(insurance);
+
+            return data;
         }
     }
 }
