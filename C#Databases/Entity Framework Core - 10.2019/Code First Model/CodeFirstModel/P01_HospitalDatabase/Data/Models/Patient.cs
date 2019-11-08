@@ -1,6 +1,7 @@
 ﻿namespace P01_HospitalDatabase.Data.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class Patient
     {
@@ -15,6 +16,15 @@
         public string Email { get; set; }
 
         public bool HasInsurance { get; set; }
+
+        [NotMapped]
+        public string FullName 
+        {
+            get
+            {
+                return this.FirstName + " " + this.LastName;
+            }
+        }
 
         public ICollection<Visitation> Visitations { get; set; } = new HashSet<Visitation>();
 

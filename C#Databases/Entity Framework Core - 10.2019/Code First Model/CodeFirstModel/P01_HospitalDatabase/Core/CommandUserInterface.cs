@@ -12,8 +12,6 @@
 
         public void Register(HospitalContext context)
         {
-            Console.WriteLine("Hello, guest!");
-
             List<string> doctorData = this.InputDoctorData();
 
             Doctor doctor = new Doctor
@@ -27,6 +25,7 @@
             context.Doctors.Add(doctor);
             context.SaveChanges();
 
+            Console.WriteLine("You registered successfully! Now you can login!");
             this.Login(context);
         }
 
@@ -43,7 +42,7 @@
 
             if (email.Any())
             {
-                Console.WriteLine("Please, enter your password: ");
+                Console.Write("Please, enter your password: ");
                 string passwordLogin = Console.ReadLine();
 
                 var password = context
@@ -56,16 +55,11 @@
                 {
                     var doctor = context
                         .Doctors
-                        .Select(d => new DoctorResultModel
-                        {
-                            Name = d.Name,
-                            Email = d.Email,
-                            Password = d.Password
-                        })
-                        .SingleOrDefault(d => d.Email == emailLogin && d.Password == passwordLogin);
+                        .FirstOrDefault(d => d.Email == emailLogin && d.Password == passwordLogin);
 
                     Console.WriteLine($"Welcome, Dr. {doctor.Name}!");
-                    Console.WriteLine($"Please, choose C to Create, S to Select or D to Delete Patient: ");
+                    Console.Write($"Please, choose C to Create or S to Select patient: ");
+
                     string answer = Console.ReadLine();
 
                     if (answer.ToUpper() == "C")
@@ -76,11 +70,6 @@
                     else if (answer.ToUpper() == "S")
                     {
                         this.SelectPatient(doctor, context);
-                    }
-
-                    else if (answer.ToUpper() == "D")
-                    {
-                        this.DeletePatient(context);
                     }
 
                     else
@@ -102,38 +91,186 @@
             }
         }
 
-        private void DeletePatient(HospitalContext context)
+        private void EditPatient(Patient patient, Doctor doctor, HospitalContext context)
         {
-            //TO DO
-            throw new NotImplementedException();
+            Console.WriteLine($"If you would like to Edit Visitation type Y/N: ");
+            string answer = Console.ReadLine();
+
+            if (answer.ToUpper() == "Y")
+            {
+                EditVisitation(patient, doctor, context);
+            }
+
+            Console.WriteLine($"If you would like to Edit Diagnose type Y/N: ");
+            answer = Console.ReadLine();
+
+            if (answer.ToUpper() == "Y")
+            {
+                EditDiagnose(patient, doctor, context);
+            }
+
+            Console.WriteLine($"If you would like to Edit Prescriptions type Y/N: ");
+            answer = Console.ReadLine();
+
+            if (answer.ToUpper() == "Y")
+            {
+                EditPrescriptions(patient, doctor, context);
+            }
+
+            Console.WriteLine("Here are all the changes: ");
+            this.ReadPatient(patient, context);
         }
 
-        private void EditPatient(Patient patient, HospitalContext context)
+        private void EditPrescriptions(Patient patient, Doctor doctor, HospitalContext context)
         {
-            //TO DO
-            throw new NotImplementedException();
+            Console.WriteLine("Please, write medicament name:");
+            var medicament = string.Empty;
+
+            while ((medicament = Console.ReadLine()) != string.Empty)
+            {
+                var currentMedicament = context
+                    .Medicaments
+                    .FirstOrDefault(m => m.Name == medicament);
+
+                if (currentMedicament == null)
+                {
+                    currentMedicament = GenerateMedicament(medicament, context);
+                }
+
+                PatientMedicament patientMedicament = context
+                    .PatientsMedicaments
+                    .FirstOrDefault(pm => pm.PatientId == patient.PatientId && pm.MedicamentId == currentMedicament.MedicamentId);
+
+                if (patientMedicament == null)
+                {
+                    patientMedicament = GeneratePatientMedicament(currentMedicament, patient, context);
+                }
+
+                currentMedicament.Prescriptions.Add(patientMedicament);
+                patient.Prescriptions.Add(patientMedicament);
+                context.SaveChanges();
+            }
         }
 
-        private void SelectPatient(DoctorResultModel doctor, HospitalContext context)
+        private PatientMedicament GeneratePatientMedicament(Medicament currentMedicament, Patient patient, HospitalContext context)
         {
-            Console.Write("Please, enter patient's Id Number: ");
+            var patientMedicament = new PatientMedicament()
+            {
+                PatientId = patient.PatientId,
+                Patient = patient,
+                MedicamentId = currentMedicament.MedicamentId,
+                Medicament = currentMedicament
+            };
+
+            context.PatientsMedicaments.Add(patientMedicament);
+            context.SaveChanges();
+
+            return context.PatientsMedicaments.Last();
+        }
+
+        private Medicament GenerateMedicament(string medicament, HospitalContext context)
+        {
+            var newMedicament = new Medicament()
+            {
+                Name = medicament
+            };
+
+            context.Medicaments.Add(newMedicament);
+            context.SaveChanges();
+
+            return context.Medicaments.Last();
+        }
+
+        private void EditDiagnose(Patient patient, Doctor doctor, HospitalContext context)
+        {
+            Console.Write("Please, write diagnose name: ");
+            string DiagnoseName = Console.ReadLine();
+
+            var diagnose = context.Diagnoses.FirstOrDefault(d => d.Name == DiagnoseName);
+
+            if (diagnose == null)
+            {
+                diagnose = GenerateDiagnose(DiagnoseName, patient, context);
+            }
+
+            patient.Diagnoses.Add(diagnose);
+            context.SaveChanges();
+
+
+            Console.Write("Please, add comments to diagnose: ");
+            string comments = Console.ReadLine();
+
+            diagnose.Comments = comments;
+            context.SaveChanges();
+        }
+
+        private Diagnose GenerateDiagnose(string answer, Patient patient, HospitalContext context)
+        {
+            Diagnose diagnose = new Diagnose()
+            {
+                Name = answer,
+                PatientId = patient.PatientId,
+                Patient = patient
+            };
+
+            context.Diagnoses.Add(diagnose);
+            context.SaveChanges();
+
+            return context.Diagnoses.Last();
+        }
+
+        private void EditVisitation(Patient patient, Doctor doctor, HospitalContext context)
+        {
+            var visitationId = GenerateVisitations(patient, doctor, context);
+            var patientVisitation = context
+                .Visitations
+                .FirstOrDefault(v => v.VisitationId == visitationId);
+
+            patient.Visitations.Add(patientVisitation);
+            context.SaveChanges();
+
+            Console.WriteLine("Please, add Comments to the visitation!");
+            string comments = Console.ReadLine();
+
+            patientVisitation.Comments = comments;
+            context.SaveChanges();
+        }
+
+        private int GenerateVisitations(Patient patient, Doctor doctor, HospitalContext context)
+        {
+            Visitation visitation = new Visitation();
+            visitation.Date = DateTime.UtcNow;
+            visitation.PatientId = patient.PatientId;
+            visitation.Patient = visitation.Patient;
+            visitation.DoctorId = doctor.DoctorId;
+            visitation.Doctor = doctor;
+
+            context.Visitations.Add(visitation);
+            context.SaveChanges();
+
+            return context.Visitations.Last().VisitationId;
+        }
+
+        private void SelectPatient(Doctor doctor, HospitalContext context)
+        {
+            Console.Write("Please, enter patient's Id Number in order to see or edit a patient profile: ");
             int patientId = int.Parse(Console.ReadLine());
 
             var patient = context.Patients.Find(patientId);
 
             if (patient != null)
             {
-                Console.Write($"Please, enter R to read or E to edit patient {patient.FirstName} {patient.LastName}: ");
+                Console.Write($"Please, enter R to Read or E to Edit patient {patient.FirstName} {patient.LastName}: ");
                 string answer = Console.ReadLine();
 
-                if (answer == "R")
+                if (answer.ToUpper() == "R")
                 {
                     ReadPatient(patient, context);
                 }
 
-                else if (answer == "E")
+                else if (answer.ToUpper() == "E")
                 {
-                    EditPatient(patient, context);
+                    EditPatient(patient, doctor, context);
                 }
 
                 else
@@ -191,7 +328,7 @@
             }
         }
 
-        private void CreatePatient(DoctorResultModel doctor,HospitalContext context)
+        private void CreatePatient(Doctor doctor,HospitalContext context)
         {
             List<string> patientData = InputPatientData();
 
@@ -219,6 +356,7 @@
             context.Patients.Add(patient);
             context.SaveChanges();
 
+            Console.WriteLine($"Patient {patient.FirstName} {patient.LastName} with Id {patient.PatientId} successfully created!");
             this.SelectPatient(doctor, context);
         }
 

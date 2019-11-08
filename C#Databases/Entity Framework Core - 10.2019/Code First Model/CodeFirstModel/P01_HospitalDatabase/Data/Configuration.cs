@@ -1,7 +1,7 @@
 ﻿namespace P01_HospitalDatabase.Data
 {
-    public class Configuration
+    internal class Configuration
     {
-        public const string ConnectionString = @"Server=;Database=;";
+        internal const string ConnectionString = @"Server=;Database=;";
     }
 }

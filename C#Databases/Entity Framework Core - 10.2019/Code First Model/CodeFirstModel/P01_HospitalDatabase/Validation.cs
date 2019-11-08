@@ -14,11 +14,6 @@
             throw new ArgumentException("Incorrect password!");
         }
 
-        //public string ValidateEmail()
-        //{
-        //    throw new ArgumentException("Incorrect email!");
-        //}
-
         public string ValidatePatient()
         {
             throw new ArgumentException("There is no such patient in the system!");
