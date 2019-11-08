@@ -103,16 +103,17 @@
         {
             string[] visitationInput = new string[]
             {
-                "12-11-2017 Ok",
-                "03-09-2016 Normal",
-                "16-05-2019 Medium",
+                "12-11-2017, Ok",
+                "03-09-2016, Normal",
+                "16-05-2019, Medium",
             };
 
             Visitation[] visitations = new Visitation[visitationInput.Length];
 
             for (int i = 0; i < visitationInput.Length; i++)
             {
-                string[] visitationProps = visitationInput[i].Split();
+                string[] visitationProps = visitationInput[i]
+                    .Split(", ", StringSplitOptions.RemoveEmptyEntries);
 
                 var visitation = new Visitation()
                 {
@@ -134,16 +135,17 @@
         {
             string[] diagnoseInput = new string[]
             {
-                "Hrema No",
-                "Headache Yes",
-                "Toothache No",
+                "Hrema, No",
+                "Headache, Yes",
+                "Toothache, No",
             };
 
             Diagnose[] diagnoses = new Diagnose[diagnoseInput.Length];
 
             for (int i = 0; i < diagnoseInput.Length; i++)
             {
-                string[] diagnoseProps = diagnoseInput[i].Split();
+                string[] diagnoseProps = diagnoseInput[i]
+                    .Split(", ", StringSplitOptions.RemoveEmptyEntries);
 
                 var diagnose = new Diagnose()
                 {
@@ -163,16 +165,17 @@
         {
             string[] patientInput = new string[]
             {
-                "Dimo Angelov Sofiq qwe@abv.bg true",
-                "Irina Petrova Plovdiv rty@gmail.com true",
-                "Natalia Qnkova Varna uio@abv.bg true",
+                "Dimo, Angelov, Sofiq, qwe@abv.bg, true",
+                "Irina, Petrova, Plovdiv, rty@gmail.com, true",
+                "Natalia, Qnkova, Varna, uio@abv.bg, true",
             };
 
             Patient[] patients = new Patient[patientInput.Length];
 
             for (int i = 0; i < patientInput.Length; i++)
             {
-                string[] patientProps = patientInput[i].Split();
+                string[] patientProps = patientInput[i]
+                    .Split(", ", StringSplitOptions.RemoveEmptyEntries);
 
                 var patient = new Patient()
                 {
@@ -219,23 +222,24 @@
         {
             string[] doctorInput = new string[]
             {
-                "Ivan Ivanov asd@abv.bg 123 General Practitioner",
-                "Damqn Dimov asd@gmail.bg 345 Pediatrician",
-                "Ivon Kalinova zxc@abv.bg 567 Neurologist",
+                "Ivan Ivanov, asd@abv.bg, 123, General Practitioner",
+                "Damqn Dimov, asd@gmail.bg, 345, Pediatrician",
+                "Ivon Kalinova, zxc@abv.bg, 567, Neurologist",
             };
 
             Doctor[] doctors = new Doctor[doctorInput.Length];
 
             for (int i = 0; i < doctorInput.Length; i++)
             {
-                string[] doctorProps = doctorInput[i].Split();
+                string[] doctorProps = doctorInput[i]
+                    .Split(", ", StringSplitOptions.RemoveEmptyEntries);
 
                 var doctor = new Doctor()
                 {
-                    Name = doctorProps[0] + " " + doctorProps[1],
-                    Email = doctorProps[2],
-                    Password = doctorProps[3],
-                    Specialty = doctorProps[4],
+                    Name = doctorProps[0],
+                    Email = doctorProps[1],
+                    Password = doctorProps[2],
+                    Specialty = doctorProps[3],
                 };
 
                 doctors[i] = doctor;
