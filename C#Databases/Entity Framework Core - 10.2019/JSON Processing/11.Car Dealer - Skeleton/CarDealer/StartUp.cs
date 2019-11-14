@@ -27,7 +27,7 @@ namespace CarDealer
 
             //var salesJson = File.ReadAllText(@"C:\Users\Diana\OneDrive\DKProject\CSharp\C# DB\Entity Framework Core\11.Car Dealer - Skeleton\CarDealer\Datasets\sales.json");
 
-            Console.WriteLine(GetCarsWithTheirListOfParts(db));
+            Console.WriteLine(GetSalesWithAppliedDiscount(db));
         }
 
         public static string ImportSuppliers(CarDealerContext context, string inputJson)
@@ -113,7 +113,7 @@ namespace CarDealer
             int count = context.SaveChanges();
 
             return $"Successfully imported {count}.";
-        } //Judge Memory Time Limit
+        }//Judge Memory Time Limit
 
         public static string GetOrderedCustomers(CarDealerContext context)
         {
@@ -195,5 +195,57 @@ namespace CarDealer
 
             return json;
         }
+
+        public static string GetTotalSalesByCustomer(CarDealerContext context)
+        {
+            var customers = context.Customers
+                .Where(c => c.Sales.Count >= 1)
+                .Select(c => new CustomerCarsExportDto
+                {
+                    FullName = c.Name,
+                    BoughtCars = c.Sales.Count,
+                    SpendMoney = c.Sales.Sum(s => s.Car.PartCars.Sum(p => p.Part.Price)),
+                })
+                .OrderByDescending(sm => sm.SpendMoney)
+                .ThenByDescending(bc => bc.BoughtCars)
+                .ToList();
+
+            var json = JsonConvert.SerializeObject(customers, new JsonSerializerSettings()
+            {
+                ContractResolver = new DefaultContractResolver()
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy(),
+                },
+
+                Formatting = Formatting.Indented
+            });
+
+            return json;
+        }//return zero for spendMoney
+
+        public static string GetSalesWithAppliedDiscount(CarDealerContext context)
+        {
+            var sales = context.Sales
+                .Select(s => new SalesExportDto
+                {
+                    Car = new CarsPartsExportDto()
+                    {
+                        Make = s.Car.Make,
+                        Model = s.Car.Model,
+                        TravelledDistance = s.Car.TravelledDistance
+                    },
+                    CustomerName = s.Customer.Name,
+                    Discount = $"{s.Discount:F2}",
+                    Price = $"{s.Car.PartCars.Sum(p => p.Part.Price):F2}",
+                    PriceWithDiscount = $@"{(s.Car.PartCars.Sum(p => p.Part.Price) -
+                        s.Car.PartCars.Sum(p => p.Part.Price) * s.Discount / 100):F2}"
+                })
+                .Take(10)
+                .ToList();
+
+            var json = JsonConvert.SerializeObject(sales, Formatting.Indented);
+
+            return json;
+        }// no result for price
     }
 }
