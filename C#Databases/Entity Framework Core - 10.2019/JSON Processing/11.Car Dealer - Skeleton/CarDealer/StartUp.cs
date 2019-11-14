@@ -27,7 +27,7 @@ namespace CarDealer
 
             //var salesJson = File.ReadAllText(@"C:\Users\Diana\OneDrive\DKProject\CSharp\C# DB\Entity Framework Core\11.Car Dealer - Skeleton\CarDealer\Datasets\sales.json");
 
-            Console.WriteLine(GetOrderedCustomers(db));
+            Console.WriteLine(GetCarsWithTheirListOfParts(db));
         }
 
         public static string ImportSuppliers(CarDealerContext context, string inputJson)
@@ -133,6 +133,67 @@ namespace CarDealer
             return json;
         }
 
+        public static string GetCarsFromMakeToyota(CarDealerContext context)
+        {
+            var toyotaCars = context.Cars
+                .Where(c => c.Make == "Toyota")
+                .OrderBy(c => c.Model)
+                .ThenByDescending(c => c.TravelledDistance)
+                .Select(c => new CarsExportDto
+                {
+                    Id = c.Id,
+                    Make = c.Make,
+                    Model = c.Model,
+                    TravelledDistance = c.TravelledDistance
+                })
+                .ToList();
 
+            var json = JsonConvert.SerializeObject(toyotaCars, Formatting.Indented);
+
+            return json;
+        }
+
+        public static string GetLocalSuppliers(CarDealerContext context)
+        {
+            var suppliers = context.Suppliers
+                .Where(s => !s.IsImporter)
+                .Select(s => new SupplierExportDto
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    PartsCount = s.Parts.Count,
+                })
+                .ToList();
+
+            var json = JsonConvert.SerializeObject(suppliers, Formatting.Indented);
+
+            return json;
+        }
+
+        public static string GetCarsWithTheirListOfParts(CarDealerContext context)
+        {
+            var cars = context.Cars
+                .Select(c => new
+                {
+                    car = new CarsPartsExportDto
+                    {
+                        Make = c.Make,
+                        Model = c.Model,
+                        TravelledDistance = c.TravelledDistance
+                    },
+                    parts = c.PartCars
+                    .Select(p => new PartExportDto
+                    {
+                        Name = p.Part.Name,
+                        Price = $"{p.Part.Price:F2}"
+                    })
+                    .ToList()
+                })
+                .ToList();
+
+            var json = JsonConvert.SerializeObject(cars, Formatting.Indented);
+
+            return json;
+        }
     }
 }
