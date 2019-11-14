@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using ProductShop.Data;
 using ProductShop.Models;
 
@@ -16,7 +17,7 @@ namespace ProductShop
 
             //var categoryProductsJson = File.ReadAllText(@"C:\Users\Diana\OneDrive\DKProject\CSharp\C# DB\Entity Framework Core\11.Product Shop - Skeleton\ProductShop\Datasets\categories-products.json");
 
-            Console.WriteLine(GetCategoriesByProductsCount(db));
+            Console.WriteLine(GetUsersWithProducts(db));
         }
 
         public static string ImportUsers(ProductShopContext context, string inputJson)
@@ -101,7 +102,7 @@ namespace ProductShop
                     LastName = u.LastName,
                     SoldProducts = u.ProductsSold
                     .Where(p => p.Buyer != null)
-                    .Select(p => new SoldProductResultModel
+                    .Select(p => new SoldProductsResultModel
                     {
                         Name = p.Name,
                         Price = p.Price,
@@ -112,30 +113,96 @@ namespace ProductShop
                 })
                 .ToList();
 
-            var json = JsonConvert.SerializeObject(users, Formatting.Indented);
+            DefaultContractResolver contractResolver = new DefaultContractResolver()
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
+
+            var json = JsonConvert.SerializeObject(users, new JsonSerializerSettings
+            {
+                ContractResolver = contractResolver,
+                Formatting = Formatting.Indented
+            });
 
             return json;
         }
 
         public static string GetCategoriesByProductsCount(ProductShopContext context)
         {
-            // TO DO - Round averagePrice, totalRevenue
+            //Judge - iuncorrect answer 
             var categories = context.Categories
-                .OrderByDescending(c => c.CategoryProducts.Count())
+                .OrderByDescending(c => c.CategoryProducts.Count)
                 .Select(c => new CategoryResultModel
                 {
                     Category = c.Name,
                     ProductCount = c.CategoryProducts.Count,
-                    AveragePrice = c.CategoryProducts
+                    AveragePrice = $"{c.CategoryProducts.Average(p => p.Product.Price):F2}",
+                    /*c.CategoryProducts
                     .Select(cp => cp.Product.Price)
-                    .Average(),
-                    TotalRevenue = c.CategoryProducts
+                    .Average(),*/
+                    TotalRevenue = $"{c.CategoryProducts.Sum(p => p.Product.Price):F2}"
+                    /*c.CategoryProducts
                     .Select(cp => cp.Product.Price)
-                    .Sum(),
+                    .Sum(),*/
                 })
                 .ToList();
 
-            var json = JsonConvert.SerializeObject(categories, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(categories, new JsonSerializerSettings()
+            {
+                ContractResolver = new DefaultContractResolver()
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy(),
+                },
+
+                Formatting = Formatting.Indented
+            });
+
+            return json;
+        }
+
+        public static string GetUsersWithProducts(ProductShopContext context)
+        {
+            //Judge - incorrect answer
+            var users = context.Users
+                .Where(u => u.ProductsSold.Any(ps => ps.Buyer != null))
+                .OrderByDescending(u => u.ProductsSold.Count(ps => ps.Buyer != null))
+                .Select(u => new UserProductsResultModel
+                {
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Age = u.Age,
+                    SoldProducts = new SoldProductsToUserResultModel
+                    {
+                        Count = u.ProductsSold
+                                 .Count(ps => ps.Buyer != null),
+                        Products = u.ProductsSold
+                                 .Where(ps => ps.Buyer != null)
+                                  .Select(ps => new SoldProductsResultModel
+                                  {
+                                     Name = ps.Name,
+                                     Price = ps.Price
+                                  })
+                                  .ToList()
+                    }
+                })
+                .ToList();
+
+            var result = new UserWithProductsResultModel
+            {
+                UserCount = users.Count,
+                Users = users
+            };
+
+            var json = JsonConvert.SerializeObject(result, new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver()
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy(),
+                },
+
+                NullValueHandling = NullValueHandling.Ignore,
+                Formatting = Formatting.Indented
+            });
 
             return json;
         }

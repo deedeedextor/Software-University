@@ -5,13 +5,13 @@ namespace ProductShop
 {
     public  class UserResultModel
     {
-        [JsonProperty(PropertyName = "firstName")]
+        //[JsonProperty(PropertyName = "firstName")]
         public string FirstName { get; set; }
 
-        [JsonProperty(PropertyName = "lastName")]
+        //[JsonProperty(PropertyName = "lastName")]
         public string LastName { get; set; }
 
-        [JsonProperty(PropertyName = "soldProducts")]
-        public ICollection<SoldProductResultModel> SoldProducts { get; set; }
+        //[JsonProperty(PropertyName = "soldProducts")]
+        public ICollection<SoldProductsResultModel> SoldProducts { get; set; }
     }
 }

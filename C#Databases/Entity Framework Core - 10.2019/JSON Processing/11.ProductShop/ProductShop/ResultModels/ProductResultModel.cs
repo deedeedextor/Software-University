@@ -6,15 +6,15 @@ namespace ProductShop
 {
     public  class ProductResultModel
     {
-        [JsonProperty(PropertyName = "name")]
+        //[JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "price")]
+        //[JsonProperty(PropertyName = "price")]
         public decimal Price { get; set; }
 
-        [JsonProperty(PropertyName = "seller")]
+        //[JsonProperty(PropertyName = "seller")]
         public string Seller { get; set; }
 
-        public ICollection<SoldProductResultModel> MyProperty { get; set; }
+        public ICollection<SoldProductsResultModel> SoldProducts { get; set; }
     }
 }

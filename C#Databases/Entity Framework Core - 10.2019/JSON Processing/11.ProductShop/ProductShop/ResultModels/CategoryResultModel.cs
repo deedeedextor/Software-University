@@ -4,16 +4,16 @@ namespace ProductShop
 {
     public class CategoryResultModel
     {
-        [JsonProperty(PropertyName = "category")]
+        //[JsonProperty(PropertyName = "category")]
         public string Category { get; set; }
 
-        [JsonProperty(PropertyName = "productName")]
+        //[JsonProperty(PropertyName = "productName")]
         public int ProductCount { get; set; }
 
-        [JsonProperty(PropertyName = "averagePrice")]
-        public decimal AveragePrice { get; set; }
+        //[JsonProperty(PropertyName = "averagePrice")]
+        public string AveragePrice { get; set; }
 
-        [JsonProperty(PropertyName = "totalRevenue")]
-        public decimal TotalRevenue { get; set; }
+        //[JsonProperty(PropertyName = "totalRevenue")]
+        public string TotalRevenue { get; set; }
     }
 }
