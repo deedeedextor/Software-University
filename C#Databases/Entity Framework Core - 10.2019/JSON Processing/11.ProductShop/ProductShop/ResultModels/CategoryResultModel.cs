@@ -8,7 +8,7 @@ namespace ProductShop
         public string Category { get; set; }
 
         //[JsonProperty(PropertyName = "productName")]
-        public int ProductCount { get; set; }
+        public int ProductsCount { get; set; }
 
         //[JsonProperty(PropertyName = "averagePrice")]
         public string AveragePrice { get; set; }

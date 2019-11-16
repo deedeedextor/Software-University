@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using AutoMapper;
 using CarDealer.Data;
+using CarDealer.DTO.ImportDtos;
 using CarDealer.DTO.ImportDTOs;
 using CarDealer.Models;
 using Newtonsoft.Json;
@@ -25,7 +26,7 @@ namespace CarDealer
             CarDealerContext db = new CarDealerContext();
             //db.Database.EnsureCreated();
 
-            //var salesJson = File.ReadAllText(@"C:\Users\Diana\OneDrive\DKProject\CSharp\C# DB\Entity Framework Core\11.Car Dealer - Skeleton\CarDealer\Datasets\sales.json");
+            //var inputJson = File.ReadAllText(@"C:\Users\Diana\Desktop\Software-University\C#Databases\Entity Framework Core - 10.2019\JSON Processing\11.Car Dealer - Skeleton\CarDealer\Datasets\sales.json");
 
             Console.WriteLine(GetSalesWithAppliedDiscount(db));
         }
@@ -108,8 +109,11 @@ namespace CarDealer
 
         public static string ImportSales(CarDealerContext context, string inputJson)
         {
-            var json = JsonConvert.DeserializeObject<Sale[]>(inputJson);
-            context.Sales.AddRange(json);
+            var json = JsonConvert.DeserializeObject<SaleDto[]>(inputJson);
+
+            var sales = mapper.Map<Sale[]>(json);
+            context.Sales.AddRange(sales);
+
             int count = context.SaveChanges();
 
             return $"Successfully imported {count}.";
@@ -199,14 +203,14 @@ namespace CarDealer
         public static string GetTotalSalesByCustomer(CarDealerContext context)
         {
             var customers = context.Customers
-                .Where(c => c.Sales.Count >= 1)
+                .Where(c => c.Sales.Any())
                 .Select(c => new CustomerCarsExportDto
                 {
                     FullName = c.Name,
                     BoughtCars = c.Sales.Count,
-                    SpendMoney = c.Sales.Sum(s => s.Car.PartCars.Sum(p => p.Part.Price)),
+                    SpentMoney = c.Sales.Sum(s => s.Car.PartCars.Sum(p => p.Part.Price)),
                 })
-                .OrderByDescending(sm => sm.SpendMoney)
+                .OrderByDescending(sm => sm.SpentMoney)
                 .ThenByDescending(bc => bc.BoughtCars)
                 .ToList();
 
@@ -221,7 +225,7 @@ namespace CarDealer
             });
 
             return json;
-        }//return zero for spendMoney
+        }
 
         public static string GetSalesWithAppliedDiscount(CarDealerContext context)
         {
@@ -246,6 +250,6 @@ namespace CarDealer
             var json = JsonConvert.SerializeObject(sales, Formatting.Indented);
 
             return json;
-        }// no result for price
+        }
     }
 }

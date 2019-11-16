@@ -6,6 +6,6 @@
 
         public int BoughtCars { get; set; }
 
-        public decimal SpendMoney { get; set; }
+        public decimal SpentMoney { get; set; }
     }
 }

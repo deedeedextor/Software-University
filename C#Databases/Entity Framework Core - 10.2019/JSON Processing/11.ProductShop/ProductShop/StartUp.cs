@@ -17,7 +17,7 @@ namespace ProductShop
 
             //var categoryProductsJson = File.ReadAllText(@"C:\Users\Diana\OneDrive\DKProject\CSharp\C# DB\Entity Framework Core\11.Product Shop - Skeleton\ProductShop\Datasets\categories-products.json");
 
-            Console.WriteLine(GetUsersWithProducts(db));
+            Console.WriteLine(GetCategoriesByProductsCount(db));
         }
 
         public static string ImportUsers(ProductShopContext context, string inputJson)
@@ -129,13 +129,12 @@ namespace ProductShop
 
         public static string GetCategoriesByProductsCount(ProductShopContext context)
         {
-            //Judge - iuncorrect answer 
             var categories = context.Categories
-                .OrderByDescending(c => c.CategoryProducts.Count)
+                .OrderByDescending(c => c.CategoryProducts.Count())
                 .Select(c => new CategoryResultModel
                 {
                     Category = c.Name,
-                    ProductCount = c.CategoryProducts.Count,
+                    ProductsCount = c.CategoryProducts.Count(),
                     AveragePrice = $"{c.CategoryProducts.Average(p => p.Product.Price):F2}",
                     /*c.CategoryProducts
                     .Select(cp => cp.Product.Price)
@@ -162,10 +161,9 @@ namespace ProductShop
 
         public static string GetUsersWithProducts(ProductShopContext context)
         {
-            //Judge - incorrect answer
             var users = context.Users
-                .Where(u => u.ProductsSold.Any(ps => ps.Buyer != null))
-                .OrderByDescending(u => u.ProductsSold.Count(ps => ps.Buyer != null))
+                .Where(u => u.ProductsSold.Any(p => p.Buyer != null))
+                //.OrderByDescending(u => u.ProductsSold.Count)
                 .Select(u => new UserProductsResultModel
                 {
                     FirstName = u.FirstName,
@@ -174,9 +172,10 @@ namespace ProductShop
                     SoldProducts = new SoldProductsToUserResultModel
                     {
                         Count = u.ProductsSold
-                                 .Count(ps => ps.Buyer != null),
+                                 .Where(p => p.Buyer != null)
+                                 .Count(),
                         Products = u.ProductsSold
-                                 .Where(ps => ps.Buyer != null)
+                                  .Where(p => p.Buyer != null)
                                   .Select(ps => new SoldProductsResultModel
                                   {
                                      Name = ps.Name,
@@ -185,11 +184,12 @@ namespace ProductShop
                                   .ToList()
                     }
                 })
+                .OrderByDescending(u => u.SoldProducts.Count)
                 .ToList();
 
             var result = new UserWithProductsResultModel
             {
-                UserCount = users.Count,
+                UsersCount = users.Count,
                 Users = users
             };
 

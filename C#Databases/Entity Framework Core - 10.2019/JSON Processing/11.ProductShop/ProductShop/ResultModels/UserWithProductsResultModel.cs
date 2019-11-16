@@ -4,7 +4,7 @@ namespace ProductShop
 {
     public class UserWithProductsResultModel
     {
-        public int UserCount { get; set; }
+        public int UsersCount { get; set; }
         public ICollection<UserProductsResultModel> Users { get; set; }
     }
 }
