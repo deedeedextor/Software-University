@@ -3,7 +3,7 @@
 namespace CarDealer.Dtos.Export
 {
     [XmlType("car")]
-    public class ExportCarWithDistanceDto
+    public class CarDto
     {
         [XmlAttribute(AttributeName = "make")]
         public string Make { get; set; }
@@ -13,8 +13,5 @@ namespace CarDealer.Dtos.Export
 
         [XmlAttribute(AttributeName = "travelled-distance")]
         public long TravelledDistance { get; set; }
-
-        [XmlArray("parts")]
-        public ExportPartDto[] Parts { get; set; }
     }
 }
