@@ -231,11 +231,13 @@ namespace ProductShop
                     }
                 })
                 .OrderByDescending(u => u.SoldProductDto.Count)
+                .Take(10)
                 .ToArray();
 
             var customExport = new ExportCustomUserProductDto
             {
-                Count = users.Length,
+                Count = context.Users
+                .Count(x => x.ProductsSold.Any()),
                 UsesAndProducts = users
             };
 
@@ -251,6 +253,6 @@ namespace ProductShop
             xmlSerializer.Serialize(new StringWriter(sb), customExport, namespases);
 
             return sb.ToString().TrimEnd();
-        }// - 50/100
+        }
     }
 }
