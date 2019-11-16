@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using CarDealer.Data;
+using CarDealer.Dtos.Export;
 using CarDealer.Dtos.Import;
 using CarDealer.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace CarDealer
@@ -23,9 +26,9 @@ namespace CarDealer
 
             //context.Database.EnsureCreated();
 
-            var inputXml = File.ReadAllText(@"C:\Users\Diana\Desktop\Software-University\C#Databases\Entity Framework Core - 10.2019\XML Processing\12.CarDealer - XML\CarDealer\Datasets\cars.xml");
+            //var inputXml = File.ReadAllText(@"C:\Users\Diana\Desktop\Software-University\C#Databases\Entity Framework Core - 10.2019\XML Processing\12.CarDealer - XML\CarDealer\Datasets\sales.xml");
 
-            Console.WriteLine(ImportCars(context, inputXml));
+            Console.WriteLine(GetCarsWithDistance(context));
         }
 
         public static string ImportSuppliers(CarDealerContext context, string inputXml)
@@ -108,6 +111,79 @@ namespace CarDealer
             int count = context.SaveChanges();
 
             return $"Successfully imported {cars.Count()}";
+        }//Memory Limit
+
+        public static string ImportCustomers(CarDealerContext context, string inputXml)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(ImportCustomerDto[]), new XmlRootAttribute("Customers"));
+
+            var customersDto = (ImportCustomerDto[])xmlSerializer.Deserialize(new StringReader(inputXml));
+
+            var customers = new List<Customer>();
+
+            foreach (var customerDto in customersDto)
+            {
+                var customer = Mapper.Map<Customer>(customerDto);
+                customers.Add(customer);
+            }
+
+            context.Customers.AddRange(customers);
+            context.SaveChanges();
+
+            return $"Successfully imported {customers.Count}";
+        }
+
+        public static string ImportSales(CarDealerContext context, string inputXml)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(ImportSaleDto[]), new XmlRootAttribute("Sales"));
+            var salesDto = (ImportSaleDto[])xmlSerializer.Deserialize(new StringReader(inputXml));
+
+            var sales = new List<Sale>();
+
+            foreach (var saleDto in salesDto)
+            {
+                var targetCar = context.Cars.FirstOrDefault(c => c.Id == saleDto.CarId);
+
+                if (targetCar != null)
+                {
+                    var sale = Mapper.Map<Sale>(saleDto);
+                    sales.Add(sale);
+                }
+            }
+
+            context.Sales.AddRange(sales);
+            context.SaveChanges();
+            ;
+            return $"Successfully imported {sales.Count}";
+        }
+
+        public static string GetCarsWithDistance(CarDealerContext context)
+        {
+            var cars = context.Cars
+                 .Where(c => c.TravelledDistance > 2000000)
+                 .OrderBy(c => c.Make)
+                 .ThenBy(c => c.Model)
+                 .Take(10)
+                 .Select(c => new ExportCarWithDistanceDto
+                 {
+                     Make = c.Make,
+                     Model = c.Model,
+                     TravelledDistance = c.TravelledDistance
+                 })
+                 .ToArray();
+
+            var sb = new StringBuilder();
+
+            var xmlSerializer = new XmlSerializer(typeof(ExportCarWithDistanceDto[]), new XmlRootAttribute("cars"));
+
+            var namespases = new XmlSerializerNamespaces(new[]
+            {
+                new XmlQualifiedName(),
+            });
+
+            xmlSerializer.Serialize(new StringWriter(sb), cars, namespases);
+
+            return sb.ToString().TrimEnd();
         }
     }
 }
