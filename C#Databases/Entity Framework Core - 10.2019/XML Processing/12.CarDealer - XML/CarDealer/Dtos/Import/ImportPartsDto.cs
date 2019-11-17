@@ -2,10 +2,10 @@
 
 namespace CarDealer.Dtos.Import
 {
-    [XmlRoot(ElementName = "parts")]
+    [XmlType("partId")]
     public class ImportPartsDto
     {
-        [XmlElement("partId")]
-        public ImportPartIdDto[] PartsId { get; set; }
+        [XmlAttribute(AttributeName = "id")]
+        public int Id { get; set; }
     }
 }

@@ -26,9 +26,9 @@ namespace CarDealer
 
             //context.Database.EnsureCreated();
 
-            //var inputXml = File.ReadAllText(@"C:\Users\Diana\Desktop\Software-University\C#Databases\Entity Framework Core - 10.2019\XML Processing\12.CarDealer - XML\CarDealer\Datasets\sales.xml");
+            //var inputXml = File.ReadAllText(@"C:\Users\Diana\Desktop\Software-University\C#Databases\Entity Framework Core - 10.2019\XML Processing\12.CarDealer - XML\CarDealer\Datasets\cars.xml");
 
-            Console.WriteLine(GetSalesWithAppliedDiscount(context));
+            Console.WriteLine(GetCarsWithDistance(context));
         }
 
         public static string ImportSuppliers(CarDealerContext context, string inputXml)
@@ -89,16 +89,16 @@ namespace CarDealer
 
                 context.Cars.Add(car);
 
-                foreach (var part in carDto.Parts.PartsId)
+                foreach (var part in carDto.Parts)
                 {
                     if (car.PartCars
-                        .FirstOrDefault(p => p.PartId == part.PartId) == null &&
-                        context.Parts.Find(part.PartId) != null)
+                        .FirstOrDefault(p => p.PartId == part.Id) == null &&
+                        context.Parts.Find(part.Id) != null)
                     {
                         var partCar = new PartCar
                         {
                             CarId = car.Id,
-                            PartId = part.PartId
+                            PartId = part.Id
                         };
 
                         car.PartCars.Add(partCar);
@@ -111,7 +111,7 @@ namespace CarDealer
             context.SaveChanges();
 
             return $"Successfully imported {cars.Count()}";
-        }//Memory Limit
+        }
 
         public static string ImportCustomers(CarDealerContext context, string inputXml)
         {
