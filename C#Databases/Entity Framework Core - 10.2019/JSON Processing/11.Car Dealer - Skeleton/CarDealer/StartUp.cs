@@ -14,21 +14,19 @@ namespace CarDealer
 {
     public class StartUp
     {
-        private static readonly MapperConfiguration config = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<CarDealerProfile>();
-        });
-
-        private static readonly IMapper mapper = config.CreateMapper();
-
         public static void Main(string[] args)
         {
+            Mapper.Initialize(x =>
+            {
+                x.AddProfile<CarDealerProfile>();
+            });
+
             CarDealerContext db = new CarDealerContext();
             //db.Database.EnsureCreated();
 
-            //var inputJson = File.ReadAllText(@"C:\Users\Diana\Desktop\Software-University\C#Databases\Entity Framework Core - 10.2019\JSON Processing\11.Car Dealer - Skeleton\CarDealer\Datasets\sales.json");
+            var inputJson = File.ReadAllText(@"C:\Users\Diana\Desktop\Software-University\C#Databases\Entity Framework Core - 10.2019\JSON Processing\11.Car Dealer - Skeleton\CarDealer\Datasets\sales.json");
 
-            Console.WriteLine(GetSalesWithAppliedDiscount(db));
+            Console.WriteLine(ImportSales(db, inputJson));
         }
 
         public static string ImportSuppliers(CarDealerContext context, string inputJson)
@@ -99,7 +97,7 @@ namespace CarDealer
         {
             var json = JsonConvert.DeserializeObject<CustomerDto[]>(inputJson);
 
-            var customers = mapper.Map<Customer[]>(json);
+            var customers = Mapper.Map<Customer[]>(json);
             context.Customers.AddRange(customers);
 
             var count = context.SaveChanges();
@@ -111,12 +109,10 @@ namespace CarDealer
         {
             var json = JsonConvert.DeserializeObject<SaleDto[]>(inputJson);
 
-            var sales = mapper.Map<Sale[]>(json);
+            var sales = Mapper.Map<Sale[]>(json);
             context.Sales.AddRange(sales);
 
-            int count = context.SaveChanges();
-
-            return $"Successfully imported {count}.";
+            return $"Successfully imported {context.SaveChanges()}.";
         }//Judge Memory Time Limit
 
         public static string GetOrderedCustomers(CarDealerContext context)
