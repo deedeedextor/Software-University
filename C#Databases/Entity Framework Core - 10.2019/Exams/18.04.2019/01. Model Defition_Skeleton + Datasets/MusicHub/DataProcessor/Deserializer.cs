@@ -3,11 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Xml.Serialization;
     using AutoMapper;
     using Data;
     using MusicHub.Data.Models;
+    using MusicHub.Data.Models.Enums;
     using MusicHub.DataProcessor.ImportDtos;
     using Newtonsoft.Json;
 
@@ -108,12 +111,96 @@
 
         public static string ImportSongs(MusicHubDbContext context, string xmlString)
         {
-            throw new NotImplementedException();
+            var xmlSerializer = new XmlSerializer(typeof(ImportSongDto[]), new XmlRootAttribute("Songs"));
+
+            var songsDto = (ImportSongDto[])xmlSerializer.Deserialize(new StringReader(xmlString));
+
+            var songs = new List<Song>();
+            var sb = new StringBuilder();
+
+            foreach (var songDto in songsDto)
+            {
+                bool isGenreValid = Enum.IsDefined(typeof(Genre), songDto.Genre);
+                bool isAlbumValid = context.Albums.Any(a => a.Id == songDto.AlbumId);
+                bool isWriterValid = context.Writers.Any(w => w.Id == songDto.WriterId);
+
+                if (!isGenreValid || !isAlbumValid || !isWriterValid)
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                var song = Mapper.Map<Song>(songDto);
+                bool isSongValid = IsValid(song);
+
+                if (!isSongValid)
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                songs.Add(song);
+
+                sb.AppendLine(string.Format(SuccessfullyImportedSong, song.Name, song.Genre, song.Duration));
+            }
+
+            context.Songs.AddRange(songs);
+            context.SaveChanges();
+
+            return sb.ToString().TrimEnd();
         }
 
         public static string ImportSongPerformers(MusicHubDbContext context, string xmlString)
         {
-            throw new NotImplementedException();
+            var xmlSerializer = new XmlSerializer(typeof(ImportPerformerDto[]), new XmlRootAttribute("Performers"));
+
+            var performersDto = (ImportPerformerDto[])xmlSerializer.Deserialize(new StringReader(xmlString));
+
+            var performers = new List<Performer>();
+
+            var sb = new StringBuilder();
+
+            foreach (var performerDto in performersDto)
+            {
+                var performer = Mapper.Map<Performer>(performerDto);
+                bool isPerformerValid = IsValid(performer);
+
+                var songs = context.Songs
+                    .Select(s => s.Id)
+                    .ToList();
+
+                var songsExists = performerDto.PerformersSongs
+                    .Select(ps => ps.Id)
+                    .All(x => songs.Contains(x));
+
+                if (!isPerformerValid || !songsExists)
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                foreach (var songDto in performerDto.PerformersSongs)
+                {
+                    var songPerformer = new SongPerformer()
+                    {
+                        Performer = performer,
+                        PerformerId = performer.Id,
+                        Song = context.Songs.Find(songDto.Id),
+                        SongId = songDto.Id
+                    };
+
+                    performer.PerformerSongs.Add(songPerformer);
+                }
+
+                performers.Add(performer);
+
+                sb.AppendLine(string.Format(SuccessfullyImportedPerformer, performer.FirstName, performer.PerformerSongs.Count()));
+            }
+
+            context.Performers.AddRange(performers);
+            context.SaveChanges();
+
+            return sb.ToString().TrimEnd();
         }
 
         private static bool IsValid(object dto)

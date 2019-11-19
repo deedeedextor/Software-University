@@ -37,16 +37,16 @@
                     File.ReadAllText(baseDir + "ImportWriters.json"));
             PrintAndExportEntityToFile(writers, exportDir + "ImportWriters.txt");*/
 
-            var producerAlbums = DataProcessor.Deserializer.ImportProducersAlbums(context,
+            /*var producerAlbums = DataProcessor.Deserializer.ImportProducersAlbums(context,
                     File.ReadAllText(baseDir + "ImportProducersAlbums.json"));
-            PrintAndExportEntityToFile(producerAlbums, exportDir + "ImportProducersAlbums.txt");
+            PrintAndExportEntityToFile(producerAlbums, exportDir + "ImportProducersAlbums.txt");*/
 
-            var songs = DataProcessor.Deserializer.ImportSongs(context, 
-                File.ReadAllText(baseDir + "Actual - ImportSongs.xml"));
-            PrintAndExportEntityToFile(songs, exportDir + "ImportSongs.txt");
+            /*var songs = DataProcessor.Deserializer.ImportSongs(context, 
+                File.ReadAllText(baseDir + "ImportSongs.xml"));
+            PrintAndExportEntityToFile(songs, exportDir + "ImportSongs.txt");*/
 
             var performers = DataProcessor.Deserializer.ImportSongPerformers(context, 
-                File.ReadAllText(baseDir + "Actual - ImportSongPerformers.xml"));
+                File.ReadAllText(baseDir + "ImportSongPerformers.xml"));
             PrintAndExportEntityToFile(performers, exportDir + "ImportSongPerformers.txt");
         }
 
