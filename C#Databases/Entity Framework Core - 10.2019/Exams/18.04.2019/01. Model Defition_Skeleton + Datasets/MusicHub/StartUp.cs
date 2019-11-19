@@ -33,17 +33,17 @@
 
         private static void ImportEntities(MusicHubDbContext context, string baseDir, string exportDir)
         {
-            /*var writers = DataProcessor.Deserializer.ImportWriters(context,
+            var writers = DataProcessor.Deserializer.ImportWriters(context,
                     File.ReadAllText(baseDir + "ImportWriters.json"));
-            PrintAndExportEntityToFile(writers, exportDir + "ImportWriters.txt");*/
+            PrintAndExportEntityToFile(writers, exportDir + "ImportWriters.txt");
 
-            /*var producerAlbums = DataProcessor.Deserializer.ImportProducersAlbums(context,
+            var producerAlbums = DataProcessor.Deserializer.ImportProducersAlbums(context,
                     File.ReadAllText(baseDir + "ImportProducersAlbums.json"));
-            PrintAndExportEntityToFile(producerAlbums, exportDir + "ImportProducersAlbums.txt");*/
+            PrintAndExportEntityToFile(producerAlbums, exportDir + "ImportProducersAlbums.txt");
 
-            /*var songs = DataProcessor.Deserializer.ImportSongs(context, 
+            var songs = DataProcessor.Deserializer.ImportSongs(context,
                 File.ReadAllText(baseDir + "ImportSongs.xml"));
-            PrintAndExportEntityToFile(songs, exportDir + "ImportSongs.txt");*/
+            PrintAndExportEntityToFile(songs, exportDir + "ImportSongs.txt");
 
             var performers = DataProcessor.Deserializer.ImportSongPerformers(context, 
                 File.ReadAllText(baseDir + "ImportSongPerformers.xml"));
