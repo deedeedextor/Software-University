@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29424.173
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Singleton", "Singleton\Singleton.csproj", "{FF3162BB-FFD5-4331-B94A-9B84C3B99F40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facade", "Facade\Facade.csproj", "{43EAEB10-FACC-4B5C-8FA8-743E60F60054}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandPattern", "CommandPattern\CommandPattern.csproj", "{787B6DC6-4C9F-4D84-BB69-E681112C394C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF3162BB-FFD5-4331-B94A-9B84C3B99F40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF3162BB-FFD5-4331-B94A-9B84C3B99F40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF3162BB-FFD5-4331-B94A-9B84C3B99F40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF3162BB-FFD5-4331-B94A-9B84C3B99F40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43EAEB10-FACC-4B5C-8FA8-743E60F60054}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43EAEB10-FACC-4B5C-8FA8-743E60F60054}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43EAEB10-FACC-4B5C-8FA8-743E60F60054}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43EAEB10-FACC-4B5C-8FA8-743E60F60054}.Release|Any CPU.Build.0 = Release|Any CPU
+		{787B6DC6-4C9F-4D84-BB69-E681112C394C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{787B6DC6-4C9F-4D84-BB69-E681112C394C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{787B6DC6-4C9F-4D84-BB69-E681112C394C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{787B6DC6-4C9F-4D84-BB69-E681112C394C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {20A96A42-DE04-49D4-8EEA-8FD798E50FBE}
+	EndGlobalSection
+EndGlobal
