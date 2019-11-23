@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -149,7 +150,7 @@
 
                 projections.Add(projection);
 
-                sb.AppendLine(string.Format(SuccessfulImportProjection, targetMovie.Title, projection.DateTime.ToString("MM/dd/yyyy")));
+                sb.AppendLine(string.Format(SuccessfulImportProjection, targetMovie.Title, projection.DateTime.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)));
             }
 
             context.Projections.AddRange(projections);
@@ -174,7 +175,7 @@
 
                 var isCustomerValid = IsValid(customer);
 
-                var projections = context.Projections.Select(x => x.Id).ToList();
+                var projections = context.Projections.Select(x => x.Id).ToArray();
                 var isValidProjection = projections
                     .Any(p => customerDto.Tickets.Any(c => c.ProjectionId != p));
 
@@ -182,12 +183,6 @@
                 {
                     sb.AppendLine(ErrorMessage);
                     continue;
-                }
-
-                foreach (var ticketDto in customerDto.Tickets)
-                {
-                    var ticket = Mapper.Map<Ticket>(ticketDto);
-                    customer.Tickets.Add(ticket);
                 }
 
                 customers.Add(customer);
@@ -200,6 +195,7 @@
 
             return sb.ToString().TrimEnd();
         }
+
         private static bool IsValid(object dto)
         {
             var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(dto);

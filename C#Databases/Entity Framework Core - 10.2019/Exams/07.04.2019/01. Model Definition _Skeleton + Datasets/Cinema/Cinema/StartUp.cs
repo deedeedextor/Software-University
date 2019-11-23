@@ -35,14 +35,14 @@
             /*var movies =
                 DataProcessor.Deserializer.ImportMovies(context,
                     File.ReadAllText(baseDir + "movies.json"));
-            PrintAndExportEntityToFile(movies, exportDir + "Actual Result - ImportMovies.txt");*/
+            PrintAndExportEntityToFile(movies, exportDir + "Actual Result - ImportMovies.txt");
 
-            /*var hallSeats =
+            var hallSeats =
                 DataProcessor.Deserializer.ImportHallSeats(context,
                     File.ReadAllText(baseDir + "halls-seats.json"));
-            PrintAndExportEntityToFile(hallSeats, exportDir + "Actual Result - ImportHallSeats.txt");*/
+            PrintAndExportEntityToFile(hallSeats, exportDir + "Actual Result - ImportHallSeats.txt");*//*
 
-            /*var projections = DataProcessor.Deserializer.ImportProjections(context,
+            var projections = DataProcessor.Deserializer.ImportProjections(context,
                 File.ReadAllText(baseDir + "projections.xml"));
             PrintAndExportEntityToFile(projections, exportDir + "Actual Result - ImportProjections.txt");*/
 
