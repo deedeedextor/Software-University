@@ -16,6 +16,7 @@
         {
             var albums = context.Albums
                 .Where(a => a.ProducerId == producerId)
+                .OrderByDescending(a => a.Price)
                 .Select(a => new ExportAlbumDto
                 {
                     AlbumName = a.Name,
@@ -32,7 +33,6 @@
                     .ToList(),
                     AlbumPrice = a.Songs.Sum(p => p.Price).ToString("F2")
                 })
-                .OrderByDescending(a => a.AlbumPrice)
                 .ToList();
 
             var json = JsonConvert.SerializeObject(albums, new JsonSerializerSettings
@@ -47,6 +47,11 @@
         {
             var songs = context.Songs
                 .Where(s => s.Duration.TotalSeconds > duration)
+                .OrderBy(s => s.Name)
+                .ThenBy(s => s.Writer.Name)
+                .ThenBy(s => s.SongPerformers
+                              .Select(sp => sp.Performer.FirstName + " " + sp.Performer.LastName)
+                              .FirstOrDefault())
                 .Select(s => new ExportSongDto
                 {
                     SongName = s.Name,
@@ -57,9 +62,6 @@
                     AlbumProducer = s.Album.Producer.Name,
                     Duration = s.Duration.ToString(@"hh\:mm\:ss")
                 })
-                .OrderBy(s => s.SongName)
-                .ThenBy(s => s.Writer)
-                .ThenBy(s => s.Performer)
                 .ToArray();
 
             var xmlSerializer = new XmlSerializer(typeof(ExportSongDto[]), new XmlRootAttribute("Songs"));
@@ -74,6 +76,6 @@
             xmlSerializer.Serialize(new StringWriter(sb), songs, namespaces);
 
             return sb.ToString().TrimEnd();
-        }// Judge 12/25
+        }
     }
 }
