@@ -1,4 +1,4 @@
-﻿namespace PerStore.Data
+﻿namespace PetStore.Data
 {
     public class DataSettings
     {

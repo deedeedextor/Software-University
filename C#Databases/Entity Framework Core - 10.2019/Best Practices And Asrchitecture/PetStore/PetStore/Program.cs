@@ -1,16 +1,17 @@
 ﻿namespace PetStore
 {
-    using Microsoft.EntityFrameworkCore;
-    using PerStore.Data;
-    using System;
+    using Data;
+    using Services.Implementations;
 
     public class Program
     {
         public static void Main(string[] args)
         {
-            var context = new PetStoreDbContext();
+            using var data = new PetStoreDbContext();
 
-            context.Database.Migrate();
+            var brandService = new BrandService(data);
+
+            var brandWithToys = brandService.findByIdWithToys(1);
         }
     }
 }

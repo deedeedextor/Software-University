@@ -1,7 +1,7 @@
-﻿namespace PerStore.Data
+﻿namespace PetStore.Data
 {
     using Microsoft.EntityFrameworkCore;
-    using PetStore.Models;
+    using Models;
 
     public class PetStoreDbContext : DbContext
     {
