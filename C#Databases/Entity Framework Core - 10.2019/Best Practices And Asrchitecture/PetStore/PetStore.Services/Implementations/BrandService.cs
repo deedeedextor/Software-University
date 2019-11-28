@@ -38,7 +38,7 @@
             return brand.Id;
         }
 
-        public BrandWithToysServiceModel findByIdWithToys(int id)
+        public BrandWithToysServiceModel FindByIdWithToys(int id)
             => this.data
               .Brands
             .Where(br => br.Id == id)

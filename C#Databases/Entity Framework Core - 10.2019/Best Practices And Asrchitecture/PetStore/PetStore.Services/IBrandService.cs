@@ -9,6 +9,6 @@
 
         IEnumerable<BrandListingServiceModel> SearchByName(string name);
 
-        BrandWithToysServiceModel findByIdWithToys(int id);
+        BrandWithToysServiceModel FindByIdWithToys(int id);
     }
 }

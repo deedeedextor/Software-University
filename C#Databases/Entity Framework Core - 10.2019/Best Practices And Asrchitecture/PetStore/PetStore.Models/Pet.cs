@@ -1,5 +1,6 @@
 ﻿namespace PetStore.Models
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using static DataValidation;
 
@@ -8,6 +9,8 @@
         public int Id { get; set; }
 
         public Gender Gender { get; set; }
+
+        public DateTime DateOfBirth { get; set; }
 
         public decimal Price { get; set; }
 
@@ -22,6 +25,5 @@
 
         public int? OrderId { get; set; }
         public Order Order { get; set; }
-
     }
 }
