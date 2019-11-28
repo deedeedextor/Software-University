@@ -1,6 +1,7 @@
 ﻿namespace PetStore.Services.Implementations
 {
     using System;
+    using System.Linq;
     using PetStore.Data;
     using PetStore.Models;
 
@@ -9,12 +10,14 @@
         private readonly PetStoreDbContext data;
         private readonly IBreedService breedService;
         private readonly ICategoryService categoryService;
+        private readonly IUserService userService;
 
-        public PetService(PetStoreDbContext data, IBreedService breedService, ICategoryService categoryService)
+        public PetService(PetStoreDbContext data, IBreedService breedService, ICategoryService categoryService, IUserService userService)
         {
             this.data = data;
             this.breedService = breedService;
             this.categoryService = categoryService;
+            this.userService = userService;
         }
 
         public void BuyPet(Gender gender, DateTime dateOfBirth, decimal price, string description, int breedId, int categoryId)
@@ -39,11 +42,45 @@
                 Gender = gender,
                 DateOfBirth = dateOfBirth,
                 Description = description,
+                Price = price,
                 BreedId = breedId,
                 CategoryId = categoryId
             };
 
             this.data.Pets.Add(pet);
+            this.data.SaveChanges();
+        }
+
+        public bool Exists(int petId)
+        {
+            return this.data.Pets.Any(p => p.Id == petId);
+        }
+
+        public void SellPet(int petId, int userId)
+        {
+            if (!this.Exists(petId))
+            {
+                throw new ArgumentException("There is no such pet with given id in the database!");
+            }
+
+            if (!this.userService.Exists(userId))
+            {
+                throw new ArgumentException("There is no such user with given id in the database!");
+            }
+
+            var pet = this.data.Pets
+               .First(p => p.Id == petId);
+
+            var order = new Order()
+            {
+                PurchaseDate = DateTime.Now,
+                Status = OrderStatus.Done,
+                UserId = userId
+            };
+
+            this.data.Orders.Add(order);
+            pet.Order = order;
+
             this.data.SaveChanges();
         }
     }

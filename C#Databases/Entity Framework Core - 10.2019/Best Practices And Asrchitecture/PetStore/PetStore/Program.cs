@@ -11,13 +11,20 @@
             using var data = new PetStoreDbContext();
 
             var breedService = new BreedService(data);
-            breedService.Add("Persian");
+            var categoryService = new CategoryService(data);
+            var userService = new UserService(data);
+
+            var petService = new PetService(data, breedService, categoryService, userService);
+            //petService.BuyPet(Models.Gender.Female, DateTime.Now, 30.89m, null, 1, 1);
+            petService.SellPet(1, 3);
+
+
+            //breedService.Add("Persian");
 
             /*var brandService = new BrandService(data);
 
             var brandWithToys = brandService.FindByIdWithToys(1);*/
 
-            //var userService = new UserService(data);
             //var toyService = new ToyService(data, userService);
 
             //userService.Register("Maria", "mar123@abv.bg");
