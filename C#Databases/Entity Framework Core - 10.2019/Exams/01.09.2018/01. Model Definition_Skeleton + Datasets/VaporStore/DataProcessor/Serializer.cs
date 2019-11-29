@@ -51,7 +51,7 @@
             });
 
             return json;
-        }//10/20
+        }
 
         public static string ExportUserPurchasesByType(VaporStoreDbContext context, string storeType)
 		{
