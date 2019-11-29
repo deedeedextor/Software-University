@@ -16,7 +16,7 @@ namespace VaporStore.DataProcessor.ExportDto
         [JsonProperty("Games")]
         public ICollection<ExportGameByGenreDto> Games { get; set; }
 
-        [JsonProperty("Players")]
+        [JsonProperty("TotalPlayers")]
         public int TotalPlayers { get; set; }
     }
 }
