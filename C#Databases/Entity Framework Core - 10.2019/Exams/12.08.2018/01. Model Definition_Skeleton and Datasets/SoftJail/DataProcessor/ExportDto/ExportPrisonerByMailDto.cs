@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
-
-namespace SoftJail.DataProcessor.ExportDto
+﻿namespace SoftJail.DataProcessor.ExportDto
 {
+    using System.Xml.Serialization;
+
     [XmlType("Prisoner")]
     public class ExportPrisonerByMailDto
     {

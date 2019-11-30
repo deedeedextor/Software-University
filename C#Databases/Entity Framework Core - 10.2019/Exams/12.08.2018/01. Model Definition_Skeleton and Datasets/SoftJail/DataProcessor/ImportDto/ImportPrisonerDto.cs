@@ -1,8 +1,8 @@
-﻿using SoftJail.Data.Models;
-using System.Collections.Generic;
-
-namespace SoftJail.DataProcessor.ImportDto
+﻿namespace SoftJail.DataProcessor.ImportDto
 {
+    using SoftJail.Data.Models;
+    using System.Collections.Generic;
+
     public class ImportPrisonerDto
     {
         public string FullName { get; set; }

@@ -1,12 +1,10 @@
-﻿using SoftJail.Data.Models.Enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
-
-namespace SoftJail.Data.Models
+﻿namespace SoftJail.Data.Models
 {
+    using SoftJail.Data.Models.Enums;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public class Officer
     {
         public int Id { get; set; }

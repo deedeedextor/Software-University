@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-
-namespace SoftJail.DataProcessor.ExportDto
+﻿namespace SoftJail.DataProcessor.ExportDto
 {
+    using Newtonsoft.Json;
+
     public class ExportOfficerByPrisonerDto
     {
         [JsonProperty("OfficerName")]

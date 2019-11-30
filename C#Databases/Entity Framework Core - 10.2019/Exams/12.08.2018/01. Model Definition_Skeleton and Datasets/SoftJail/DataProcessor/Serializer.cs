@@ -91,10 +91,5 @@
             Array.Reverse(charArray);
             return new string(charArray);
         }
-
-        private static string Reverse()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

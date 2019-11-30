@@ -1,7 +1,7 @@
-﻿using System.Xml.Serialization;
-
-namespace SoftJail.DataProcessor.ExportDto
+﻿namespace SoftJail.DataProcessor.ExportDto
 {
+    using System.Xml.Serialization;
+
     [XmlType("Message")]
     public class ExportMailDto
     {

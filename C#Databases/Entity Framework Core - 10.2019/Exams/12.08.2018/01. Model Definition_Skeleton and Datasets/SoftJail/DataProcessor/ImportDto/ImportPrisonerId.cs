@@ -1,7 +1,7 @@
-﻿using System.Xml.Serialization;
-
-namespace SoftJail.DataProcessor.ImportDto
+﻿namespace SoftJail.DataProcessor.ImportDto
 {
+    using System.Xml.Serialization;
+
     [XmlType("Prisoner")]
     public class ImportPrisonerId
     {

@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using SoftJail.Data.Models;
-using System.Collections.Generic;
-
-namespace SoftJail.DataProcessor.ImportDto
+﻿namespace SoftJail.DataProcessor.ImportDto
 {
+    using Newtonsoft.Json;
+    using SoftJail.Data.Models;
+    using System.Collections.Generic;
+
     public class ImportDepartmentDto
     {
         [JsonProperty("Name")]

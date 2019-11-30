@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-
-namespace SoftJail.DataProcessor.ExportDto
+﻿namespace SoftJail.DataProcessor.ExportDto
 {
+    using Newtonsoft.Json;
+    using System.Collections.Generic;
+
     public class ExportPrisonerByCellDto
     {
         [JsonProperty("Id")]
