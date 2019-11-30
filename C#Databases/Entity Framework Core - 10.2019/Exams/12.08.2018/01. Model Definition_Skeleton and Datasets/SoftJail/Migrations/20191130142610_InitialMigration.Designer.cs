@@ -10,7 +10,7 @@ using SoftJail.Data;
 namespace SoftJail.Migrations
 {
     [DbContext(typeof(SoftJailDbContext))]
-    [Migration("20191129145223_InitialMigration")]
+    [Migration("20191130142610_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
