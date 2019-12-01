@@ -1,15 +1,11 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.IO;
-using AutoMapper;
-using FastFood.Data;
-using FastFood.DataProcessor;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-
-namespace FastFood.App
+﻿namespace FastFood.App
 {
-	public class Startup
+    using System;
+    using System.IO;
+    using AutoMapper;
+    using FastFood.Data;
+
+    public class Startup
 	{
 		public static void Main(string[] args)
 		{
@@ -21,11 +17,11 @@ namespace FastFood.App
 
 			Mapper.Initialize(cfg => cfg.AddProfile<FastFoodProfile>());
 
-			ImportEntities(context);
+			//ImportEntities(context);
 
-			ExportEntities(context);
+			//ExportEntities(context);
 
-			BonusTask(context);
+			//BonusTask(context);
 		}
 
 		private static void ImportEntities(FastFoodDbContext context, string baseDir = @"..\Datasets\")

@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-using FastFood.Data;
-
-namespace FastFood.DataProcessor
+﻿namespace FastFood.DataProcessor
 {
-	public class Serializer
+    using System;
+    using System.IO;
+    using FastFood.Data;
+
+    public class Serializer
 	{
 		public static string ExportOrdersByEmployee(FastFoodDbContext context, string employeeName, string orderType)
 		{
