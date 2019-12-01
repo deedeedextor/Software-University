@@ -11,13 +11,13 @@
 		{
 			var context = new FastFoodDbContext();
 
-			ResetDatabase(context);
+			//ResetDatabase(context);
 
 			Console.WriteLine("Database Reset.");
 
 			Mapper.Initialize(cfg => cfg.AddProfile<FastFoodProfile>());
 
-			//ImportEntities(context);
+			ImportEntities(context);
 
 			//ExportEntities(context);
 
