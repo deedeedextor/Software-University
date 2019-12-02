@@ -17,9 +17,9 @@
 
 			Mapper.Initialize(cfg => cfg.AddProfile<FastFoodProfile>());
 
-			ImportEntities(context);
+			//ImportEntities(context);
 
-			//ExportEntities(context);
+			ExportEntities(context);
 
 			//BonusTask(context);
 		}
@@ -42,14 +42,14 @@
 		{
 			const string exportDir = "./ImportResults/";
 
-			var jsonOutput = DataProcessor.Serializer.ExportOrdersByEmployee(context, "Avery Rush", "ToGo");
-			Console.WriteLine(jsonOutput);
-			File.WriteAllText(exportDir + "OrdersByEmployee.json", jsonOutput);
+            var jsonOutput = DataProcessor.Serializer.ExportOrdersByEmployee(context, "Avery Rush", "ToGo");
+            Console.WriteLine(jsonOutput);
+            File.WriteAllText(exportDir + "OrdersByEmployee.json", jsonOutput);
 
-			var xmlOutput = DataProcessor.Serializer.ExportCategoryStatistics(context, "Chicken,Drinks,Toys");
-			Console.WriteLine(xmlOutput);
-			File.WriteAllText(exportDir + "CategoryStatistics.xml", xmlOutput);
-		}
+            var xmlOutput = DataProcessor.Serializer.ExportCategoryStatistics(context, "Chicken,Drinks,Toys");
+            Console.WriteLine(xmlOutput);
+            File.WriteAllText(exportDir + "CategoryStatistics.xml", xmlOutput);
+        }
 
 		private static void BonusTask(FastFoodDbContext context)
 		{
