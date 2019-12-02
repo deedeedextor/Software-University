@@ -1,16 +1,17 @@
-﻿using Newtonsoft.Json;
-
-namespace FastFood.DataProcessor.Dto.Import
+﻿namespace FastFood.DataProcessor.Dto.Import
 {
+    using Newtonsoft.Json;
+    using System.ComponentModel.DataAnnotations;
+
     public class ImportEmployeeDto
     {
-        [JsonProperty("Name")]
+        [Required, StringLength(30), MinLength(3)]
         public string Name { get; set; }
 
-        [JsonProperty("Age")]
+        [Required, Range(15, 80)]
         public int Age { get; set; }
 
-        [JsonProperty("Position")]
+        [Required, StringLength(30), MinLength(3)]
         public string Position { get; set; }
     }
 }

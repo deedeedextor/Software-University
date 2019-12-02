@@ -13,7 +13,7 @@
 
 			//ResetDatabase(context);
 
-			Console.WriteLine("Database Reset.");
+			//Console.WriteLine("Database Reset.");
 
 			Mapper.Initialize(cfg => cfg.AddProfile<FastFoodProfile>());
 
@@ -28,15 +28,15 @@
 		{
 			const string exportDir = "./ImportResults/";
 
-			var employees = DataProcessor.Deserializer.ImportEmployees(context, File.ReadAllText(baseDir + "employees.json"));
-			PrintAndExportEntityToFile(employees, exportDir + "Employees.txt");
+            var employees = DataProcessor.Deserializer.ImportEmployees(context, File.ReadAllText(baseDir + "employees.json"));
+            PrintAndExportEntityToFile(employees, exportDir + "Employees.txt");
 
-			var items = DataProcessor.Deserializer.ImportItems(context, File.ReadAllText(baseDir + "items.json"));
-			PrintAndExportEntityToFile(items, exportDir + "Items.txt");
+            var items = DataProcessor.Deserializer.ImportItems(context, File.ReadAllText(baseDir + "items.json"));
+            PrintAndExportEntityToFile(items, exportDir + "Items.txt");
 
-			var orders = DataProcessor.Deserializer.ImportOrders(context, File.ReadAllText(baseDir + "orders.xml"));
-			PrintAndExportEntityToFile(orders, exportDir + "Orders.txt");
-		}
+            var orders = DataProcessor.Deserializer.ImportOrders(context, File.ReadAllText(baseDir + "orders.xml"));
+            PrintAndExportEntityToFile(orders, exportDir + "Orders.txt");
+        }
 
 		private static void ExportEntities(FastFoodDbContext context)
 		{
