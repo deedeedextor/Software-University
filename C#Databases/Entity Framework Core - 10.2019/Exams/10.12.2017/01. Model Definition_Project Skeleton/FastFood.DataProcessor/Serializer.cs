@@ -17,7 +17,7 @@
 		{
             var type = Enum.Parse<OrderType>(orderType);
 
-            var orders = context
+            var employees = context
                 .Employees
                 .Where(e => e.Name == employeeName)
                 .Select(e => new
@@ -43,7 +43,7 @@
                 })
                 .SingleOrDefault();
 
-            var json = JsonConvert.SerializeObject(orders, Newtonsoft.Json.Formatting.Indented);
+            var json = JsonConvert.SerializeObject(employees, Newtonsoft.Json.Formatting.Indented);
 
             return json;
 		}//10/20

@@ -19,9 +19,9 @@
 
 			//ImportEntities(context);
 
-			//ExportEntities(context);
+			ExportEntities(context);
 
-			BonusTask(context);
+			//BonusTask(context);
 		}
 
 		private static void ImportEntities(FastFoodDbContext context, string baseDir = @"..\Datasets\")
