@@ -15,13 +15,13 @@
             {
                 Mapper.Initialize(config => config.AddProfile<PetClinicProfile>());
 
-                ResetDatabase(context);
+                //ResetDatabase(context);
 
-                ImportEntities(context);
+                //ImportEntities(context);
 
                 ExportEntities(context);
 				
-				BonusTask(context);
+				//BonusTask(context);
             }
         }
 

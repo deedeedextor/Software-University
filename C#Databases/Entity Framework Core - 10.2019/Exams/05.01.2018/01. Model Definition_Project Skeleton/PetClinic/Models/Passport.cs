@@ -5,10 +5,9 @@ namespace PetClinic.Models
 {
     public class Passport
     {
-        [Key, RegularExpression(@"^[A-Za-z]{7}[0-9]{3}$")]
+        [Key, RegularExpression(@"^([A-Za-z]{7}[0-9]{3})$")]
         public string SerialNumber { get; set; }
 
-        [Required]
         public Animal Animal { get; set; }
 
         [Required, RegularExpression(@"^(\+359|0)[0-9]{9}$")]
