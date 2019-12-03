@@ -21,13 +21,13 @@
 
             this.CreateMap<ImportVetDto, Vet>();
 
-            /*this.CreateMap<ImportProcedureDto, Procedure>()
+            this.CreateMap<ImportProcedureDto, Procedure>()
                 .ForPath(x => x.Vet.Name, y => y.MapFrom(x => x.Vet))
                 .ForPath(x => x.Animal.Passport.SerialNumber, y => y.MapFrom(x => x.Animal))
                 .ForMember(x => x.DateTime, y => y.MapFrom(x => DateTime.ParseExact(x.DateTime, "dd-MM-yyyy", CultureInfo.InvariantCulture)))
-                .ReverseMap();*//*
+                .ReverseMap();
 
-            this.CreateMap<AnimalAidDto, AnimalAid>();*/
+            this.CreateMap<AnimalAidDto, AnimalAid>();
         }
     }
 }

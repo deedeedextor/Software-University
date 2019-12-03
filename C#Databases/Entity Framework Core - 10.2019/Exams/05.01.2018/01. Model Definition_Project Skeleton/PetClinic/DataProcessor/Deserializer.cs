@@ -123,7 +123,7 @@
 
         public static string ImportProcedures(PetClinicContext context, string xmlString)
         {
-            var xDoc = XDocument.Parse(xmlString);
+            /*var xDoc = XDocument.Parse(xmlString);
             var elements = xDoc.Root.Elements();
 
             var sb = new StringBuilder();
@@ -204,8 +204,9 @@
             }
 
             context.Procedures.AddRange(validEntries);
-            context.SaveChanges();
-            /*var sb = new StringBuilder();
+            context.SaveChanges();*/
+
+            var sb = new StringBuilder();
 
             var procedures = new List<Procedure>();
 
@@ -234,31 +235,36 @@
                     continue;
                 }
 
-                var animalAids = new List<AnimalAid>();
+                var procedure = Mapper.Map<Procedure>(procedureDto);
 
-                bool allAidsExist = true;
-
-                foreach (var aid in procedureDto.AnimalAids)
+                foreach (var aidDto in procedureDto.AnimalAids)
                 {
-                    int? aidId = context.AnimalAids.SingleOrDefault(a => a.Name == aid.Name)?.Id;
-
-                    if (aidId == null || animalAids.Any(id => id == aidId))
+                    if (procedureDto.AnimalAids.Contains(aidDto) || context.AnimalAids.FirstOrDefault(aa => aa.Name == aidDto.Name) == null)
                     {
-                        allAidsExist = false;
-                        break;
+                        sb.AppendLine(string.Format(ErrorMessage));
+                        continue;
                     }
 
-                    animalAids.Add(aidId.Value);
+                    var animalAid = Mapper.Map<AnimalAid>(aidDto);
+
+                    var procedureAnimalAid = new ProcedureAnimalAid()
+                    {
+                        Procedure = procedure,
+                        AnimalAidId = animalAid.Id
+                    };
+
+                    procedure.ProcedureAnimalAids.Add(procedureAnimalAid);
                 }
 
-                if (!allAidsExist)
-                {
-                    sb.AppendLine(FailureMessage);
-                    continue;
-                }*/
+                procedures.Add(procedure);
+                sb.AppendLine("Record successfully imported.");
+            }
+
+            context.Procedures.AddRange(procedures);
+            context.SaveChanges();
 
             return sb.ToString().TrimEnd();
-        }
+        }//22/30
 
         private static bool IsValid(object dto)
         {
