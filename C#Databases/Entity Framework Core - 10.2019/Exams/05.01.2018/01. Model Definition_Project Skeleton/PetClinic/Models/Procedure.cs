@@ -24,7 +24,7 @@ namespace PetClinic.Models
         public ICollection<ProcedureAnimalAid> ProcedureAnimalAids { get; set; } = new HashSet<ProcedureAnimalAid>();
 
         [NotMapped]
-        public decimal Cost => this.ProcedureAnimalAids.Sum(pa => pa.AnimalAid.Price);
+        public decimal Cost { get; set; }
 
         [Required]
         public DateTime DateTime { get; set; }
