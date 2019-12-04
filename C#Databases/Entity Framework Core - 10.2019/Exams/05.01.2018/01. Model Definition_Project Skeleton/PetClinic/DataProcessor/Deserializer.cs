@@ -219,17 +219,23 @@
                 var isProcedureValid = IsValid(procedureDto);
                 var isAnimalAidsValid = IsValid(procedureDto.AnimalAids);
 
-                var allAnimalAids = context.AnimalAids
+                /*var allAnimalAids = context.AnimalAids
                     .Select(aa => aa.Name)
-                    .ToArray();
+                    .ToArray();*/
 
-                var vetExists = context.Vets
-                    .Any(v => v.Name == procedureDto.Vet);
+                /* var vetExists = context.Vets
+                     .Any(v => v.Name == procedureDto.Vet);*/
 
-                var animalPassportExists = context.Animals
-                    .Any(a => a.Passport.SerialNumber == procedureDto.Animal);
+                var vet = context.Vets
+                    .FirstOrDefault(v => v.Name == procedureDto.Vet);
 
-                if (!isProcedureValid || !isAnimalAidsValid || !vetExists || !animalPassportExists)
+                /*var animalPassportExists = context.Animals
+                    .Any(a => a.Passport.SerialNumber == procedureDto.Animal);*/
+
+                var animalPassport = context.Animals
+                    .FirstOrDefault(a => a.PassportSerialNumber == procedureDto.Animal);
+
+                if (!isProcedureValid || !isAnimalAidsValid || vet == null || animalPassport == null)
                 {
                     sb.AppendLine(string.Format(ErrorMessage));
                     continue;
@@ -237,9 +243,16 @@
 
                 var procedure = Mapper.Map<Procedure>(procedureDto);
 
+                /*var procedure = new Procedure()
+                {
+                    Vet = vet,
+                    Animal = animalPassport,
+                    DateTime = DateTime.ParseExact(procedureDto.DateTime, "dd-MM-yyyy", CultureInfo.InvariantCulture)
+                };*/
+
                 foreach (var aidDto in procedureDto.AnimalAids)
                 {
-                    if (procedureDto.AnimalAids.Contains(aidDto) || context.AnimalAids.FirstOrDefault(aa => aa.Name == aidDto.Name) == null)
+                    if (procedureDto.AnimalAids.Any(aa => aa.Name == aidDto.Name) || context.AnimalAids.FirstOrDefault(aa => aa.Name == aidDto.Name) == null)
                     {
                         sb.AppendLine(string.Format(ErrorMessage));
                         continue;
