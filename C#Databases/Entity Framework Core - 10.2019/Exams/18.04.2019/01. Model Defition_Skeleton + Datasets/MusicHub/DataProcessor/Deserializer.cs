@@ -124,16 +124,11 @@
                 bool isAlbumValid = context.Albums.Any(a => a.Id == songDto.AlbumId);
                 bool isWriterValid = context.Writers.Any(w => w.Id == songDto.WriterId);
 
-                if (!isGenreValid || !isAlbumValid || !isWriterValid)
-                {
-                    sb.AppendLine(ErrorMessage);
-                    continue;
-                }
-
                 var song = Mapper.Map<Song>(songDto);
                 bool isSongValid = IsValid(song);
 
-                if (!isSongValid)
+
+                if (!isSongValid || !isGenreValid || !isAlbumValid || !isWriterValid)
                 {
                     sb.AppendLine(ErrorMessage);
                     continue;
