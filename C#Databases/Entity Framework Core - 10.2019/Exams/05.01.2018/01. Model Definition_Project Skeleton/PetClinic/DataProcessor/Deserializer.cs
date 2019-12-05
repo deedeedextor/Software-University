@@ -227,15 +227,15 @@
                      .Any(v => v.Name == procedureDto.Vet);*/
 
                 var vet = context.Vets
-                    .FirstOrDefault(v => v.Name == procedureDto.Vet);
+                    .Any(v => v.Name == procedureDto.Vet);
 
                 /*var animalPassportExists = context.Animals
                     .Any(a => a.Passport.SerialNumber == procedureDto.Animal);*/
 
                 var animalPassport = context.Animals
-                    .FirstOrDefault(a => a.PassportSerialNumber == procedureDto.Animal);
+                    .Any(a => a.PassportSerialNumber == procedureDto.Animal);
 
-                if (!isProcedureValid || !isAnimalAidsValid || vet == null || animalPassport == null)
+                if (!isProcedureValid || !isAnimalAidsValid || !vet || !animalPassport)
                 {
                     sb.AppendLine(string.Format(ErrorMessage));
                     continue;
@@ -250,9 +250,16 @@
                     DateTime = DateTime.ParseExact(procedureDto.DateTime, "dd-MM-yyyy", CultureInfo.InvariantCulture)
                 };*/
 
+                var animalAids = new List<string>();
+
                 foreach (var aidDto in procedureDto.AnimalAids)
                 {
-                    if (procedureDto.AnimalAids.Any(aa => aa.Name == aidDto.Name) || context.AnimalAids.FirstOrDefault(aa => aa.Name == aidDto.Name) == null)
+                    if (!animalAids.Contains(aidDto.Name))
+                    {
+                        animalAids.Add(aidDto.Name);
+                    }
+
+                    else if (animalAids.Contains(aidDto.Name)  || context.AnimalAids.FirstOrDefault(aa => aa.Name == aidDto.Name) == null)
                     {
                         sb.AppendLine(string.Format(ErrorMessage));
                         continue;
