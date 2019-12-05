@@ -31,7 +31,8 @@
                             oi.Item.Name,
                             oi.Item.Price,
                             oi.Quantity
-                        }).ToArray(),
+                        })
+                        .ToArray(),
                         TotalPrice = o.OrderItems.Sum(oi => oi.Item.Price * oi.Quantity)
                     })
                         .OrderByDescending(o => o.TotalPrice)
