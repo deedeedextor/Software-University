@@ -21,6 +21,6 @@ namespace VaporStore.Data.Models
         [Required, Range(3, 103)]
         public int Age { get; set; }
 
-        public ICollection<Card> Cards { get; set; }
+        public ICollection<Card> Cards { get; set; } = new HashSet<Card>();
     }
 }
