@@ -105,17 +105,11 @@
 
                 var isWeaponValid = Enum.IsDefined(typeof(Weapon), officerDto.Weapon);
 
-                if (!isPositionValid || !isWeaponValid)
-                {
-                    sb.AppendLine(ErrorMessage);
-                    continue;
-                }
-
                 var officer = Mapper.Map<Officer>(officerDto);
 
                 var isOfficerValid = IsValid(officer);
 
-                if (!isOfficerValid)
+                if (!isPositionValid || !isWeaponValid || !isOfficerValid)
                 {
                     sb.AppendLine(ErrorMessage);
                     continue;
