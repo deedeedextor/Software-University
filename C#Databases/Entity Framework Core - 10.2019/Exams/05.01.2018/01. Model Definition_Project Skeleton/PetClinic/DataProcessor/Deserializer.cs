@@ -123,89 +123,6 @@
 
         public static string ImportProcedures(PetClinicContext context, string xmlString)
         {
-            /*var xDoc = XDocument.Parse(xmlString);
-            var elements = xDoc.Root.Elements();
-
-            var sb = new StringBuilder();
-            var validEntries = new List<Procedure>();
-
-            foreach (var el in elements)
-            {
-                string vetName = el.Element("Vet")?.Value;
-                string passportId = el.Element("Animal")?.Value;
-                string dateTimeString = el.Element("DateTime")?.Value;
-
-                int? vetId = context.Vets.SingleOrDefault(v => v.Name == vetName)?.Id;
-                bool passportExists = context.Passports.Any(p => p.SerialNumber == passportId);
-
-                bool dateIsValid = DateTime
-                    .TryParseExact(dateTimeString, "dd-MM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime);
-
-                var animalAidElements = el.Element("AnimalAids")?.Elements();
-
-                if (vetId == null || !passportExists || animalAidElements == null || !dateIsValid)
-                {
-                    sb.AppendLine(ErrorMessage);
-                    continue;
-                }
-
-                var animalAidIds = new List<int>();
-                bool allAidsExist = true;
-
-                foreach (var aid in animalAidElements)
-                {
-                    string aidName = aid.Element("Name")?.Value;
-
-                    int? aidId = context.AnimalAids.SingleOrDefault(a => a.Name == aidName)?.Id;
-
-                    if (aidId == null || animalAidIds.Any(id => id == aidId))
-                    {
-                        allAidsExist = false;
-                        break;
-                    }
-
-                    animalAidIds.Add(aidId.Value);
-                }
-
-                if (!allAidsExist)
-                {
-                    sb.AppendLine(ErrorMessage);
-                    continue;
-                }
-
-                var procedure = new Procedure()
-                {
-                    VetId = vetId.Value,
-                    AnimalId = context.Animals.Single(a => a.PassportSerialNumber == passportId).Id,
-                    DateTime = dateTime,
-                };
-
-                foreach (var id in animalAidIds)
-                {
-                    var mapping = new ProcedureAnimalAid()
-                    {
-                        Procedure = procedure,
-                        AnimalAidId = id
-                    };
-
-                    procedure.ProcedureAnimalAids.Add(mapping);
-                }
-
-                bool isValid = IsValid(procedure);
-
-                if (!isValid)
-                {
-                    sb.AppendLine(ErrorMessage);
-                    continue;
-                }
-
-                validEntries.Add(procedure);
-                sb.AppendLine("Record successfully imported.");
-            }
-
-            context.Procedures.AddRange(validEntries);
-            context.SaveChanges();*/
-
             var sb = new StringBuilder();
 
             var procedures = new List<Procedure>();
@@ -217,25 +134,16 @@
             foreach (var procedureDto in proceduresDto)
             {
                 var isProcedureValid = IsValid(procedureDto);
-                var isAnimalAidsValid = IsValid(procedureDto.AnimalAids);
 
-                /*var allAnimalAids = context.AnimalAids
-                    .Select(aa => aa.Name)
-                    .ToArray();*/
-
-                /* var vetExists = context.Vets
-                     .Any(v => v.Name == procedureDto.Vet);*/
+                var animalAids = context.AnimalAids.ToHashSet();
 
                 var vet = context.Vets
                     .Any(v => v.Name == procedureDto.Vet);
 
-                /*var animalPassportExists = context.Animals
-                    .Any(a => a.Passport.SerialNumber == procedureDto.Animal);*/
-
                 var animalPassport = context.Animals
                     .Any(a => a.PassportSerialNumber == procedureDto.Animal);
 
-                if (!isProcedureValid || !isAnimalAidsValid || !vet || !animalPassport)
+                if (!isProcedureValid || !vet || !animalPassport)
                 {
                     sb.AppendLine(string.Format(ErrorMessage));
                     continue;
@@ -243,37 +151,17 @@
 
                 var procedure = Mapper.Map<Procedure>(procedureDto);
 
-                /*var procedure = new Procedure()
-                {
-                    Vet = vet,
-                    Animal = animalPassport,
-                    DateTime = DateTime.ParseExact(procedureDto.DateTime, "dd-MM-yyyy", CultureInfo.InvariantCulture)
-                };*/
-
-                var animalAids = new List<string>();
-
                 foreach (var aidDto in procedureDto.AnimalAids)
                 {
-                    if (!animalAids.Contains(aidDto.Name))
-                    {
-                        animalAids.Add(aidDto.Name);
-                    }
+                    var animalAidId = animalAids.First(aa => aa.Name == aidDto.Name).Id;
 
-                    else if (animalAids.Contains(aidDto.Name)  || context.AnimalAids.FirstOrDefault(aa => aa.Name == aidDto.Name) == null)
+                    if (procedure.ProcedureAnimalAids.Any(paa => paa.AnimalAidId == animalAidId))
                     {
                         sb.AppendLine(string.Format(ErrorMessage));
                         continue;
                     }
 
-                    var animalAid = Mapper.Map<AnimalAid>(aidDto);
-
-                    var procedureAnimalAid = new ProcedureAnimalAid()
-                    {
-                        Procedure = procedure,
-                        AnimalAidId = animalAid.Id
-                    };
-
-                    procedure.ProcedureAnimalAids.Add(procedureAnimalAid);
+                    procedure.ProcedureAnimalAids.Add(new ProcedureAnimalAid { AnimalAidId = animalAidId });
                 }
 
                 procedures.Add(procedure);
