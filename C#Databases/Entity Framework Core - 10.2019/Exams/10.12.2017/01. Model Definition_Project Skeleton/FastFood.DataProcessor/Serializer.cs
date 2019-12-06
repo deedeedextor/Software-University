@@ -20,29 +20,29 @@
             var employees = context
                 .Employees
                 .Where(e => e.Name == employeeName)
-                .Select(e => new
+                .Select(e => new ExportEmployeeWithOrdersDto
                 {
-                    e.Name,
-                    Orders = e.Orders.Where(o => o.Type == type).Select(o => new
+                    Name = e.Name,
+                    Orders = e.Orders.Where(o => o.Type == type).Select(o => new ExportOrdersByEmployeeDto
                     {
-                        o.Customer,
-                        Items = o.OrderItems.Select(oi => new
+                        Customer = o.Customer,
+                        Items = o.OrderItems.Select(oi => new ExportItemsByOrderDto
                         {
-                            oi.Item.Name,
-                            oi.Item.Price,
-                            oi.Quantity
+                            Name = oi.Item.Name,
+                            Price = oi.Item.Price,
+                            Quantity = oi.Quantity
                         })
                         .ToArray(),
                         TotalPrice = o.OrderItems.Sum(oi => oi.Item.Price * oi.Quantity)
                     })
-                        .OrderByDescending(o => o.TotalPrice)
-                        .ThenByDescending(o => o.Items.Length)
-                        .ToArray(),
+                    .OrderByDescending(o => o.TotalPrice)
+                    .ThenByDescending(o => o.Items.Length)
+                    .ToArray(),
                     TotalMade = e.Orders
                         .Where(o => o.Type == type)
                         .Sum(o => o.OrderItems.Sum(oi => oi.Item.Price * oi.Quantity))
                 })
-                .SingleOrDefault();
+                .ToList();
 
             var json = JsonConvert.SerializeObject(employees, Newtonsoft.Json.Formatting.Indented);
 
