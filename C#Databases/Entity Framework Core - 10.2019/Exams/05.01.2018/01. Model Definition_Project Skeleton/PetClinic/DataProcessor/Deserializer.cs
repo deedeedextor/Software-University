@@ -151,12 +151,15 @@
 
                 var procedure = Mapper.Map<Procedure>(procedureDto);
 
+                var doNotImportProcedure = true;
+
                 foreach (var aidDto in procedureDto.AnimalAids)
                 {
                     var animalAidId = animalAids.First(aa => aa.Name == aidDto.Name).Id;
 
-                    if (procedure.ProcedureAnimalAids.Any(paa => paa.AnimalAidId == animalAidId))
+                    if (animalAidId == 0 || procedure.ProcedureAnimalAids.Any(paa => paa.AnimalAidId == animalAidId))
                     {
+                        doNotImportProcedure = false;
                         sb.AppendLine(string.Format(ErrorMessage));
                         continue;
                     }
@@ -164,8 +167,11 @@
                     procedure.ProcedureAnimalAids.Add(new ProcedureAnimalAid { AnimalAidId = animalAidId });
                 }
 
-                procedures.Add(procedure);
-                sb.AppendLine("Record successfully imported.");
+                if (doNotImportProcedure)
+                {
+                    procedures.Add(procedure);
+                    sb.AppendLine("Record successfully imported.");
+                }
             }
 
             context.Procedures.AddRange(procedures);
