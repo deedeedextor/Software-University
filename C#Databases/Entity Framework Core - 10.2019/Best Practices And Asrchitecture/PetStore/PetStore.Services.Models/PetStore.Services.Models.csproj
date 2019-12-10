@@ -8,4 +8,8 @@
     <Folder Include="User\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PetStore.Models\PetStore.Models.csproj" />
+  </ItemGroup>
+
 </Project>

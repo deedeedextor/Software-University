@@ -69,6 +69,37 @@
             this.data.SaveChanges();
         }
 
+        public bool Delete(int id)
+        {
+            var pet = this.data.Pets.Find(id);
+
+            if (pet == null)
+            {
+                return false;
+            }
+
+            this.data.Pets.Remove(pet);
+            this.data.SaveChanges();
+
+            return true;
+        }
+
+        public PetDetailsServiceModel Details(int id)
+            => this.data
+            .Pets
+            .Where(p => p.Id == id)
+            .Select(p => new PetDetailsServiceModel
+            {
+                Id = p.Id,
+                Gender = p.Gender,
+                Breed = p.Breed.Name,
+                Category = p.Category.Name,
+                DateOfBirth = p.DateOfBirth,
+                Description = p.Description,
+                Price = p.Price
+            })
+            .FirstOrDefault();
+
         public bool Exists(int petId)
         {
             return this.data.Pets.Any(p => p.Id == petId);

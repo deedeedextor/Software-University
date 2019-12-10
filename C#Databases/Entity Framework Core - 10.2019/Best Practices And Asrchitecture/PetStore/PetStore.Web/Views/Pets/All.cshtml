@@ -29,20 +29,26 @@
         <th>
             Price
         </th>
+        <th>
+
+        </th>
     </tr>
     @foreach (var pet in Model.Pets)
     {
-        <tr>
-            <td>
-                (@pet.Id) @pet.Category
-            </td>
-            <td>
-                @pet.Breed
-            </td>
-            <td>
-                $@pet.Price
-            </td>
-        </tr>
+<tr>
+    <td>
+        (@pet.Id) @pet.Category
+    </td>
+    <td>
+        @pet.Breed
+    </td>
+    <td>
+        $@pet.Price
+    </td>
+    <td class="text-center">
+        <a href="/Pets/Delete/@pet.Id" class="btn btn-danger btn-sm">Delete</a>
+    </td>
+</tr>
     }
 </table>
 

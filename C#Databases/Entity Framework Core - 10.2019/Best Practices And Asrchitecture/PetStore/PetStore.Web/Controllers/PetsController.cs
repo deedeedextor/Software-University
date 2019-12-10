@@ -30,5 +30,29 @@ namespace PetStore.Web.Controllers
 
             return View(model);
         }
+
+        public IActionResult Delete(int id)
+        {
+            var pet = this.pets.Details(id);
+
+            if (pet == null)
+            {
+                return NotFound();
+            }
+
+            return View(pet);
+        }
+
+        public IActionResult ConfirmDelete(int id)
+        {
+            var deleted = this.pets.Delete(id);
+
+            if (!deleted)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }
