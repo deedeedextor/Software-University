@@ -1,12 +1,16 @@
 ﻿namespace PetStore.Services.Implementations
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using PetStore.Data;
     using PetStore.Models;
+    using PetStore.Services.Models.Pet;
 
     public class PetService : IPetService
     {
+        private const int PetsPageSize = 25;
+
         private readonly PetStoreDbContext data;
         private readonly IBreedService breedService;
         private readonly ICategoryService categoryService;
@@ -19,6 +23,20 @@
             this.categoryService = categoryService;
             this.userService = userService;
         }
+
+        public IEnumerable<PetListingServiceModel> All(int page = 1)
+            => this.data
+            .Pets
+            .Skip((page - 1) * PetsPageSize)
+            .Take(PetsPageSize)
+            .Select(p => new PetListingServiceModel
+            {
+                Id = p.Id,
+                Price = p.Price,
+                Category = p.Category.Name,
+                Breed = p.Breed.Name,
+            })
+            .ToList();
 
         public void BuyPet(Gender gender, DateTime dateOfBirth, decimal price, string description, int breedId, int categoryId)
         {
