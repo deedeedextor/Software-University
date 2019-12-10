@@ -8,7 +8,7 @@ namespace TeisterMask.DataProcessor.ImportDto
 {
     public class ExportBusiestEmployeeDto
     {
-        [Required, StringLength(40), MinLength(3), RegularExpression("^(A-Z)|(a-Z)|.*(0-9)+$")]
+        [Required, StringLength(40), MinLength(3), RegularExpression("^[A-Za-z0-9]+$")]
         public string Username { get; set; }
 
         [Required]

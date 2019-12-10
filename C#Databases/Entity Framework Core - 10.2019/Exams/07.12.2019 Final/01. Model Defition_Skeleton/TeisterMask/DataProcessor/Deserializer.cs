@@ -42,8 +42,11 @@
                 var project = new Project
                 {
                     Name = projectDto.Name,
-                    OpenDate = DateTime.ParseExact(projectDto.OpenDate, "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                    DueDate = DateTime.ParseExact(projectDto.DueDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                    OpenDate = DateTime.ParseExact(projectDto.OpenDate, @"dd/MM/yyyy", CultureInfo.InvariantCulture),
+                    DueDate = string.IsNullOrEmpty(projectDto.DueDate) ?
+                        (DateTime?)null
+                        : DateTime.ParseExact(
+                        projectDto.DueDate, @"dd/MM/yyyy", CultureInfo.InvariantCulture)
                 };
 
                 if (!IsValid(project))
@@ -54,30 +57,35 @@
 
                 foreach (var taskDto in projectDto.Tasks)
                 {
-                    var task = new Task
-                    {
-                        Name = taskDto.Name,
-                        OpenDate = DateTime.ParseExact(taskDto.OpenDate, @"dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        DueDate = DateTime.ParseExact(taskDto.DueDate, @"dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        ExecutionType = (ExecutionType)Enum.Parse<ExecutionType>(taskDto.ExecutionType),
-                        LabelType = (LabelType)Enum.Parse<LabelType>(taskDto.LabelType),
-                    };
+                    var isExecutionTypeValid = Enum.IsDefined(typeof(ExecutionType), taskDto.ExecutionType);
 
-                    if (!IsValid(task))
+                    var isLabelTypeValid = Enum.IsDefined(typeof(LabelType), taskDto.LabelType);
+
+                    if (!isExecutionTypeValid || !isLabelTypeValid)
                     {
                         sb.AppendLine(ErrorMessage);
                         continue;
                     }
 
-                    if (task.OpenDate < project.OpenDate || task.DueDate > project.DueDate)
+                    var task = new Task
+                    {
+                        Name = taskDto.Name,
+                        OpenDate = DateTime.ParseExact(taskDto.OpenDate, @"dd/MM/yyyy", CultureInfo.InvariantCulture),
+                        DueDate = DateTime.ParseExact(taskDto.DueDate, @"dd/MM/yyyy", CultureInfo.InvariantCulture),
+                        ExecutionType = (ExecutionType)
+                            Enum.ToObject(typeof(ExecutionType), taskDto.ExecutionType),
+                        LabelType = (LabelType)
+                            Enum.ToObject(typeof(LabelType), taskDto.LabelType),
+                        Project = project
+                    };
+
+                    if (!IsValid(task) || task.OpenDate < project.OpenDate || task.DueDate > project.DueDate)
                     {
                         sb.AppendLine(ErrorMessage);
                         continue;
                     }
 
                     project.Tasks.Add(task);
-                    /*DateTime openDateTask = DateTime.Parse(task.OpenDate);
-                    DateTime openDateProject = DateTime.Parse(project.OpenDate);*/
                 }
 
                 projects.Add(project);
@@ -88,7 +96,7 @@
             context.SaveChanges();
 
             return sb.ToString().TrimEnd();
-        }
+        }//13-25 - nullable DateTime.ParseExact
 
         public static string ImportEmployees(TeisterMaskContext context, string jsonString)
         {
@@ -113,15 +121,9 @@
                     Phone = employeeDto.Phone,
                 };
 
-                var tasks = context.Tasks
-                    .Select(t => t.Id)
-                    .ToList();
-
                 foreach (var taskId in employeeDto.Tasks.Distinct())
                 {
-                    var isTaskExists = tasks.Contains(taskId);
-
-                    if (!isTaskExists)
+                    if (context.Tasks.Find(taskId) == null)
                     {
                         sb.AppendLine(ErrorMessage);
                         continue;
