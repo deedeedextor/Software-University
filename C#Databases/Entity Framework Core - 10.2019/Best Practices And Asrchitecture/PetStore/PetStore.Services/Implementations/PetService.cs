@@ -101,5 +101,8 @@
 
             this.data.SaveChanges();
         }
+
+        public int Total()
+            => this.data.Pets.Count();
     }
 }

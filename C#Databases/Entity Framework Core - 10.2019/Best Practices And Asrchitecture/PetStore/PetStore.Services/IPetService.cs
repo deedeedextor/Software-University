@@ -15,5 +15,7 @@
         void SellPet(int petId, int userId);
 
         bool Exists(int petId);
+
+        int Total();
     }
 }
