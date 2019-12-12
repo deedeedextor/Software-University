@@ -9,6 +9,8 @@ namespace PetStore.Services
 
         void Edit(CategoryEditServiceModel model);
 
+        bool Remove(int id);
+
         CategoryDetailsServiceModel GetById(int id);
 
         IEnumerable<AllCategoriesServiceModel> All();

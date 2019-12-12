@@ -54,6 +54,28 @@
             return cdsm;
         }
 
+        public bool Remove(int id)
+        {
+            var category = this.data
+                .Categories
+                .Find(id);
+
+            if (category == null)
+            {
+                return false;
+            }
+
+            this.data.Categories.Remove(category);
+            int deletedEntitiesCount = this.data.SaveChanges();
+
+            if (deletedEntitiesCount == 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public IEnumerable<AllCategoriesServiceModel> All()
             => this.data
             .Categories

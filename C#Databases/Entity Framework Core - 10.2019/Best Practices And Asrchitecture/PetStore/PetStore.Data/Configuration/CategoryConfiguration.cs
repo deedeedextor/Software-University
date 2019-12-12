@@ -12,7 +12,7 @@
                  .HasMany(c => c.Pets)
                  .WithOne(p => p.Category)
                  .HasForeignKey(k => k.CategoryId)
-                 .OnDelete(DeleteBehavior.Restrict);
+                 .OnDelete(DeleteBehavior.Cascade);
 
             category
                 .HasMany(c => c.Food)
