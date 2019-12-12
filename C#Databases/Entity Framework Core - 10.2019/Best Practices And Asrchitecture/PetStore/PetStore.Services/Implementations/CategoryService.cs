@@ -25,6 +25,35 @@
             this.data.SaveChanges();
         }
 
+        public void Edit(CategoryEditServiceModel model)
+        {
+            var category = this.data
+                .Categories
+                .Find(model.Id);
+
+            category.Name = model.Name;
+            category.Description = model.Description;
+
+            this.data.SaveChanges();
+        }
+
+        public CategoryDetailsServiceModel GetById(int id)
+        {
+            var category = this.data
+                .Categories
+                .Find(id);
+
+
+            var cdsm = new CategoryDetailsServiceModel
+            {
+                Id = category?.Id,
+                Name = category?.Name,
+                Description = category?.Description,
+            };
+
+            return cdsm;
+        }
+
         public IEnumerable<AllCategoriesServiceModel> All()
             => this.data
             .Categories
@@ -40,5 +69,6 @@
         {
             return this.data.Categories.Any(c => c.Id == categoryId);
         }
+
     }
 }
