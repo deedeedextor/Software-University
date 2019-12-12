@@ -19,6 +19,7 @@
         bool Exists(int petId);
 
         int Total();
+
         bool Delete(int id);
     }
 }

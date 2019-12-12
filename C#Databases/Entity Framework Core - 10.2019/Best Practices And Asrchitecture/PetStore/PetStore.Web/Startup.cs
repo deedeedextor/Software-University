@@ -28,6 +28,7 @@ namespace PetStore.Web
         {
             services.AddDbContext<PetStoreDbContext>();
 
+            services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IPetService, PetService>();
             services.AddTransient<IBreedService, BreedService>();
             services.AddTransient<ICategoryService, CategoryService>();
