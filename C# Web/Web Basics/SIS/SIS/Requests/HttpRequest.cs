@@ -51,10 +51,21 @@ namespace SIS.HTTP.Requests
             return true;
         }
 
+        private IEnumerable<string> ParsePlainRequestsHeaders(string[] requestLines)
+        {
+            for (int i = 0; i < requestLines.Length - 1; i++)
+            {
+                if (!string.IsNullOrEmpty(requestLines[i]))
+                {
+                    yield return requestLines[i];
+                }
+            }
+        }
+
         private void ParseRequestMethod(string[] requestLine)
         {
             HttpRequestMethod method;
-            bool isParsed = HttpRequestMethod.TryParse(requestLine[0], out method);
+            bool isParsed = HttpRequestMethod.TryParse(requestLine[0], true, out method);
 
             if (!isParsed)
             {
@@ -129,7 +140,7 @@ namespace SIS.HTTP.Requests
             this.ParseRequestUrl(requestLine);
             this.ParseRequestPath();
 
-            this.ParseHeaders(splitRequestContent.Skip(1).ToArray());
+            this.ParseHeaders(this.ParsePlainRequestsHeaders(splitRequestContent).ToArray());
             this.ParseCookies();
 
             this.ParseRequestParameters(splitRequestContent[splitRequestContent.Length - 1]);
