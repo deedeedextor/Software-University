@@ -1,7 +1,5 @@
 ﻿using HttpServerDemo.Models.Contracts;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -24,7 +22,7 @@ namespace HttpServerDemo.Models
         {
             this.tcpListener.Start();
             this.isWorking = true;
-            //Console.WriteLine("Started!");
+            Console.WriteLine("Started!");
 
             while (this.isWorking)
             {
@@ -42,8 +40,8 @@ namespace HttpServerDemo.Models
                 string responseBody = "<form method='post'><input type='text' name='tweet' placeholder='Enter tweet...' /><input name='name' /><input type='submit' /></form>";
                 string response = "HTTP/1.0 200 OK" + NewLine +
                                   "Content-Type: text/html" + NewLine +
-                                  // "Location: https://google.com" + NewLine +
-                                  // "Content-Disposition: attachment; filename=index.html" + NewLine +
+                                   "Location: https://google.com" + NewLine +
+                                   "Content-Disposition: attachment; filename=index.html" + NewLine +
                                   "Server: MyCustomServer/1.0" + NewLine +
                                   $"Content-Length: {responseBody.Length}" + NewLine + NewLine +
                                   responseBody;
