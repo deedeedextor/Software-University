@@ -53,7 +53,7 @@ namespace SIS.HTTP.Requests
 
         private IEnumerable<string> ParsePlainRequestsHeaders(string[] requestLines)
         {
-            for (int i = 0; i < requestLines.Length - 1; i++)
+            for (int i = 1; i < requestLines.Length - 1; i++)
             {
                 if (!string.IsNullOrEmpty(requestLines[i]))
                 {
@@ -100,7 +100,7 @@ namespace SIS.HTTP.Requests
 
         private void ParseRequestQueryParameters()
         {
-            this.Url.Split('?')[1]
+            this.Url.Split('?', '#')[1]
                 .Split('&')
                 .Select(plainQueryParameter => plainQueryParameter.Split('='))
                 .ToList()

@@ -1,5 +1,6 @@
 ﻿using SIS.HTTP.Common;
 using SIS.HTTP.Enums;
+using SIS.HTTP.Extensions;
 using SIS.HTTP.Headers;
 using SIS.HTTP.Headers.Contracts;
 using SIS.HTTP.Responses.Contracts;
@@ -33,13 +34,28 @@ namespace SIS.HTTP.Responses
 
         public void AddHeader(HttpHeader header)
         {
-            CoreValidator.ThrowIfNull(header, nameof(header));
             this.Headers.AddHeader(header);
         }
 
         public byte[] GetBytes()
         {
-            throw new NotImplementedException();
+            byte[] httpResponseBytesWithoutBody = Encoding.UTF8.GetBytes(this.ToString());
+
+            byte[] httpResponseBytesWithBody = new byte[httpResponseBytesWithoutBody.Length + this.Content.Length];
+
+            int currentIndex = 0;
+
+            for (; currentIndex < httpResponseBytesWithoutBody.Length; currentIndex++)
+            {
+                httpResponseBytesWithBody[currentIndex] = httpResponseBytesWithoutBody[currentIndex];
+            }
+
+            for (; currentIndex < httpResponseBytesWithBody.Length; currentIndex++)
+            {
+                httpResponseBytesWithBody[currentIndex] = this.Content[currentIndex];
+            }
+
+            return httpResponseBytesWithBody;
         }
 
         public override string ToString()
@@ -47,7 +63,7 @@ namespace SIS.HTTP.Responses
             var result = new StringBuilder();
 
             result
-                .Append($"{GlobalConstants.HttpOneProtocolFragment} {(int)this.StatusCode} {this.StatusCode.ToString()}")
+                .Append($"{GlobalConstants.HttpOneProtocolFragment} {this.StatusCode.GetStatusLine()}")
                 .Append(GlobalConstants.HttpNewLine)
                 .Append(this.Headers)
                 .Append(GlobalConstants.HttpNewLine);
