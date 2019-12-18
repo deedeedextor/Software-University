@@ -1,6 +1,9 @@
 ﻿using SIS.HTTP.Enums;
-using SIS.HTTP.Requests;
+using SIS.HTTP.Headers;
+using SIS.HTTP.Responses;
 using System;
+using System.Globalization;
+using System.Text;
 
 namespace Demo.App
 {
@@ -18,9 +21,15 @@ namespace Demo.App
 
             HttpRequest httpRequest = new HttpRequest(request);*/
 
-            HttpResponseStatusCode statusCode = HttpResponseStatusCode.Unauthorized;
+            /*HttpResponseStatusCode statusCode = HttpResponseStatusCode.Unauthorized;*/
 
-            Console.WriteLine((int) statusCode);
+            HttpResponse response = new HttpResponse(HttpResponseStatusCode.InternalServerError);
+            response.AddHeader(new HttpHeader("Host", "localhost:5000"));
+            response.AddHeader(new HttpHeader("Date", DateTime.Now.ToString(CultureInfo.InvariantCulture)));
+
+            response.Content = Encoding.UTF8.GetBytes("<h1>Hello World!</h1>");
+
+            Console.WriteLine(Encoding.UTF8.GetString(response.GetBytes()));
         }
     }
 }

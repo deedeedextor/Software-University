@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SIS.HTTP.Extensions
+﻿namespace SIS.HTTP.Extensions
 {
     public static class StringExtensions
     {

@@ -1,9 +1,6 @@
 ﻿using SIS.HTTP.Enums;
 using SIS.HTTP.Headers;
 using SIS.HTTP.Headers.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SIS.HTTP.Responses.Contracts
 {

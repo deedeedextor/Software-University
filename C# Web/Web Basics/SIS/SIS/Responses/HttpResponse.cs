@@ -4,8 +4,6 @@ using SIS.HTTP.Extensions;
 using SIS.HTTP.Headers;
 using SIS.HTTP.Headers.Contracts;
 using SIS.HTTP.Responses.Contracts;
-using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace SIS.HTTP.Responses
@@ -43,16 +41,14 @@ namespace SIS.HTTP.Responses
 
             byte[] httpResponseBytesWithBody = new byte[httpResponseBytesWithoutBody.Length + this.Content.Length];
 
-            int currentIndex = 0;
-
-            for (; currentIndex < httpResponseBytesWithoutBody.Length; currentIndex++)
+            for (int i = 0; i < httpResponseBytesWithoutBody.Length; i++)
             {
-                httpResponseBytesWithBody[currentIndex] = httpResponseBytesWithoutBody[currentIndex];
+                httpResponseBytesWithBody[i] = httpResponseBytesWithoutBody[i];
             }
 
-            for (; currentIndex < httpResponseBytesWithBody.Length; currentIndex++)
+            for (int i = 0; i < httpResponseBytesWithBody.Length - httpResponseBytesWithoutBody.Length; i++)
             {
-                httpResponseBytesWithBody[currentIndex] = this.Content[currentIndex];
+                httpResponseBytesWithBody[i + httpResponseBytesWithoutBody.Length] = this.Content[i];
             }
 
             return httpResponseBytesWithBody;
