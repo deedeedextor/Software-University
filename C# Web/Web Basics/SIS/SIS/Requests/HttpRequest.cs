@@ -47,7 +47,14 @@ namespace SIS.HTTP.Requests
 
         private bool IsValidRequestQueryString(string queryString, string[] queryParameters)
         {
-            return true;
+            CoreValidator.ThrowIfNullOrEmpty(queryString, nameof(queryString));
+
+            return !(string.IsNullOrEmpty(queryString) || queryParameters.Length < 1);
+        }
+
+        private bool HasQueryString()
+        {
+            return this.Url.Split('?').Length > 1;
         }
 
         private IEnumerable<string> ParsePlainRequestsHeaders(string[] requestLines)
@@ -99,21 +106,27 @@ namespace SIS.HTTP.Requests
 
         private void ParseRequestQueryParameters()
         {
-            this.Url.Split('?', '#')[1]
-                .Split('&')
-                .Select(plainQueryParameter => plainQueryParameter.Split('='))
-                .ToList()
-                .ForEach(queryParameterKeyValuePair => this.QueryData.Add(queryParameterKeyValuePair[0], queryParameterKeyValuePair[1]));
+            if (this.HasQueryString())
+            {
+                this.Url.Split('?', '#')[1]
+                    .Split('&')
+                    .Select(plainQueryParameter => plainQueryParameter.Split('='))
+                    .ToList()
+                    .ForEach(queryParameterKeyValuePair => this.QueryData.Add(queryParameterKeyValuePair[0], queryParameterKeyValuePair[1]));
+            }
         }
 
         private void ParseRequestFormDataParameters(string formData)
         {
-            //TO DO Prase Multiple Parameters By Name
-            formData
-                .Split('&')
-                .Select(plainQueryParameter => plainQueryParameter.Split('='))
-                .ToList()
-                .ForEach(queryParameterKeyValuePair => this.FormData.Add(queryParameterKeyValuePair[0], queryParameterKeyValuePair[1]));
+            if (!string.IsNullOrEmpty(formData))
+            {
+                //TO DO Prase Multiple Parameters By Name
+                formData
+                    .Split('&')
+                    .Select(plainQueryParameter => plainQueryParameter.Split('='))
+                    .ToList()
+                    .ForEach(queryParameterKeyValuePair => this.FormData.Add(queryParameterKeyValuePair[0], queryParameterKeyValuePair[1]));
+            }
         }
 
         private void ParseRequestParameters(string formData)
