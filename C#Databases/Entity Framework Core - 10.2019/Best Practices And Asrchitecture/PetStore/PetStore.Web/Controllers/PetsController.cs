@@ -12,9 +12,6 @@
         public PetsController(IPetService pets)
             => this.pets = pets;
 
-        //public IEnumerable<PetListingServiceModel> All()
-            //=> this.pets.All();
-
         public IActionResult All(int page = 1)
         {
             var allPets = this.pets.All(page);
@@ -31,10 +28,39 @@
         }
 
         [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var petDetails = this.pets.GetById(id);
+
+            if (petDetails == null)
+            {
+                return NotFound();
+            }
+
+            if (petDetails.Description == null)
+            {
+                petDetails.Description = "No description";
+            }
+
+            var pdvm = new PetDetailsViewModel
+            {
+                Id = petDetails.Id,
+                Gender = petDetails.Gender,
+                DateOfBirth = petDetails.DateOfBirth,
+                Description = petDetails.Description,
+                Breed = petDetails.Breed,
+                Category = petDetails.Category,
+                Price = petDetails.Price
+            };
+
+            return this.View(pdvm);
+        }
+
+        [HttpGet]
         public IActionResult Edit(int id)
         {
             var pet = this.pets
-                .Details(id);
+                .GetById(id);
 
             if (pet == null)
             {
@@ -81,13 +107,13 @@
 
             this.pets.Edit(pdsm);
 
-            return this.RedirectToAction("All", "Pets");
+            return this.RedirectToAction("Details", "Pets", new{pdsm.Id});
         }
 
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var pet = this.pets.Details(id);
+            var pet = this.pets.GetById(id);
 
             if (pet == null)
             {

@@ -7,7 +7,7 @@
 
     public interface IPetService
     {
-        PetDetailsServiceModel Details(int id);
+        PetDetailsServiceModel GetById(int id);
 
         IEnumerable<PetListingServiceModel> All(int page = 1);
 

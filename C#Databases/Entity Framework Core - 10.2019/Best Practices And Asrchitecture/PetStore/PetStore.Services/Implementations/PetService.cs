@@ -85,7 +85,7 @@
             return true;
         }
 
-        public PetDetailsServiceModel Details(int id)
+        public PetDetailsServiceModel GetById(int id)
             => this.data
             .Pets
             .Where(p => p.Id == id)
