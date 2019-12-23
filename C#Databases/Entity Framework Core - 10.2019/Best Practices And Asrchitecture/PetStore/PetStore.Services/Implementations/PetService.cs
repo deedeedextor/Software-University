@@ -3,9 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using PetStore.Data;
+    using Data;
     using PetStore.Models;
-    using PetStore.Services.Models.Pet;
+    using Models.Pet;
+    using System.Globalization;
 
     public class PetService : IPetService
     {
@@ -47,12 +48,12 @@
 
             if (!this.breedService.Exists(breedId))
             {
-                throw new ArgumentException("Thre is no such breed with given id in the database!");
+                throw new ArgumentException("There is no such breed with given id in the database!");
             }
 
             if (!this.categoryService.Exists(categoryId))
             {
-                throw new ArgumentException("Thre is no such category with given id in the database!");
+                throw new ArgumentException("There is no such category with given id in the database!");
             }
 
             var pet = new Pet()
@@ -94,11 +95,29 @@
                 Gender = p.Gender,
                 Breed = p.Breed.Name,
                 Category = p.Category.Name,
-                DateOfBirth = p.DateOfBirth,
+                DateOfBirth = p.DateOfBirth.ToString(CultureInfo.InvariantCulture),
                 Description = p.Description,
                 Price = p.Price
             })
             .FirstOrDefault();
+
+        public void Edit(PetDetailsServiceModel model)
+        {
+            var pet = this.data.Pets.Find(model.Id);
+
+            pet.Gender = model.Gender;
+            pet.DateOfBirth = DateTime.Parse(model.DateOfBirth, CultureInfo.InvariantCulture);
+            pet.Description = model.Description;
+            pet.BreedId = this.data
+                .Breed
+                .First(b => b.Name == model.Breed).Id;
+            pet.CategoryId = this.data
+                .Categories
+                .First(b => b.Name == model.Category).Id;
+            pet.Price = model.Price;
+
+            this.data.SaveChanges();
+        }
 
         public bool Exists(int petId)
         {

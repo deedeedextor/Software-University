@@ -2,7 +2,7 @@
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
-    using PetStore.Models;
+    using Models;
 
     public class FoodConfiguration : IEntityTypeConfiguration<Food>
     {

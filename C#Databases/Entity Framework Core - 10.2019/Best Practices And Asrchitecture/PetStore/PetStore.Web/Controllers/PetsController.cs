@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PetStore.Services;
-using PetStore.Services.Models.Pet;
-using PetStore.Web.Models.Pet;
-using System.Collections.Generic;
-
-namespace PetStore.Web.Controllers
+﻿namespace PetStore.Web.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using Services;
+    using PetStore.Services.Models.Pet;
+    using Models.Pet;
+
     public class PetsController : Controller
     {
         private readonly IPetService pets;
@@ -31,6 +30,61 @@ namespace PetStore.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var pet = this.pets
+                .Details(id);
+
+            if (pet == null)
+            {
+                return BadRequest();
+            }
+
+            var pdvm = new PetDetailsViewModel
+            {
+                Id = pet.Id,
+                Gender = pet.Gender,
+                DateOfBirth = pet.DateOfBirth,
+                Description = pet.Description,
+                Breed = pet.Breed,
+                Category = pet.Category,
+                Price = pet.Price
+            };
+
+            return this.View(pdvm);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(PetDetailsViewModel pet)
+        {
+            if (!this.pets.Exists(pet.Id))
+            {
+                return this.BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            var pdsm = new PetDetailsServiceModel
+            {
+                Id = pet.Id,
+                Gender = pet.Gender,
+                DateOfBirth = pet.DateOfBirth,
+                Description = pet.Description,
+                Breed = pet.Breed,
+                Category = pet.Category,
+                Price = pet.Price
+            };
+
+            this.pets.Edit(pdsm);
+
+            return this.RedirectToAction("All", "Pets");
+        }
+
+        [HttpGet]
         public IActionResult Delete(int id)
         {
             var pet = this.pets.Details(id);

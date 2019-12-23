@@ -1,6 +1,6 @@
 ﻿namespace PetStore.Services
 {
-    using PetStore.Services.Models.Toy;
+    using Models.Toy;
 
     public interface IToyService
     {

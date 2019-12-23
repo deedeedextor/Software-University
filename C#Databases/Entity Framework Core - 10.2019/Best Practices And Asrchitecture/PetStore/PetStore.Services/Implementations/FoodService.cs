@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using PetStore.Data;
-using PetStore.Models;
-using PetStore.Services.Models.Food;
-
-namespace PetStore.Services.Implementations
+﻿namespace PetStore.Services.Implementations
 {
+    using System;
+    using System.Linq;
+    using Data;
+    using PetStore.Models;
+    using Models.Food;
+
     public class FoodService : IFootService
     {
         private readonly PetStoreDbContext data;

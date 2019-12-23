@@ -1,10 +1,10 @@
-﻿namespace PetStore.Services.Models.Pet
+﻿namespace PetStore.Web.Models.Pet
 {
     using PetStore.Models;
 
-    public class PetDetailsServiceModel
+    public class PetDetailsViewModel
     {
-        public int Id { get; set; }
+        public int Id { get; set; }      
 
         public Gender Gender { get; set; }
 

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace PetStore.Web.Models.Category
+﻿namespace PetStore.Web.Models.Category
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class CategoryEditInputModel
     {
         public int Id { get; set; }

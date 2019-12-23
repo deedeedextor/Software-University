@@ -1,7 +1,6 @@
 ﻿namespace PetStore.Services.Implementations
 {
-    using PetStore.Data;
-    using System.Linq;
+    using Data;
 
     public class OrderService : IOrderService
     {

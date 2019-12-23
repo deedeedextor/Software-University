@@ -1,8 +1,8 @@
-﻿using PetStore.Services.Models.Category;
-using System.Collections.Generic;
-
-namespace PetStore.Services
+﻿namespace PetStore.Services
 {
+    using Models.Category;
+    using System.Collections.Generic;
+
     public interface ICategoryService
     {
         void Create(CreateCategoryServiceModel model);

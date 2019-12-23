@@ -1,11 +1,9 @@
-﻿using PetStore.Services.Models.Pet;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace PetStore.Web.Models.Pet
+﻿namespace PetStore.Web.Models.Pet
 {
+    using PetStore.Services.Models.Pet;
+    using System;
+    using System.Collections.Generic;
+
     public class AllPetsViewModel
     {
         public IEnumerable<PetListingServiceModel> Pets { get; set; }

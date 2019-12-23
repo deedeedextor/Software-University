@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PetStore.Services.Models.Pet
+﻿namespace PetStore.Services.Models.Pet
 {
     public class PetListingServiceModel
     {

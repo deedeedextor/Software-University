@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using PetStore.Services;
-using PetStore.Services.Models.Category;
-using PetStore.Web.Models.Category;
-
-namespace PetStore.Web.Controllers
+﻿namespace PetStore.Web.Controllers
 {
+    using System.Linq;
+    using Microsoft.AspNetCore.Mvc;
+    using Services;
+    using PetStore.Services.Models.Category;
+    using Models.Category;
+
     public class CategoriesController : Controller
     {
         private readonly ICategoryService categories;

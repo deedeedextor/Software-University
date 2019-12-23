@@ -1,6 +1,6 @@
-﻿namespace PetStore.Web.Models.Category
+﻿namespace PetStore.Services.Models.Breed
 {
-    public class CategoryListingViewModel
+    public class BreedDetailsServiceModel
     {
         public int Id { get; set; }
 
