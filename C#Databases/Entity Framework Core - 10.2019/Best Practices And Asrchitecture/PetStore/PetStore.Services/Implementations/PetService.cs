@@ -70,6 +70,25 @@
             this.data.SaveChanges();
         }
 
+        public void Create(CreatePetServiceModel model)
+        {
+            var pet = new Pet
+            {
+                Gender = (Gender)Enum.Parse(typeof(Gender), model.Gender),
+                DateOfBirth = DateTime.ParseExact(model.DateOfBirth, @"MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture),
+                Price = model.Price,
+                Description = model?.Description,
+                Breed = this.data
+                .Breed
+                .FirstOrDefault(b => b.Name == model.Breed),
+                Category = this.data
+                .Categories
+                .FirstOrDefault(b => b.Name == model.Category),
+            };
+
+            this.data.Pets.Add(pet);
+            this.data.SaveChanges();
+        }
         public bool Delete(int id)
         {
             var pet = this.data.Pets.Find(id);
@@ -92,7 +111,7 @@
             .Select(p => new PetDetailsServiceModel
             {
                 Id = p.Id,
-                Gender = p.Gender,
+                Gender = p.Gender.ToString(),
                 Breed = p.Breed.Name,
                 Category = p.Category.Name,
                 DateOfBirth = p.DateOfBirth.ToString(CultureInfo.InvariantCulture),
@@ -105,15 +124,15 @@
         {
             var pet = this.data.Pets.Find(model.Id);
 
-            pet.Gender = model.Gender;
-            pet.DateOfBirth = DateTime.Parse(model.DateOfBirth, CultureInfo.InvariantCulture);
+            pet.Gender = (Gender)Enum.Parse(typeof(Gender), model.Gender);
+            pet.DateOfBirth = DateTime.ParseExact(model.DateOfBirth, @"MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
             pet.Description = model.Description;
-            pet.BreedId = this.data
+            pet.Breed = this.data
                 .Breed
-                .First(b => b.Name == model.Breed).Id;
-            pet.CategoryId = this.data
+                .First(b => b.Name == model.Breed);
+            pet.Category = this.data
                 .Categories
-                .First(b => b.Name == model.Category).Id;
+                .First(b => b.Name == model.Category);
             pet.Price = model.Price;
 
             this.data.SaveChanges();
@@ -154,5 +173,6 @@
 
         public int Total()
             => this.data.Pets.Count();
+
     }
 }

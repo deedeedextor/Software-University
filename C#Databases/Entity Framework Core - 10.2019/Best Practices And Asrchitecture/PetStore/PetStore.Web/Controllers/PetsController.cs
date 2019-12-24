@@ -4,13 +4,19 @@
     using Services;
     using PetStore.Services.Models.Pet;
     using Models.Pet;
+    using AutoMapper;
+    using PetStore.Models;
 
     public class PetsController : Controller
     {
         private readonly IPetService pets;
+        private readonly IMapper mapper;
 
-        public PetsController(IPetService pets)
-            => this.pets = pets;
+        public PetsController(IPetService pets, IMapper mapper)
+        {
+            this.pets = pets;
+            this.mapper = mapper;
+        }
 
         public IActionResult All(int page = 1)
         {
@@ -28,6 +34,26 @@
         }
 
         [HttpGet]
+        public IActionResult Create()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(PetInputViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            var pet = mapper.Map<CreatePetServiceModel>(model);
+
+            this.pets.Create(pet);
+            return RedirectToAction("All", "Pets");
+        }
+
+        [HttpGet]
         public IActionResult Details(int id)
         {
             var petDetails = this.pets.GetById(id);
@@ -42,16 +68,7 @@
                 petDetails.Description = "No description";
             }
 
-            var pdvm = new PetDetailsViewModel
-            {
-                Id = petDetails.Id,
-                Gender = petDetails.Gender,
-                DateOfBirth = petDetails.DateOfBirth,
-                Description = petDetails.Description,
-                Breed = petDetails.Breed,
-                Category = petDetails.Category,
-                Price = petDetails.Price
-            };
+            var pdvm = mapper.Map<PetDetailsViewModel>(petDetails);
 
             return this.View(pdvm);
         }
@@ -67,16 +84,7 @@
                 return BadRequest();
             }
 
-            var pdvm = new PetDetailsViewModel
-            {
-                Id = pet.Id,
-                Gender = pet.Gender,
-                DateOfBirth = pet.DateOfBirth,
-                Description = pet.Description,
-                Breed = pet.Breed,
-                Category = pet.Category,
-                Price = pet.Price
-            };
+            var pdvm = mapper.Map<PetDetailsViewModel>(pet);
 
             return this.View(pdvm);
         }
@@ -94,16 +102,7 @@
                 return this.View();
             }
 
-            var pdsm = new PetDetailsServiceModel
-            {
-                Id = pet.Id,
-                Gender = pet.Gender,
-                DateOfBirth = pet.DateOfBirth,
-                Description = pet.Description,
-                Breed = pet.Breed,
-                Category = pet.Category,
-                Price = pet.Price
-            };
+            var pdsm = mapper.Map<PetDetailsServiceModel>(pet);
 
             this.pets.Edit(pdsm);
 

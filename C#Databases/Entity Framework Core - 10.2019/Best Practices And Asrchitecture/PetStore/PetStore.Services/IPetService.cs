@@ -15,6 +15,8 @@
 
         void SellPet(int petId, int userId);
 
+        void Create(CreatePetServiceModel model);
+
         void Edit(PetDetailsServiceModel model);
 
         bool Exists(int petId);

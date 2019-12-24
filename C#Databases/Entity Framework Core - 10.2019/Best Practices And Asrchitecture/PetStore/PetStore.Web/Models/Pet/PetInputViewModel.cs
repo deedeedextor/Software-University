@@ -13,7 +13,5 @@
         public string Breed { get; set; }
 
         public string Category { get; set; }
-
-        public int? OrderId { get; set; }
     }
 }
