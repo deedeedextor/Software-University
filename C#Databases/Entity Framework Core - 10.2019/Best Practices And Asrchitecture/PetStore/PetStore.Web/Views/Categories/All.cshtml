@@ -7,9 +7,9 @@
 <h1>Categories</h1>
 
 <p>
-    <a class="btn btn-info" asp-action="Create">Create Category</a>
+    <a class="btn btn-primary" asp-action="Create">Create Category</a>
 </p>
-<table class="table">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>
@@ -30,9 +30,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" }) &nbsp; &nbsp; &nbsp;
+            <td class="text-center">
                 @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-sm btn-info" })&nbsp; &nbsp; &nbsp;
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" }) &nbsp; &nbsp; &nbsp;
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-sm btn-danger" })
             </td>
         </tr>
