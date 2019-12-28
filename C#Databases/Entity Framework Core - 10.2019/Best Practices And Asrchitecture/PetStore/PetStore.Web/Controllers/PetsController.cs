@@ -5,7 +5,6 @@
     using PetStore.Services.Models.Pet;
     using Models.Pet;
     using AutoMapper;
-    using PetStore.Models;
 
     public class PetsController : Controller
     {

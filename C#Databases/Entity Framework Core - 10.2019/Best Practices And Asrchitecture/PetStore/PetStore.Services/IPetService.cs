@@ -9,6 +9,8 @@
     {
         PetDetailsServiceModel GetById(int id);
 
+        IEnumerable<SelectListBreed> Breeds();
+
         IEnumerable<PetListingServiceModel> All(int page = 1);
 
         void BuyPet(Gender gender, DateTime dateOfBirth, decimal price, string description, int breedId, int categoryId);

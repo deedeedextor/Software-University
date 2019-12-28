@@ -25,6 +25,15 @@
             this.userService = userService;
         }
 
+        public IEnumerable<SelectListBreed> Breeds()
+            => this.data
+            .Breed
+            .Select(b => new SelectListBreed
+            {
+                Name = b.Name
+            })
+            .ToList();
+
         public IEnumerable<PetListingServiceModel> All(int page = 1)
             => this.data
             .Pets
