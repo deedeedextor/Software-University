@@ -45,13 +45,15 @@ namespace HttpServerDemo.Models
             Console.WriteLine(new string('=', 50));
             Console.WriteLine(stringRequest);
 
-            //string responseBody = DateTime.Now.ToString();
+            string responseBody = DateTime.Now.ToString();
 
-            string responseBody = "<form method='post'><input type='text' name='tweet' placeholder='Enter tweet...' /><input name='name' /><input type='submit' /></form>";
+            //string responseBody = "<form method='post'><input type='text' name='tweet' placeholder='Enter tweet...' /><input name='name' /><input type='submit' /></form>";
             string response = "HTTP/1.0 200 OK" + NewLine +
                               "Content-Type: text/html" + NewLine +
-                               "Location: https://google.com" + NewLine +
-                               "Content-Disposition: attachment; filename=index.html" + NewLine +
+                              "Set-Cookie: cookie1=test; Path=/" + NewLine +
+                              "Set-Cookie: cookie2=test" + NewLine +
+                              //"Location: https://google.com" + NewLine +
+                              //"Content-Disposition: attachment; filename=index.html" + NewLine +
                               "Server: MyCustomServer/1.0" + NewLine +
                               $"Content-Length: {responseBody.Length}" + NewLine + NewLine +
                               responseBody;
