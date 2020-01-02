@@ -7,7 +7,15 @@ namespace SIS.Demo.Controllers
     {
         public IHttpResponse Home(IHttpRequest request)
         {
+            this.HttpRequest = request;
             return this.View();
+        }
+
+        public IHttpResponse Login(IHttpRequest httpRequest)
+        {
+            httpRequest.Session.AddParameter("username", "Pesho");
+
+            return this.Redirect("/");
         }
     }
 }

@@ -1,7 +1,8 @@
-﻿using SIS.HTTP.Sessions.Contracts;
+﻿using SIS.HTTP.Sessions;
+using SIS.HTTP.Sessions.Contracts;
 using System.Collections.Concurrent;
 
-namespace SIS.HTTP.Sessions
+namespace SIS.WebServer.Sessions
 {
     public class HttpSessionStorage
     {
