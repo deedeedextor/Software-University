@@ -26,7 +26,7 @@ namespace SIS.HTTP.Headers
             return this.headers.ContainsKey(key);
         }
 
-        public HttpHeader HetHeader(string key)
+        public HttpHeader GetHeader(string key)
         {
             CoreValidator.ThrowIfNullOrEmpty(key, nameof(key));
             return this.headers[key];
