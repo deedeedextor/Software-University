@@ -33,6 +33,6 @@ namespace SIS.HTTP.Headers
         }
 
         public override string ToString()
-            => string.Join("\r\n", this.headers.Values.Select(h => h.ToString()));
+            => string.Join(GlobalConstants.HttpNewLine, this.headers.Values.Select(h => h.ToString()));
     }
 }

@@ -21,6 +21,7 @@ namespace SIS.HTTP.Cookies
 
             this.Key = key;
             this.Value = value;
+            this.Expires = DateTime.UtcNow.AddDays(expires);
         }
 
         public string Key { get; }

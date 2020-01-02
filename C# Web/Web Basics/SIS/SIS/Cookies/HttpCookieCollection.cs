@@ -2,12 +2,12 @@
 using SIS.HTTP.Cookies.Contracts;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 namespace SIS.HTTP.Cookies
 {
     public class HttpCookieCollection : IHttpCookieCollection
     {
-        private const string HttpCookiesStringSeparator = " ";
         private Dictionary<string, HttpCookie> cookies;
 
         public HttpCookieCollection()
@@ -53,7 +53,14 @@ namespace SIS.HTTP.Cookies
 
         public override string ToString()
         {
-            return string.Join(HttpCookiesStringSeparator, this.cookies.Values);
+            var sb = new StringBuilder();
+
+            foreach (var cookie in this.cookies.Values)
+            {
+                sb.Append($"Set-Cookie: {cookie}").Append(GlobalConstants.HttpNewLine);
+            }
+
+            return sb.ToString();
         }
     }
 }
