@@ -14,7 +14,9 @@ namespace Demo.App
 
             serverRoutingTable.Add(HttpRequestMethod.Get, "/", request => new HomeController().Home(request));
 
-            serverRoutingTable.Add(HttpRequestMethod.Get, "/login", request => new HomeController().Login(request));
+            serverRoutingTable.Add(HttpRequestMethod.Get, "/login", request => new UserController().Login(request));
+
+            serverRoutingTable.Add(HttpRequestMethod.Get, "/logout", request => new UserController().Logout(request));
 
             Server server = new Server(8000, serverRoutingTable);
 

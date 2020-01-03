@@ -12,7 +12,7 @@ namespace SIS.Demo.Controllers
     {
         protected IHttpRequest HttpRequest { get; set; }
 
-        private bool IsLoggedIn()
+        protected bool IsLoggedIn()
         {
             return this.HttpRequest.Session.ContainsParameter("username");
         }
