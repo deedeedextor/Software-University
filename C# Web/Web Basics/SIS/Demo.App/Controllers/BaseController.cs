@@ -1,8 +1,8 @@
-﻿using SIS.HTTP.Cookies;
-using SIS.HTTP.Enums;
+﻿using SIS.HTTP.Enums;
 using SIS.HTTP.Requests.Contracts;
 using SIS.HTTP.Responses.Contracts;
 using SIS.WebServer.Results;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 
@@ -12,6 +12,8 @@ namespace SIS.Demo.Controllers
     {
         protected IHttpRequest HttpRequest { get; set; }
 
+        protected Dictionary<string, object> ViewData = new Dictionary<string, object>();
+
         protected bool IsLoggedIn()
         {
             return this.HttpRequest.Session.ContainsParameter("username");
@@ -19,15 +21,12 @@ namespace SIS.Demo.Controllers
 
         private string ParseTemplate(string viewContent)
         {
-            if (this.IsLoggedIn())
+            foreach (var param in this.ViewData)
             {
-                return viewContent.Replace("@Model.HelloMessage", $"Hello, {this.HttpRequest.Session.GetParameter("username")}");
+                viewContent = viewContent.Replace($"@Model.{param.Key.ToLower()}", param.Value.ToString());
             }
 
-            else
-            {
-                return viewContent.Replace("@Model.HelloMessage", "Hello World from SIS.WebServer");
-            }
+            return viewContent;
         }
 
         public IHttpResponse View([CallerMemberName] string view = null)
@@ -40,8 +39,6 @@ namespace SIS.Demo.Controllers
             viewContent = this.ParseTemplate(viewContent);
 
             HtmlResult htmlResult = new HtmlResult(viewContent, HttpResponseStatusCode.Ok);
-
-            htmlResult.Cookies.AddCookie(new HttpCookie("lang", "en"));
 
             return htmlResult;
         }

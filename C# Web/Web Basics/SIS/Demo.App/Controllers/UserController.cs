@@ -62,7 +62,7 @@ namespace SIS.Demo.Controllers
                 context.SaveChanges();
             }
 
-            return this.Redirect("/users/login");
+            return this.Redirect("/login");
         }
 
         public IHttpResponse Logout(IHttpRequest httpRequest)

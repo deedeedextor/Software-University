@@ -1,4 +1,5 @@
-﻿using SIS.Demo.Controllers;
+﻿using Demo.Data;
+using SIS.Demo.Controllers;
 using SIS.HTTP.Enums;
 using SIS.WebServer;
 using SIS.WebServer.Routing;
@@ -10,16 +11,31 @@ namespace Demo.App
     {
         public static void Main(string[] args)
         {
+            using (var context = new DemoDbContext())
+            {
+                context.Database.EnsureCreated();
+            }
+
             IServerRoutingTable serverRoutingTable = new ServerRoutingTable();
 
-            serverRoutingTable.Add(HttpRequestMethod.Get, "/", request => new HomeController().Home(request));
+            //[GET] Mappings
+            serverRoutingTable.Add(HttpRequestMethod.Get, "/", request => new HomeController(request).Index(request));
 
             serverRoutingTable.Add(HttpRequestMethod.Get, "/login", request => new UserController().Login(request));
 
+            serverRoutingTable.Add(HttpRequestMethod.Get, "/register", request => new UserController().Register(request));
+
             serverRoutingTable.Add(HttpRequestMethod.Get, "/logout", request => new UserController().Logout(request));
 
-            Server server = new Server(8000, serverRoutingTable);
+            serverRoutingTable.Add(HttpRequestMethod.Get, "/home", request => new HomeController(request).Home(request));
 
+
+            //[POST] Mappings
+            serverRoutingTable.Add(HttpRequestMethod.Post, "/login", request => new UserController().LoginConfirm(request));
+
+            serverRoutingTable.Add(HttpRequestMethod.Post, "/register", request => new UserController().RegisterConfirm(request));
+
+            Server server = new Server(8000, serverRoutingTable);
             server.Run();
 
             /*string request =
