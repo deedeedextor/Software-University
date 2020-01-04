@@ -12,13 +12,6 @@ namespace SIS.Demo.Controllers
 
         public IHttpResponse Index(IHttpRequest request)
         {
-            //IHttpResponse newResponse = new HttpResponse();
-
-            //HttpCookie cookie = new HttpCookie("lang", "en");
-            //cookie.Delete();
-
-            //newResponse.AddCookie(cookie);
-
             return this.View();
         }
 
@@ -29,7 +22,7 @@ namespace SIS.Demo.Controllers
                 return this.Redirect("/login");
             }
 
-            this.ViewData["username"] = this.HttpRequest.Session.GetParameter("username");
+            this.ViewData["Username"] = this.HttpRequest.Session.GetParameter("username");
 
             return this.View();
         }

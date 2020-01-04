@@ -23,7 +23,7 @@ namespace SIS.Demo.Controllers
         {
             foreach (var param in this.ViewData)
             {
-                viewContent = viewContent.Replace($"@Model.{param.Key.ToLower()}", param.Value.ToString());
+                viewContent = viewContent.Replace($"@Model.{param.Key}", param.Value.ToString());
             }
 
             return viewContent;

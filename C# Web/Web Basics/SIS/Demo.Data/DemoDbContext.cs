@@ -26,6 +26,11 @@ namespace Demo.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder
+                .Entity<User>()
+                .Property(user => user.Id)
+                .ValueGeneratedOnAdd();
+
         }
     }
 }

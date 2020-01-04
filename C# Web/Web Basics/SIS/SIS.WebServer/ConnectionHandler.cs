@@ -115,14 +115,14 @@ namespace SIS.WebServer
             {
                 var cookie = httpRequest.Cookies.GetCookie(HttpSessionStorage.SessionCookieKey);
                 sessionId = cookie.Value;
-                httpRequest.Session = HttpSessionStorage.GetSession(sessionId);
             }
 
             else
             {
                 sessionId = Guid.NewGuid().ToString();
-                httpRequest.Session = HttpSessionStorage.GetSession(sessionId);
             }
+
+            httpRequest.Session = HttpSessionStorage.GetSession(sessionId);
 
             return sessionId;
         }
