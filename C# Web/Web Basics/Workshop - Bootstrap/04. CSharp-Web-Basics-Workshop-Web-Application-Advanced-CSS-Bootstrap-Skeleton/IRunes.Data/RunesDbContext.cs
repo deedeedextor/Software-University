@@ -1,5 +1,6 @@
 ﻿namespace IRunes.Data
 {
+    using IRunes.Models;
     using Microsoft.EntityFrameworkCore;
 
     public class RunesDbContext : DbContext
@@ -13,6 +14,12 @@
         {
         }
 
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<Track> Tracks { get; set; }
+
+        public DbSet<Album> Albums { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -24,7 +31,24 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder
+                .Entity<User>()
+                .Property(user => user.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder
+                .Entity<Track>()
+                .Property(user => user.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder
+                .Entity<Album>()
+                .Property(user => user.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder
+                .Entity<Album>()
+                .HasMany(album => album.Tracks);
         }
     }
 }
