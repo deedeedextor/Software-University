@@ -1,8 +1,5 @@
 ﻿using SIS.HTTP.Requests.Contracts;
 using SIS.HTTP.Responses.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IRunes.App.Controllers
 {
@@ -12,7 +9,9 @@ namespace IRunes.App.Controllers
         {
             if (this.IsLoggedIn(httpRequest))
             {
-                return View("Index-Logged");
+                this.ViewData["Username"] = httpRequest.Session.GetParameter("username");
+
+                return View("Home");
             }
 
             return this.View();
