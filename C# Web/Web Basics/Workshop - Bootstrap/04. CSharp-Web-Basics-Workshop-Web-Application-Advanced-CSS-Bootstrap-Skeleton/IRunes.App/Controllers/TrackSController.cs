@@ -88,7 +88,7 @@ namespace IRunes.App.Controllers
                 }
 
                 this.ViewData["AlbumId"] = albumId;
-                this.ViewData["Track"] = trackFromContext.ToHtmlDetails();
+                this.ViewData["Track"] = trackFromContext.ToHtmlDetails(albumId);
             }
 
             return this.View();

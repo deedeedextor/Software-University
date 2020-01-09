@@ -158,6 +158,7 @@ namespace SIS.WebServer
             {
                 httpResponse = new TextResult(e.Message, HttpResponseStatusCode.InternalServerError);
             }
+
             this.PrepareResponse(httpResponse);
 
             this.client.Shutdown(SocketShutdown.Both);
