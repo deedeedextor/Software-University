@@ -45,6 +45,12 @@
             serverRoutingTable.Add(HttpRequestMethod.Post, "/Albums/Create", request => new AlbumsController().CreateConfirm(request));
             serverRoutingTable.Add(HttpRequestMethod.Get, "/Albums/Details", request => new AlbumsController().Details(request));
             #endregion
+
+            #region Tracks Routes
+            serverRoutingTable.Add(HttpRequestMethod.Get, "/Tracks/Create", request => new TrackSController().Create(request));
+            serverRoutingTable.Add(HttpRequestMethod.Post, "/Tracks/Create", request => new TrackSController().CreateConfirm(request));
+            serverRoutingTable.Add(HttpRequestMethod.Get, "/Tracks/Details", request => new TrackSController().Details(request));
+            #endregion
         }
     }
 }

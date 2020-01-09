@@ -1,6 +1,7 @@
 ﻿using IRunes.App.Extensions;
 using IRunes.Data;
 using IRunes.Models;
+using Microsoft.EntityFrameworkCore;
 using SIS.HTTP.Requests.Contracts;
 using SIS.HTTP.Responses.Contracts;
 using System.Collections.Generic;
@@ -86,6 +87,7 @@ namespace IRunes.App.Controllers
             {
                 var albumFromContext = context
                     .Albums
+                    .Include(album => album.Tracks)
                     .SingleOrDefault(album => album.Id == albumId);
 
                 if (albumFromContext == null)
