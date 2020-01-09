@@ -10,7 +10,7 @@ namespace IRunes.App.Extensions
         {
             return album.Tracks.Count == 0 
                 ? "There are currently no tracks in this album." 
-                : string.Join("", album.Tracks.Select((track, index) => track.ToHtmlAll(index + 1)));
+                : string.Join("", album.Tracks.Select((track, index) => track.ToHtmlAll(album.Id, index + 1)));
         }
 
         public static string ToHtmlAll(this Album album)
@@ -39,14 +39,18 @@ namespace IRunes.App.Extensions
                    "</div>";
         }
 
-        public static string ToHtmlAll(this Track track, int index)
+        public static string ToHtmlAll(this Track track, string albumId, int index)
         {
-            return $"<li><a href=\"/Tracks/Details?id={track.Id}\">{index}. {WebUtility.UrlDecode(track.Name)}</li>";
+            return $"<li><strong>{index}<strong>. <a href=\"/Tracks/Details?albumId={albumId}&trackId={track.Id}\">{WebUtility.UrlDecode(track.Name)}</a></li>";
         }
 
         public static string ToHtmlDetails(this Track track)
         {
-            return null;
+            return "<div class=\"track-details\">" +
+                $"        <iframe src=\"{WebUtility.UrlDecode(track.Link)}\" width=\"640\" height=\"480\"></iframe>" +
+                   $"    <h1 class=\"text-center\">Track Name: {WebUtility.UrlDecode(track.Name)}</h1>" +
+                   $"    <h1 class=\"text-center\">Track Price: ${track.Price:F2}</h1>" +
+                   "</div>";
         }
     }
 }
