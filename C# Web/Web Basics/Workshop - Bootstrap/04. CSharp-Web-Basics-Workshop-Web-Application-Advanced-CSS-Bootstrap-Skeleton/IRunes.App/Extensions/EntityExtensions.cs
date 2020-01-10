@@ -22,11 +22,11 @@ namespace IRunes.App.Extensions
         {
             return  "  <div class=\"album-details d-flex justify-content-between row\">" +
                     "     <div class=\"album-data col-md-5\">" +
-                    $"         <img src=\"{WebUtility.UrlDecode(album.Cover)}\"/>" +
+                    $"         <img src=\"{WebUtility.UrlDecode(album.Cover)}\" class=\"img-thumbnail\"/>" +
                     $"         <h1 class=\"text-center\">Album Name: {WebUtility.UrlDecode(album.Name)}</h1>" +
                     $"         <h1 class=\"text-center\">Album Price: {album.Price}</h1>" +
-                    "     <div class=\"d-flex justify-content-between w-75\">" +
-                    $"          <a class=\"btn bg-success text-white\" href=\"/Tracks/Create?albumId={album.Id}\">Create Track</a>" +
+                    "     <div class=\"d-flex justify-content-between\">" +
+                    $"         <a class=\"btn bg-success text-white\" href=\"/Tracks/Create?albumId={album.Id}\">Create Track</a>" +
                     "          <a class=\"btn bg-success text-white\" href=\"/Albums/All\">Back To All</a>" +
                     "     </div>" +
                     "  </div>" +
@@ -53,7 +53,7 @@ namespace IRunes.App.Extensions
             "      </div>" +
             "      <hr class=\"bg-success w-50\" style=\"height: 2px\" />" +
             "  <div class=\"d-flex justify-content-center\">" +
-            $"    <a href=\"/Albums/Details?id={albumId} class=btn bg-success text-white\">Back To Album</a>" +
+            $"    <a class=\"btn bg-success text-white\" href=\"/Albums/Details?id={albumId}\">Back To Album</a>" +
             "</div>";
         }
     }
