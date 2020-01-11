@@ -44,8 +44,6 @@ namespace SIS.MvcFramework
 
             while (isRunning)
             {
-                Console.WriteLine("Waiting for client...");
-
                 var client = tcpListener.AcceptSocketAsync().GetAwaiter().GetResult();
 
                 Task.Run(() => ListenAsync(client));
