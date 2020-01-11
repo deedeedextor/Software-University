@@ -9,12 +9,14 @@ namespace IRunes.App
 {
     public class Startup : IMvcApplication
     {
-        public void Configure(ServerRoutingTable serverRoutingTable)
+        public void Configure(IServerRoutingTable serverRoutingTable)
         {
             using (var context = new RunesDbContext())
             {
                 context.Database.EnsureCreated();
             }
+
+            serverRoutingTable.Add(HttpRequestMethod.Get, "/Info/About", request => new InfoController().About(request));
 
             #region Home Routes
             serverRoutingTable.Add(HttpRequestMethod.Get, "/", request => new RedirectResult("/Home/Index"));
@@ -38,9 +40,9 @@ namespace IRunes.App
             #endregion
 
             #region Tracks Routes
-            serverRoutingTable.Add(HttpRequestMethod.Get, "/Tracks/Create", request => new TrackSController().Create(request));
-            serverRoutingTable.Add(HttpRequestMethod.Post, "/Tracks/Create", request => new TrackSController().CreateConfirm(request));
-            serverRoutingTable.Add(HttpRequestMethod.Get, "/Tracks/Details", request => new TrackSController().Details(request));
+            serverRoutingTable.Add(HttpRequestMethod.Get, "/Tracks/Create", request => new TracksController().Create(request));
+            serverRoutingTable.Add(HttpRequestMethod.Post, "/Tracks/Create", request => new TracksController().CreateConfirm(request));
+            serverRoutingTable.Add(HttpRequestMethod.Get, "/Tracks/Details", request => new TracksController().Details(request));
             #endregion
         }
 

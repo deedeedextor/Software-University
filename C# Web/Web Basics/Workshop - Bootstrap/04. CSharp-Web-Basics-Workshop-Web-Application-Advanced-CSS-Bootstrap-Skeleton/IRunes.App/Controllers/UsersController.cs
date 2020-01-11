@@ -2,6 +2,7 @@
 using IRunes.Models;
 using SIS.HTTP.Requests;
 using SIS.HTTP.Responses;
+using SIS.MvcFramework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -9,7 +10,7 @@ using System.Text;
 
 namespace IRunes.App.Controllers
 {
-    public class UsersController : BaseController
+    public class UsersController : Controller
     {
         private string HashPassword(string password)
         {
@@ -43,7 +44,7 @@ namespace IRunes.App.Controllers
                     return this.Redirect("/Users/Login");
                 }
 
-                this.SignIn(httpRequest, userFromContext);
+                this.SignIn(httpRequest, userFromContext.Id, userFromContext.Username, userFromContext.Email);
             }
 
             return this.Redirect("/");
