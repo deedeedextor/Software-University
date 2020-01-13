@@ -1,6 +1,7 @@
 ﻿using SIS.HTTP.Enums;
 using SIS.HTTP.Responses;
-using SIS.MvcFramework.Attributes;
+using SIS.MvcFramework.Attributes.Action;
+using SIS.MvcFramework.Attributes.Http;
 using SIS.MvcFramework.Routing;
 using System;
 using System.Linq;
@@ -30,12 +31,12 @@ namespace SIS.MvcFramework
                 .Where(type => type.IsClass && !type.IsAbstract
                 && typeof(Controller).IsAssignableFrom(type));
 
-            // TO DO: RemoveToString from InfoController
             foreach (var controller in controllers)
             {
                 var actions = controller
                     .GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
-                    .Where(method => !method.IsSpecialName && method.DeclaringType == controller);
+                    .Where(method => !method.IsSpecialName && method.DeclaringType == controller)
+                    .Where(x => x.GetCustomAttributes().All(a => a.GetType() != typeof(NonActionAttribute)));
 
                 foreach (var action in actions)
                 {
