@@ -1,9 +1,7 @@
 ﻿using SIS.HTTP.Requests;
-using SIS.HTTP.Responses;
 using SIS.MvcFramework.Extensions;
 using SIS.MvcFramework.Result;
 using System.Collections.Generic;
-using System.IO;
 using System.Runtime.CompilerServices;
 
 namespace SIS.MvcFramework
@@ -73,9 +71,14 @@ namespace SIS.MvcFramework
             return new JsonResult(obj.ToJson());
         }
 
-        protected ActionResult File()
+        protected ActionResult File(byte[] fileContent)
         {
-            return null;
+            return new FileResult(fileContent);
+        }
+
+        protected ActionResult NotFound(string message = "")
+        {
+            return new NotFoundResult(message);
         }
     }
 }
