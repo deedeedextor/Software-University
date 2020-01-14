@@ -1,12 +1,13 @@
 ﻿using SIS.HTTP.Requests;
 using SIS.MvcFramework.Extensions;
+using SIS.MvcFramework.Identity;
 using SIS.MvcFramework.Result;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace SIS.MvcFramework
 {
-    public class Controller
+    public abstract class Controller
     {
         protected Controller()
         {
@@ -14,6 +15,10 @@ namespace SIS.MvcFramework
         }
 
         protected Dictionary<string, object> ViewData;
+
+        protected Principal User => (Principal)this.Request.Session.GetParameter("principal");
+
+        public IHttpRequest Request { get; set; }
 
         private string ParseTemplate(string viewContent)
         {
@@ -25,21 +30,24 @@ namespace SIS.MvcFramework
             return viewContent;
         }
 
-        protected void SignIn(IHttpRequest httpRequest, string id, string username, string email)
+        protected void SignIn(string id, string username, string email)
         {
-            httpRequest.Session.AddParameter("Id", id);
-            httpRequest.Session.AddParameter("username", username);
-            httpRequest.Session.AddParameter("email", email);
+            this.Request.Session.AddParameter("principal", new Principal 
+            { 
+                Id = id,
+                Username = username,
+                Email = email,
+            });
         }
 
-        protected void SignOut(IHttpRequest httpRequest)
+        protected void SignOut()
         {
-            httpRequest.Session.ClearParameters();
+            this.Request.Session.ClearParameters();
         }
 
-        protected bool IsLoggedIn(IHttpRequest request)
+        protected bool IsLoggedIn()
         {
-            return request.Session.ContainsParameter("username");
+            return this.User != null;
         }
 
         protected ActionResult View([CallerMemberName] string view = null)

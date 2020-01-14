@@ -2,6 +2,7 @@
 using SIS.HTTP.Responses;
 using SIS.MvcFramework.Attributes.Action;
 using SIS.MvcFramework.Attributes.Http;
+using SIS.MvcFramework.Result;
 using SIS.MvcFramework.Routing;
 using System;
 using System.Linq;
@@ -61,10 +62,12 @@ namespace SIS.MvcFramework
                     {
                         path = $"/{controller.Name.Replace("Controller", string.Empty)}/{attribute.ActionName}";
                     }
+
                     serverRoutingTable.Add(httpMethod, path, request =>
                     {
                         var controllerInstance = Activator.CreateInstance(controller);
-                        var response = action.Invoke(controllerInstance, new[] { request }) as IHttpResponse;
+                        ((Controller)controllerInstance).Request = request;
+                        var response = action.Invoke(controllerInstance, new object [0]) as ActionResult;
 
                         return response;
                     });
