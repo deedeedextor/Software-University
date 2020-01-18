@@ -38,8 +38,8 @@ namespace IRunes.Services
 
         public Album CreateAlbum(Album album)
         {
-            album = context.Albums.Add(album).Entity;
-            context.SaveChanges();
+            album = this.context.Albums.Add(album).Entity;
+            this.context.SaveChanges();
 
             return album;
         }

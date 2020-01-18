@@ -1,5 +1,5 @@
-﻿using IRunes.Data;
-using IRunes.Models;
+﻿using IRunes.Models;
+using IRunes.Services;
 using SIS.MvcFramework;
 using SIS.MvcFramework.Attributes.Action;
 using SIS.MvcFramework.Attributes.Http;
@@ -13,6 +13,13 @@ namespace IRunes.App.Controllers
 {
     public class UsersController : Controller
     {
+        private readonly IUserService userService;
+
+        public UsersController()
+        {
+            this.userService = new UserService();
+        }
+
         [NonAction]
         private string HashPassword(string password)
         {
@@ -30,25 +37,23 @@ namespace IRunes.App.Controllers
         [HttpPost(ActionName = "Login")]
         public ActionResult LoginConfirm()
         {
-            using (var context = new RunesDbContext())
+            string username = ((ISet<string>)this.Request.FormData["username"]).FirstOrDefault();
+            string password = ((ISet<string>)this.Request.FormData["password"]).FirstOrDefault();
+
+            if (username == null || password == null)
             {
-                string username = ((ISet<string>)this.Request.FormData["username"]).FirstOrDefault();
-                string password = ((ISet<string>)this.Request.FormData["password"]).FirstOrDefault();
-
-                if (username == null || password == null)
-                {
-                    return Redirect("/Users/Login");
-                }
-
-                var userFromContext = context.Users.FirstOrDefault(user => (user.Username == username || user.Email == username) && user.Password == this.HashPassword(password));
-
-                if (userFromContext == null)
-                {
-                    return this.Redirect("/Users/Login");
-                }
-
-                this.SignIn(userFromContext.Id, userFromContext.Username, userFromContext.Email);
+                return Redirect("/Users/Login");
             }
+
+            var userFromContext = this.userService
+                .GetUserByUsernameAndPassword(username, this.HashPassword(password));
+
+            if (userFromContext == null)
+            {
+                return this.Redirect("/Users/Login");
+            }
+
+            this.SignIn(userFromContext.Id, userFromContext.Username, userFromContext.Email);
 
             return this.Redirect("/");
         }
@@ -61,28 +66,24 @@ namespace IRunes.App.Controllers
         [HttpPost(ActionName = "Register")]
         public ActionResult RegisterConfirm()
         {
-            using (var context = new RunesDbContext())
+            string username = ((ISet<string>)this.Request.FormData["username"]).FirstOrDefault();
+            string password = ((ISet<string>)this.Request.FormData["password"]).FirstOrDefault();
+            string confirmPassword = ((ISet<string>)this.Request.FormData["confirmPassword"]).FirstOrDefault();
+            string email = ((ISet<string>)this.Request.FormData["email"]).FirstOrDefault();
+
+            if (password != confirmPassword)
             {
-                string username = ((ISet<string>)this.Request.FormData["username"]).FirstOrDefault();
-                string password = ((ISet<string>)this.Request.FormData["password"]).FirstOrDefault();
-                string confirmPassword = ((ISet<string>)this.Request.FormData["confirmPassword"]).FirstOrDefault();
-                string email = ((ISet<string>)this.Request.FormData["email"]).FirstOrDefault();
-
-                if (password != confirmPassword)
-                {
-                    return Redirect("/Users/Register");
-                }
-
-                var user = new User
-                {
-                    Username = username,
-                    Password = this.HashPassword(password),
-                    Email = email,
-                };
-
-                context.Users.Add(user);
-                context.SaveChanges();
+                return Redirect("/Users/Register");
             }
+
+            var user = new User
+            {
+                Username = username,
+                Password = this.HashPassword(password),
+                Email = email,
+            };
+
+            this.userService.CreateUser(user);
 
             return Redirect("/Users/Login");
         }

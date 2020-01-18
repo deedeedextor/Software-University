@@ -74,7 +74,7 @@ namespace SIS.MvcFramework
                         var authorizedAttribute = action.GetCustomAttributes()
                         .LastOrDefault(x => x.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
 
-                        if (authorizedAttribute == null || !authorizedAttribute.IsInAuthority(controllerPrincipal))
+                        if (authorizedAttribute != null && !authorizedAttribute.IsInAuthority(controllerPrincipal))
                         {
                             //TODO: Redirect to configured Url
                             return new HttpResponse(HttpResponseStatusCode.Forbidden);
