@@ -1,7 +1,6 @@
 ﻿using IRunes.Data;
 using IRunes.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,6 +13,27 @@ namespace IRunes.Services
         public AlbumService()
         {
             this.context = new RunesDbContext();
+        }
+
+        public bool AddTrackToAlbum(string albumId, Track trackFromContext)
+        {
+            var albumFromContext = this
+                       .GetAlbumById(albumId);
+
+            if (albumFromContext == null)
+            {
+                return false;
+            }
+           
+            albumFromContext.Tracks.Add(trackFromContext);
+            albumFromContext.Price = (albumFromContext.Tracks
+                .Select(track => track.Price)
+                .Sum() * 87) / 100;
+
+            this.context.Update(albumFromContext);
+            this.context.SaveChanges();
+
+            return true;
         }
 
         public Album CreateAlbum(Album album)
