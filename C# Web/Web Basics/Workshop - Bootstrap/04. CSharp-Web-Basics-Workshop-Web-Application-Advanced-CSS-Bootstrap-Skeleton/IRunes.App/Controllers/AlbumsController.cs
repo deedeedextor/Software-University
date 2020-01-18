@@ -1,9 +1,11 @@
 ﻿using IRunes.App.Extensions;
+using IRunes.App.ViewModels;
 using IRunes.Models;
 using IRunes.Services;
 using SIS.MvcFramework;
 using SIS.MvcFramework.Attributes.Http;
 using SIS.MvcFramework.Attributes.Security;
+using SIS.MvcFramework.Mapping;
 using SIS.MvcFramework.Result;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +72,8 @@ namespace IRunes.App.Controllers
             string albumId = this.Request.QueryData["id"].ToString();
 
             Album albumFromContext = this.albumService.GetAlbumById(albumId);
+
+            AlbumViewModel albumViewModel = ModelMapper.ProjectTo<AlbumViewModel>(albumFromContext);
 
             if (albumFromContext == null)
             {
