@@ -1,5 +1,4 @@
 ﻿using HttpServerDemo.Models;
-using HttpServerDemo.Models.Contracts;
 using System;
 
 namespace HttpServerDemo
