@@ -1,6 +1,8 @@
 ﻿using HttpServerDemo.Models.Contracts;
 using System;
+using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -59,6 +61,14 @@ namespace HttpServerDemo.Models
                               responseBody;
             byte[] responseBytes = Encoding.UTF8.GetBytes(response);
             await stream.WriteAsync(responseBytes, 0, responseBytes.Length);
+        }
+
+        public static async Task HttpRequest()
+        {
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync("https://softuni.bg/");
+            string result = await response.Content.ReadAsStringAsync();
+            File.WriteAllText("index.html", result);
         }
 
         public void Stop()
