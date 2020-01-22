@@ -1,5 +1,4 @@
-﻿using IRunes.App.Extensions;
-using IRunes.App.ViewModels;
+﻿using IRunes.App.ViewModels.Albums;
 using IRunes.Models;
 using IRunes.Services;
 using SIS.MvcFramework;
@@ -16,9 +15,9 @@ namespace IRunes.App.Controllers
     {
         private readonly IAlbumService albumService;
 
-        public AlbumsController()
+        public AlbumsController(IAlbumService albumService)
         {
-            this.albumService = new AlbumService();
+            this.albumService = albumService;
         }
 
         [Authorize]
@@ -26,19 +25,12 @@ namespace IRunes.App.Controllers
         {
             ICollection<Album> allAlbums = this.albumService.GetAllAlbums();
 
-            if (allAlbums.Count == 0)
+            if (allAlbums.Count != 0)
             {
-                this.ViewData["Albums"] = "There are currently no albums.";
+                this.View(allAlbums.Select(ModelMapper.ProjectTo<AlbumAllViewModel>).ToList());
             }
 
-            else
-            {
-                this.ViewData["Albums"] =
-                    string.Join(string.Empty, allAlbums
-                .Select(album => album.ToHtmlAll()).ToList());
-            }
-
-            return this.View();
+            return this.View(new List<AlbumAllViewModel>());
         }
 
         [Authorize]
@@ -49,40 +41,32 @@ namespace IRunes.App.Controllers
 
         [Authorize]
         [HttpPost(ActionName = "Create")]
-        public ActionResult CreateConfirm()
+        public ActionResult CreateConfirm(AlbumCreateInputModel model)
         {
-            string name = ((ISet<string>)this.Request.FormData["name"]).FirstOrDefault();
-            string cover = ((ISet<string>)this.Request.FormData["cover"]).FirstOrDefault();
-
-            var album = new Album
+            if (!ModelState.IsValid)
             {
-                Name = name,
-                Cover = cover,
-                Price = 0M,
-            };
+                return this.Redirect("/Albums/Create");
+            }
 
+            var album = ModelMapper.ProjectTo<Album>(model);
             this.albumService.CreateAlbum(album);
 
             return this.Redirect("/Albums/All");
         }
 
         [Authorize]
-        public ActionResult Details()
+        public ActionResult Details(string id)
         {
-            string albumId = this.Request.QueryData["id"].ToString();
+            Album albumFromContext = this.albumService.GetAlbumById(id);
 
-            Album albumFromContext = this.albumService.GetAlbumById(albumId);
-
-            AlbumViewModel albumViewModel = ModelMapper.ProjectTo<AlbumViewModel>(albumFromContext);
+            AlbumDetailsViewModel albumViewModel = ModelMapper.ProjectTo<AlbumDetailsViewModel>(albumFromContext);
 
             if (albumFromContext == null)
             {
                 return this.Redirect("/Albums/All");
             }
 
-            this.ViewData["Album"] = albumFromContext.ToHtmlDetails();
-
-            return this.View();
+            return this.View(albumViewModel);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using SIS.MvcFramework;
 using SIS.MvcFramework.Attributes.Http;
 using SIS.MvcFramework.Result;
+using System.Collections.Generic;
 
 namespace IRunes.App.Controllers
 {
@@ -9,18 +10,16 @@ namespace IRunes.App.Controllers
         [HttpGet(Url = "/")]
         public ActionResult IndexSlash()
         {
-            return Index();
+            return this.Index();
         }
 
         public ActionResult Index()
         {
-            if (this.IsLoggedIn())
-            {
-                this.ViewData["Username"] = this.User.Username;
+            return this.View();
+        }
 
-                return View("Home");
-            }
-
+        public ActionResult Test(IEnumerable<string> list)
+        {
             return this.View();
         }
     }

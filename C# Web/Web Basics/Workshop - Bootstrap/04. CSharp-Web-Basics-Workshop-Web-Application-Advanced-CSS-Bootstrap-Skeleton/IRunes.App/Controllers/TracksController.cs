@@ -1,12 +1,11 @@
-﻿using IRunes.App.Extensions;
+﻿using IRunes.App.ViewModels.Tracks;
 using IRunes.Models;
 using IRunes.Services;
 using SIS.MvcFramework;
 using SIS.MvcFramework.Attributes.Http;
 using SIS.MvcFramework.Attributes.Security;
+using SIS.MvcFramework.Mapping;
 using SIS.MvcFramework.Result;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace IRunes.App.Controllers
 {
@@ -15,64 +14,58 @@ namespace IRunes.App.Controllers
         private readonly ITrackService trackService;
         private readonly IAlbumService albumService;
 
-        public TracksController()
+        public TracksController(ITrackService trackService, IAlbumService albumService)
         {
-            this.trackService = new TrackService();
-            this.albumService = new AlbumService();
+            this.trackService = trackService;
+            this.albumService = albumService;
         }
 
         [Authorize]
-        public ActionResult Create()
+        public ActionResult Create(string albumId)
         {
-            string albumId = this.Request.QueryData["albumId"].ToString();
-
-            this.ViewData["AlbumId"] = albumId;
-            return this.View();
+            return this.View(new TrackCreateViewModel {AlbumId = albumId});
         }
 
         [Authorize]
         [HttpPost(ActionName = "Create")]
-        public ActionResult CreateConfirm()
+        public ActionResult CreateConfirm(TrackCreateInputModel model)
         {
-            string albumId = this.Request.QueryData["albumId"].ToString();
-
-            string name = ((ISet<string>)this.Request.FormData["name"]).FirstOrDefault();
-            string link = ((ISet<string>)this.Request.FormData["link"]).FirstOrDefault();
-            string price = ((ISet<string>)this.Request.FormData["price"]).FirstOrDefault();
-
-            var trackFromContext = new Track
+            if (!this.ModelState.IsValid)
             {
-                Name = name,
-                Link = link,
-                Price = decimal.Parse(price),
-            };
+                return this.Redirect("/");
+            }
 
-            if (!this.albumService.AddTrackToAlbum(albumId, trackFromContext))
+            var trackFromContext = ModelMapper.ProjectTo<Track>(model);
+
+            if (!this.albumService.AddTrackToAlbum(model.AlbumId, trackFromContext))
             {
                 return this.Redirect("/Albums/All");
             }
 
-            return this.Redirect($"/Albums/Details?id={albumId}");
+            return this.Redirect($"/Albums/Details?id={model.AlbumId}");
         }
 
         [Authorize]
-        public ActionResult Details()
+        public ActionResult Details(TrackDetailsInputModel model)
         {
-            string albumId = this.Request.QueryData["albumId"].ToString();
-            string trackId = this.Request.QueryData["trackId"].ToString();
+            if (!this.ModelState.IsValid)
+            {
+                return this.Redirect($"Albums/All");
+            }
 
-            var trackFromContext = trackService
-                    .GetTrackById(trackId);
+            var trackFromContext = this.trackService
+                    .GetTrackById(model.TrackId);
 
             if (trackFromContext == null)
             {
-                return this.Redirect($"/Albums/Details?id={albumId}");
+                return this.Redirect($"/Albums/Details?id={model.AlbumId}");
             }
 
-            this.ViewData["AlbumId"] = albumId;
-            this.ViewData["Track"] = trackFromContext.ToHtmlDetails(albumId);
+            TrackDetailsViewModel trackDetailsViewModel = ModelMapper.ProjectTo<TrackDetailsViewModel>(trackFromContext);
 
-            return this.View();
+            trackDetailsViewModel.AlbumId = model.AlbumId;
+
+            return this.View(trackDetailsViewModel);
         }
     }
 }

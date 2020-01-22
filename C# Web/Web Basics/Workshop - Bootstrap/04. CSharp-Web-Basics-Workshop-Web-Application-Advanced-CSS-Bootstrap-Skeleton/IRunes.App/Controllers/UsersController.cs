@@ -1,11 +1,10 @@
-﻿using IRunes.Models;
+﻿using IRunes.App.ViewModels.Users;
+using IRunes.Models;
 using IRunes.Services;
 using SIS.MvcFramework;
 using SIS.MvcFramework.Attributes.Action;
 using SIS.MvcFramework.Attributes.Http;
 using SIS.MvcFramework.Result;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -15,9 +14,9 @@ namespace IRunes.App.Controllers
     {
         private readonly IUserService userService;
 
-        public UsersController()
+        public UsersController(IUserService userService)
         {
-            this.userService = new UserService();
+            this.userService = userService;
         }
 
         [NonAction]
@@ -35,18 +34,9 @@ namespace IRunes.App.Controllers
         }
 
         [HttpPost(ActionName = "Login")]
-        public ActionResult LoginConfirm()
+        public ActionResult LoginConfirm(UserLoginInputModel model)
         {
-            string username = ((ISet<string>)this.Request.FormData["username"]).FirstOrDefault();
-            string password = ((ISet<string>)this.Request.FormData["password"]).FirstOrDefault();
-
-            if (username == null || password == null)
-            {
-                return Redirect("/Users/Login");
-            }
-
-            var userFromContext = this.userService
-                .GetUserByUsernameAndPassword(username, this.HashPassword(password));
+            var userFromContext = this.userService.GetUserByUsernameAndPassword(model.Username, this.HashPassword(model.Password));
 
             if (userFromContext == null)
             {
@@ -64,28 +54,28 @@ namespace IRunes.App.Controllers
         }
 
         [HttpPost(ActionName = "Register")]
-        public ActionResult RegisterConfirm()
+        public ActionResult RegisterConfirm(UserRegisterInputModel model)
         {
-            string username = ((ISet<string>)this.Request.FormData["username"]).FirstOrDefault();
-            string password = ((ISet<string>)this.Request.FormData["password"]).FirstOrDefault();
-            string confirmPassword = ((ISet<string>)this.Request.FormData["confirmPassword"]).FirstOrDefault();
-            string email = ((ISet<string>)this.Request.FormData["email"]).FirstOrDefault();
+            if (!this.ModelState.IsValid)
+            {
+                return this.Redirect("/Users/Register");
+            }
 
-            if (password != confirmPassword)
+            if (model.Password != model.ConfirmPassword)
             {
                 return Redirect("/Users/Register");
             }
 
             var user = new User
             {
-                Username = username,
-                Password = this.HashPassword(password),
-                Email = email,
+                Username = model.Username,
+                Password = this.HashPassword(model.Password),
+                Email = model.Email,
             };
 
             this.userService.CreateUser(user);
 
-            return Redirect("/Users/Login");
+            return this.Redirect("/Users/Login");
         }
 
         public ActionResult Logout()
