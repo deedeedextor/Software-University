@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using SIS.HTTP.Common;
+using SIS.Common;
 using SIS.MvcFramework.Routing;
 using SIS.MvcFramework.Sessions;
 
@@ -24,8 +24,8 @@ namespace SIS.MvcFramework
 
         public Server(int port, IServerRoutingTable serverRoutingTable, IHttpSessionStorage httpSessionStorage)
         {
-            CoreValidator.ThrowIfNull(serverRoutingTable, nameof(serverRoutingTable));
-            CoreValidator.ThrowIfNull(httpSessionStorage, nameof(httpSessionStorage));
+            serverRoutingTable.ThrowIfNull(nameof(serverRoutingTable));
+            httpSessionStorage.ThrowIfNull(nameof(httpSessionStorage));
 
             this.port = port;
             this.serverRoutingTable = serverRoutingTable;
