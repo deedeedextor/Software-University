@@ -35,8 +35,8 @@ namespace IRunes.App.Controllers
             if (System.IO.File.Exists(fullPathToResource))
             {
                 //TO DO: 
-                string mimeType = null;
-                string fileName = null;
+                //string mimeType = null;
+                //string fileName = null;
 
                 byte[] content = System.IO.File.ReadAllBytes(fullPathToResource);
                 return File(content);
