@@ -28,13 +28,13 @@ namespace IRunes.App.Controllers
             }
         }
 
-        public ActionResult Login()
+        public IActionResult Login()
         {
             return this.View();
         }
 
         [HttpPost(ActionName = "Login")]
-        public ActionResult LoginConfirm(UserLoginInputModel model)
+        public IActionResult LoginConfirm(UserLoginInputModel model)
         {
             var userFromContext = this.userService.GetUserByUsernameAndPassword(model.Username, this.HashPassword(model.Password));
 
@@ -48,13 +48,13 @@ namespace IRunes.App.Controllers
             return this.Redirect("/");
         }
 
-        public ActionResult Register()
+        public IActionResult Register()
         {
             return this.View();
         }
 
         [HttpPost(ActionName = "Register")]
-        public ActionResult RegisterConfirm(UserRegisterInputModel model)
+        public IActionResult RegisterConfirm(UserRegisterInputModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace IRunes.App.Controllers
             return this.Redirect("/Users/Login");
         }
 
-        public ActionResult Logout()
+        public IActionResult Logout()
         {
             this.SignOut();
 

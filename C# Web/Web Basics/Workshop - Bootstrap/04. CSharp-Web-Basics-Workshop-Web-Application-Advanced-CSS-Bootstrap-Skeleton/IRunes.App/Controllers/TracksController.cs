@@ -21,14 +21,14 @@ namespace IRunes.App.Controllers
         }
 
         [Authorize]
-        public ActionResult Create(string albumId)
+        public IActionResult Create(string albumId)
         {
             return this.View(new TrackCreateViewModel {AlbumId = albumId});
         }
 
         [Authorize]
         [HttpPost(ActionName = "Create")]
-        public ActionResult CreateConfirm(TrackCreateInputModel model)
+        public IActionResult CreateConfirm(TrackCreateInputModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -46,7 +46,7 @@ namespace IRunes.App.Controllers
         }
 
         [Authorize]
-        public ActionResult Details(TrackDetailsInputModel model)
+        public IActionResult Details(TrackDetailsInputModel model)
         {
             if (!this.ModelState.IsValid)
             {

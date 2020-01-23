@@ -7,7 +7,7 @@ namespace IRunes.App.Controllers
 {
     public class InfoController : Controller
     {
-        public ActionResult About()
+        public IActionResult About()
         {
             return this.View();
         }
@@ -18,12 +18,12 @@ namespace IRunes.App.Controllers
             return base.ToString();
         }
 
-        public ActionResult Json(IHttpRequest request)
+        public IActionResult Json(IHttpRequest request)
         {
             return Json(new { });
         }
 
-        public ActionResult File(IHttpRequest request)
+        public IActionResult File(IHttpRequest request)
         {
             string folderPrefix = "/../../../../";
             string assemblyLocation = this.GetType().Assembly.Location;
