@@ -27,8 +27,8 @@ namespace IRunes.App.Controllers
         }
 
         [Authorize]
-        [HttpPost(ActionName = "Create")]
-        public IActionResult CreateConfirm(TrackCreateInputModel model)
+        [HttpPost]
+        public IActionResult Create(TrackCreateInputModel model)
         {
             if (!this.ModelState.IsValid)
             {

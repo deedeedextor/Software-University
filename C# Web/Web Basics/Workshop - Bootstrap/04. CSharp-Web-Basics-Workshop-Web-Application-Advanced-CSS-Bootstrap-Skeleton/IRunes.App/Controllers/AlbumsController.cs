@@ -40,8 +40,8 @@ namespace IRunes.App.Controllers
         }
 
         [Authorize]
-        [HttpPost(ActionName = "Create")]
-        public IActionResult CreateConfirm(AlbumCreateInputModel model)
+        [HttpPost]
+        public IActionResult Create(AlbumCreateInputModel model)
         {
             if (!ModelState.IsValid)
             {

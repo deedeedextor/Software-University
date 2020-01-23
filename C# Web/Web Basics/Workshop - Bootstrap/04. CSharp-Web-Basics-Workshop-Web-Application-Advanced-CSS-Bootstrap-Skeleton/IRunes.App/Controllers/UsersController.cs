@@ -19,22 +19,13 @@ namespace IRunes.App.Controllers
             this.userService = userService;
         }
 
-        [NonAction]
-        private string HashPassword(string password)
-        {
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                return Encoding.UTF8.GetString(sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password)));
-            }
-        }
-
         public IActionResult Login()
         {
             return this.View();
         }
 
-        [HttpPost(ActionName = "Login")]
-        public IActionResult LoginConfirm(UserLoginInputModel model)
+        [HttpPost]
+        public IActionResult Login(UserLoginInputModel model)
         {
             var userFromContext = this.userService.GetUserByUsernameAndPassword(model.Username, this.HashPassword(model.Password));
 
@@ -53,8 +44,8 @@ namespace IRunes.App.Controllers
             return this.View();
         }
 
-        [HttpPost(ActionName = "Register")]
-        public IActionResult RegisterConfirm(UserRegisterInputModel model)
+        [HttpPost]
+        public IActionResult Register(UserRegisterInputModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -83,6 +74,15 @@ namespace IRunes.App.Controllers
             this.SignOut();
 
             return this.Redirect("/");
+        }
+
+        [NonAction]
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                return Encoding.UTF8.GetString(sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password)));
+            }
         }
     }
 }
