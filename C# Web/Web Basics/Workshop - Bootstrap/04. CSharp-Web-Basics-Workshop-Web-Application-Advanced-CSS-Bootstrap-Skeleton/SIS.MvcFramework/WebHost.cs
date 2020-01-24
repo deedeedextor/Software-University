@@ -4,6 +4,7 @@ using SIS.MvcFramework.Attributes.Action;
 using SIS.MvcFramework.Attributes.Http;
 using SIS.MvcFramework.Attributes.Security;
 using SIS.MvcFramework.DependencyContainer;
+using SIS.MvcFramework.Logging;
 using SIS.MvcFramework.Result;
 using SIS.MvcFramework.Routing;
 using SIS.MvcFramework.Sessions;
@@ -22,9 +23,11 @@ namespace SIS.MvcFramework
 
             IServiceProvider serviceProvider = new ServiceProvider();
 
+            serviceProvider.Add<ILogger, ConsoleLogger>();
+
             application.ConfigureServices(serviceProvider);
 
-            AutoRegisterRoutes(application, serverRoutingTable);
+            AutoRegisterRoutes(application, serverRoutingTable, serviceProvider);
 
             application.Configure(serverRoutingTable);
 
@@ -32,22 +35,22 @@ namespace SIS.MvcFramework
             server.Run();
         }
 
-        private static void AutoRegisterRoutes(IMvcApplication application, IServerRoutingTable serverRoutingTable)
+        private static void AutoRegisterRoutes(IMvcApplication application, IServerRoutingTable serverRoutingTable, IServiceProvider serviceProvider)
         {
             var controllers = application.GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass && !type.IsAbstract
                 && typeof(Controller).IsAssignableFrom(type));
 
-            foreach (var controller in controllers)
+            foreach (var controllerType in controllers)
             {
-                var actions = controller
+                var actions = controllerType
                     .GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
-                    .Where(method => !method.IsSpecialName && method.DeclaringType == controller)
+                    .Where(method => !method.IsSpecialName && method.DeclaringType == controllerType)
                     .Where(x => x.GetCustomAttributes().All(a => a.GetType() != typeof(NonActionAttribute)));
 
                 foreach (var action in actions)
                 {
-                    var path = $"/{controller.Name.Replace("Controller", string.Empty)}/{action.Name}";
+                    var path = $"/{controllerType.Name.Replace("Controller", string.Empty)}/{action.Name}";
 
                     var attribute = action.GetCustomAttributes().Where(x => x.GetType().IsSubclassOf(typeof(BaseHttpAttribute)))
                         .LastOrDefault() as BaseHttpAttribute;
@@ -66,16 +69,17 @@ namespace SIS.MvcFramework
 
                     if (attribute?.ActionName != null)
                     {
-                        path = $"/{controller.Name.Replace("Controller", string.Empty)}/{attribute.ActionName}";
+                        path = $"/{controllerType.Name.Replace("Controller", string.Empty)}/{attribute.ActionName}";
                     }
 
                     serverRoutingTable.Add(httpMethod, path, request =>
                     {
-                        var controllerInstance = System.Activator.CreateInstance(controller);
-                        ((Controller)controllerInstance).Request = request;
+                        //request => new UsersController().Login(request)
+                        var controllerInstance = serviceProvider.CreateInstance(controllerType) as Controller;
+                    controllerInstance.Request = request;
 
                         //Security Authorization - TODO: Refactor this
-                        var controllerPrincipal = ((Controller)controllerInstance).User;
+                        var controllerPrincipal = controllerInstance.User;
                         var authorizedAttribute = action.GetCustomAttributes()
                         .LastOrDefault(x => x.GetType() == typeof(AuthorizeAttribute)) as AuthorizeAttribute;
 
