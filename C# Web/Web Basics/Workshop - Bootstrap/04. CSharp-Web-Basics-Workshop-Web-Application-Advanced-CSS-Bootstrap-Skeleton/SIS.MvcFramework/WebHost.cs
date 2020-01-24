@@ -3,10 +3,10 @@ using SIS.HTTP.Responses;
 using SIS.MvcFramework.Attributes.Action;
 using SIS.MvcFramework.Attributes.Http;
 using SIS.MvcFramework.Attributes.Security;
+using SIS.MvcFramework.DependencyContainer;
 using SIS.MvcFramework.Result;
 using SIS.MvcFramework.Routing;
 using SIS.MvcFramework.Sessions;
-using System;
 using System.Linq;
 using System.Reflection;
 
@@ -20,9 +20,11 @@ namespace SIS.MvcFramework
 
             IHttpSessionStorage httpSessionStorage = new HttpSessionStorage();
 
-            AutoRegisterRoutes(application, serverRoutingTable);
+            IServiceProvider serviceProvider = new ServiceProvider();
 
-            application.ConfigureServices();
+            application.ConfigureServices(serviceProvider);
+
+            AutoRegisterRoutes(application, serverRoutingTable);
 
             application.Configure(serverRoutingTable);
 
@@ -69,7 +71,7 @@ namespace SIS.MvcFramework
 
                     serverRoutingTable.Add(httpMethod, path, request =>
                     {
-                        var controllerInstance = Activator.CreateInstance(controller);
+                        var controllerInstance = System.Activator.CreateInstance(controller);
                         ((Controller)controllerInstance).Request = request;
 
                         //Security Authorization - TODO: Refactor this
@@ -88,7 +90,7 @@ namespace SIS.MvcFramework
                         return response;
                     });
 
-                    Console.WriteLine(httpMethod + " " + path);
+                    System.Console.WriteLine(httpMethod + " " + path);
                 }
             }
         }
