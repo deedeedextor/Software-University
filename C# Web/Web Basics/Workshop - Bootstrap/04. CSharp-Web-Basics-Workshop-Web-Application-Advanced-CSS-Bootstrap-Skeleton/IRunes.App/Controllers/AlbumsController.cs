@@ -17,6 +17,7 @@ namespace IRunes.App.Controllers
 
         public AlbumsController(IAlbumService albumService)
         {
+            // new is glue
             this.albumService = albumService;
         }
 
@@ -27,7 +28,7 @@ namespace IRunes.App.Controllers
 
             if (allAlbums.Count != 0)
             {
-                this.View(allAlbums.Select(ModelMapper.ProjectTo<AlbumAllViewModel>).ToList());
+                return this.View(allAlbums.Select(ModelMapper.ProjectTo<AlbumAllViewModel>).ToList());
             }
 
             return this.View(new List<AlbumAllViewModel>());
@@ -43,12 +44,13 @@ namespace IRunes.App.Controllers
         [HttpPost]
         public IActionResult Create(AlbumCreateInputModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
                 return this.Redirect("/Albums/Create");
             }
 
-            var album = ModelMapper.ProjectTo<Album>(model);
+
+            Album album = ModelMapper.ProjectTo<Album>(model);
             this.albumService.CreateAlbum(album);
 
             return this.Redirect("/Albums/All");
@@ -57,11 +59,11 @@ namespace IRunes.App.Controllers
         [Authorize]
         public IActionResult Details(string id)
         {
-            Album albumFromContext = this.albumService.GetAlbumById(id);
+            Album albumFromDb = this.albumService.GetAlbumById(id);
 
-            AlbumDetailsViewModel albumViewModel = ModelMapper.ProjectTo<AlbumDetailsViewModel>(albumFromContext);
+            AlbumDetailsViewModel albumViewModel = ModelMapper.ProjectTo<AlbumDetailsViewModel>(albumFromDb);
 
-            if (albumFromContext == null)
+            if (albumFromDb == null)
             {
                 return this.Redirect("/Albums/All");
             }

@@ -12,6 +12,7 @@ namespace IRunes.App.Controllers
     public class TracksController : Controller
     {
         private readonly ITrackService trackService;
+
         private readonly IAlbumService albumService;
 
         public TracksController(ITrackService trackService, IAlbumService albumService)
@@ -23,7 +24,7 @@ namespace IRunes.App.Controllers
         [Authorize]
         public IActionResult Create(string albumId)
         {
-            return this.View(new TrackCreateViewModel {AlbumId = albumId});
+            return this.View(new TrackCreateViewModel { AlbumId = albumId });
         }
 
         [Authorize]
@@ -35,9 +36,9 @@ namespace IRunes.App.Controllers
                 return this.Redirect("/");
             }
 
-            var trackFromContext = ModelMapper.ProjectTo<Track>(model);
+            Track trackForDb = ModelMapper.ProjectTo<Track>(model);
 
-            if (!this.albumService.AddTrackToAlbum(model.AlbumId, trackFromContext))
+            if (!this.albumService.AddTrackToAlbum(model.AlbumId, trackForDb))
             {
                 return this.Redirect("/Albums/All");
             }
@@ -53,15 +54,14 @@ namespace IRunes.App.Controllers
                 return this.Redirect($"Albums/All");
             }
 
-            var trackFromContext = this.trackService
-                    .GetTrackById(model.TrackId);
+            Track trackFromDb = this.trackService.GetTrackById(model.TrackId);
 
-            if (trackFromContext == null)
+            if (trackFromDb == null)
             {
                 return this.Redirect($"/Albums/Details?id={model.AlbumId}");
             }
 
-            TrackDetailsViewModel trackDetailsViewModel = ModelMapper.ProjectTo<TrackDetailsViewModel>(trackFromContext);
+            TrackDetailsViewModel trackDetailsViewModel = ModelMapper.ProjectTo<TrackDetailsViewModel>(trackFromDb);
 
             trackDetailsViewModel.AlbumId = model.AlbumId;
 

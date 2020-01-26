@@ -1,4 +1,4 @@
-﻿@if(!ModelState.IsValid)
+﻿﻿@if(!ModelState.IsValid)
 {
 <div class="alert alert-danger" role="alert">
     Error
@@ -15,4 +15,3 @@
     }
 </div>
 }
-© 2020 GitHub, Inc.

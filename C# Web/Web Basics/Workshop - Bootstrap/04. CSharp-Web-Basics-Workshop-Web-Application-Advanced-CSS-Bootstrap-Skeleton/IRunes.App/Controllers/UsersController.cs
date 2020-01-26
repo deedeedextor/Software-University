@@ -27,14 +27,14 @@ namespace IRunes.App.Controllers
         [HttpPost]
         public IActionResult Login(UserLoginInputModel model)
         {
-            var userFromContext = this.userService.GetUserByUsernameAndPassword(model.Username, this.HashPassword(model.Password));
+            User userFromDb = this.userService.GetUserByUsernameAndPassword(model.Username, this.HashPassword(model.Password));
 
-            if (userFromContext == null)
+            if (userFromDb == null)
             {
                 return this.Redirect("/Users/Login");
             }
 
-            this.SignIn(userFromContext.Id, userFromContext.Username, userFromContext.Email);
+            this.SignIn(userFromDb.Id, userFromDb.Username, userFromDb.Email);
 
             return this.Redirect("/");
         }
@@ -54,14 +54,14 @@ namespace IRunes.App.Controllers
 
             if (model.Password != model.ConfirmPassword)
             {
-                return Redirect("/Users/Register");
+                return this.Redirect("/Users/Register");
             }
 
-            var user = new User
+            User user = new User
             {
                 Username = model.Username,
                 Password = this.HashPassword(model.Password),
-                Email = model.Email,
+                Email = model.Email
             };
 
             this.userService.CreateUser(user);
