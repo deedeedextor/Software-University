@@ -1,17 +1,21 @@
-﻿<hr class="bg-success" style="height: 2px" />
+﻿﻿﻿<hr class="bg-success" style="height: 2px" />
 <main>
-    <div class="track-details">
-        <h4 class="text-center">Track Name: @Model.Name</h4>
-        <h4 class="text-center">Track Price: @Model.Price</h4>
-        <hr class="bg-success w-50" style="height: 2px" />
-        <div class="d-flex justify-content-center">
-            <iframe src="@Model.Link" class="w-50" height="480"></iframe>
+    <h1 class="text-center text-success">Login</h1>
+    <hr class="bg-success w-50" style="height: 2px" />
+    <form class="w-50 mx-auto" action="/Users/Login" method="POST">
+        @Widgets.ValidationWidget
+        <div class="form-group">
+            <label for="username">Username / Email</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username / Email..." />
         </div>
-        <hr class="bg-success w-50" style="height: 2px" />
-        <div class="d-flex justify-content-center">
-            <a href="/Albums/Details?id=@Model.AlbumId" class="btn bg-success text-white">Back To Album</a>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password..." />
         </div>
-    </div>
-</main>﻿
+        <div class="d-flex justify-content-center mt-3">
+            <button type="submit" class="btn bg-success text-white">Login</button>
+        </div>
+    </form>
+</main>
 
 
