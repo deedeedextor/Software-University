@@ -15,33 +15,37 @@ namespace IRunes.Services
             this.context = context;
         }
 
-        public bool AddTrackToAlbum(string albumId, Track trackFromContext)
+        public Album CreateAlbum(Album album)
         {
-            var albumFromContext = this
-                       .GetAlbumById(albumId);
+            album = context.Albums.Add(album).Entity;
+            context.SaveChanges();
 
-            if (albumFromContext == null)
+            return album;
+        }
+
+        public bool AddTrackToAlbum(string albumId, Track trackFromDb)
+        {
+            Album albumFromDb = this.GetAlbumById(albumId);
+
+            if (albumFromDb == null)
             {
                 return false;
             }
-           
-            albumFromContext.Tracks.Add(trackFromContext);
-            albumFromContext.Price = (albumFromContext.Tracks
-                .Select(track => track.Price)
-                .Sum() * 87) / 100;
 
-            this.context.Update(albumFromContext);
+            albumFromDb.Tracks.Add(trackFromDb);
+            albumFromDb.Price = (albumFromDb.Tracks
+                                     .Select(track => track.Price)
+                                     .Sum() * 87) / 100;
+
+            this.context.Update(albumFromDb);
             this.context.SaveChanges();
 
             return true;
         }
 
-        public Album CreateAlbum(Album album)
+        public ICollection<Album> GetAllAlbums()
         {
-            album = this.context.Albums.Add(album).Entity;
-            this.context.SaveChanges();
-
-            return album;
+            return context.Albums.ToList();
         }
 
         public Album GetAlbumById(string id)
@@ -49,11 +53,6 @@ namespace IRunes.Services
             return context.Albums
                 .Include(album => album.Tracks)
                 .SingleOrDefault(album => album.Id == id);
-        }
-
-        public ICollection<Album> GetAllAlbums()
-        {
-            return context.Albums.ToList();
         }
     }
 }

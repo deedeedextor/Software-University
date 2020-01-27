@@ -13,10 +13,10 @@ namespace IRunes.Services
             this.context = context;
         }
 
-        public Track GetTrackById(string id)
+        public Track GetTrackById(string trackId)
         {
             return this.context.Tracks
-                .SingleOrDefault(track => track.Id == id);
+                .SingleOrDefault(track => track.Id == trackId);
         }
     }
 }
