@@ -36,9 +36,9 @@ namespace IRunes.App.Controllers
                 return this.Redirect("/");
             }
 
-            Track trackForDb = ModelMapper.ProjectTo<Track>(model);
+            Track trackFromDb = ModelMapper.ProjectTo<Track>(model);
 
-            if (!this.albumService.AddTrackToAlbum(model.AlbumId, trackForDb))
+            if (!this.albumService.AddTrackToAlbum(model.AlbumId, trackFromDb))
             {
                 return this.Redirect("/Albums/All");
             }

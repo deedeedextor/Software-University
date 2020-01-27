@@ -4,6 +4,11 @@ namespace IRunes.Models
 {
     public class Album
     {
+        public Album()
+        {
+            this.Tracks = new List<Track>();
+        }
+
         public string Id { get; set; }
 
         public string Name { get; set; }
@@ -12,6 +17,6 @@ namespace IRunes.Models
 
         public decimal Price { get; set; }
 
-        public ICollection<Track> Tracks { get; set; } = new HashSet<Track>();
+        public List<Track> Tracks { get; set; }
     }
 }
