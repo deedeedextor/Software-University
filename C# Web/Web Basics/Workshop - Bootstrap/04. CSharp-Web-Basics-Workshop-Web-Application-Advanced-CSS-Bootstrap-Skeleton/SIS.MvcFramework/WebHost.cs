@@ -32,9 +32,7 @@ namespace SIS.MvcFramework
             application.ConfigureServices(serviceProvider);
 
             AutoRegisterRoutes(application, serverRoutingTable, serviceProvider);
-
             application.Configure(serverRoutingTable);
-
             var server = new Server(8000, serverRoutingTable, httpSessionStorage);
             server.Run();
         }
@@ -47,7 +45,6 @@ namespace SIS.MvcFramework
             var controllers = application.GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass && !type.IsAbstract
                     && typeof(Controller).IsAssignableFrom(type));
-
             foreach (var controllerType in controllers)
             {
                 var actions = controllerType
@@ -63,7 +60,6 @@ namespace SIS.MvcFramework
                     var attribute = action.GetCustomAttributes().Where(
                         x => x.GetType().IsSubclassOf(typeof(BaseHttpAttribute))).LastOrDefault() as BaseHttpAttribute;
                     var httpMethod = HttpRequestMethod.Get;
-
                     if (attribute != null)
                     {
                         httpMethod = attribute.Method;
@@ -211,7 +207,6 @@ namespace SIS.MvcFramework
         {
             parameterName = parameterName.ToLower();
             ISet<string> httpDataValue = null;
-
             if (request.QueryData.Any(x => x.Key.ToLower() == parameterName))
             {
                 httpDataValue = request.QueryData.FirstOrDefault(

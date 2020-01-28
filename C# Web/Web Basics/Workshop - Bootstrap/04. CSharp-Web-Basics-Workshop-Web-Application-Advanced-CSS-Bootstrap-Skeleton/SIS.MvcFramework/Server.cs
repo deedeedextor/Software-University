@@ -31,7 +31,7 @@ namespace SIS.MvcFramework
             this.serverRoutingTable = serverRoutingTable;
             this.httpSessionStorage = httpSessionStorage;
 
-            tcpListener = new TcpListener(IPAddress.Parse(LocalHostIpAddress), port);
+            this.tcpListener = new TcpListener(IPAddress.Parse(LocalHostIpAddress), port);
         }
 
         private async Task ListenAsync(Socket client)
@@ -42,16 +42,15 @@ namespace SIS.MvcFramework
 
         public void Run()
         {
-            tcpListener.Start();
-            isRunning = true;
+            this.tcpListener.Start();
+            this.isRunning = true;
 
-            Console.WriteLine($"Server started at http://{LocalHostIpAddress}:{port}");
+            Console.WriteLine($"Server started at http://{LocalHostIpAddress}:{this.port}");
 
-            while (isRunning)
+            while (this.isRunning)
             {
-                var client = tcpListener.AcceptSocketAsync().GetAwaiter().GetResult();
-
-                Task.Run(() => ListenAsync(client));
+                var client = this.tcpListener.AcceptSocketAsync().GetAwaiter().GetResult();
+                Task.Run(() => this.ListenAsync(client));
             }
         }
     }

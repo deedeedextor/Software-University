@@ -19,22 +19,28 @@ namespace SIS.MvcFramework
             this.ModelState = new ModelStateDictionary();
         }
 
+        // TODO: Refactor this
+        public Principal User =>
+            this.Request.Session.ContainsParameter("principal")
+            ? (Principal)this.Request.Session.GetParameter("principal")
+            : null;
+
         public IHttpRequest Request { get; set; }
 
         public ModelStateDictionary ModelState { get; set; }
 
-        //TODO: Refactor this
-        public Principal User => this.Request.Session.ContainsParameter("principal") 
-            ?(Principal)this.Request.Session.GetParameter("principal")
-            : null;
+        protected bool IsLoggedIn()
+        {
+            return this.Request.Session.ContainsParameter("principal");
+        }
 
         protected void SignIn(string id, string username, string email)
         {
-            this.Request.Session.AddParameter("principal", new Principal 
-            { 
+            this.Request.Session.AddParameter("principal", new Principal
+            {
                 Id = id,
                 Username = username,
-                Email = email,
+                Email = email
             });
         }
 
@@ -43,19 +49,16 @@ namespace SIS.MvcFramework
             this.Request.Session.ClearParameters();
         }
 
-        protected bool IsLoggedIn()
-        {
-            return this.Request.Session.ContainsParameter("principal");
-        }
-
         protected ActionResult View([CallerMemberName] string view = null)
         {
             return this.View<object>(null, view);
         }
 
-        protected ActionResult View<T>(T model = null,[CallerMemberName] string view = null) where T : class
+        protected ActionResult View<T>(T model = null, [CallerMemberName] string view = null)
+            where T : class
         {
-            string controllerName = GetType().Name.Replace("Controller", string.Empty);
+            // TODO: Support for layout
+            string controllerName = this.GetType().Name.Replace("Controller", string.Empty);
             string viewName = view;
 
             string viewContent = System.IO.File.ReadAllText("Views/" + controllerName + "/" + viewName + ".html");
@@ -65,9 +68,7 @@ namespace SIS.MvcFramework
             layoutContent = this.viewEngine.GetHtml(layoutContent, model, this.ModelState, this.User);
             layoutContent = layoutContent.Replace("@RenderBody()", viewContent);
 
-
-            HtmlResult htmlResult = new HtmlResult(layoutContent);
-
+            var htmlResult = new HtmlResult(layoutContent);
             return htmlResult;
         }
 

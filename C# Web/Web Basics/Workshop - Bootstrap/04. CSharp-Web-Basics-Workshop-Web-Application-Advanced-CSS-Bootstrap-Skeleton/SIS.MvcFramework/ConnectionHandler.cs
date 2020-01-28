@@ -44,7 +44,7 @@ namespace SIS.MvcFramework
 
             while (true)
             {
-                int numberOfBytesToRead = await client.ReceiveAsync(data, SocketFlags.None);
+                int numberOfBytesToRead = await this.client.ReceiveAsync(data, SocketFlags.None);
 
                 if (numberOfBytesToRead == 0)
                 {
@@ -80,9 +80,8 @@ namespace SIS.MvcFramework
             if (File.Exists(fullPathToResource))
             {
                 byte[] content = File.ReadAllBytes(fullPathToResource);
-                return new InlineResourceResult(content, HttpResponseStatusCode.Found);
+                return new InlineResourceResult(content, HttpResponseStatusCode.Ok);
             }
-
             else
             {
                 return new TextResult($"Route with method {httpRequest.RequestMethod} and path \"{httpRequest.Path}\" not found.", HttpResponseStatusCode.NotFound);
@@ -92,31 +91,33 @@ namespace SIS.MvcFramework
         private IHttpResponse HandleRequest(IHttpRequest httpRequest)
         {
             // EXECUTE FUNCTION FOR CURRENT REQUEST -> RETURNS RESPONSE
-            if (!serverRoutingTable.Contains(httpRequest.RequestMethod, httpRequest.Path))
+            if (!this.serverRoutingTable.Contains(httpRequest.RequestMethod, httpRequest.Path))
             {
-                return ReturnIfResource(httpRequest);
+                return this.ReturnIfResource(httpRequest);
             }
 
-            return serverRoutingTable.Get(httpRequest.RequestMethod, httpRequest.Path).Invoke(httpRequest);
+            return this.serverRoutingTable.Get(httpRequest.RequestMethod, httpRequest.Path).Invoke(httpRequest);
         }
 
         private string SetRequestSession(IHttpRequest httpRequest)
         {
-            string sessionId = null;
-
             if (httpRequest.Cookies.ContainsCookie(HttpSessionStorage.SessionCookieKey))
             {
-                var cookie = httpRequest.Cookies.GetCookie(HttpSessionStorage.SessionCookieKey);
-                sessionId = cookie.Value;
+                var cookie = httpRequest
+                    .Cookies
+                    .GetCookie(HttpSessionStorage.SessionCookieKey);
+
+                string sessionId = cookie.Value;
 
                 if (this.httpSessionStorage.ContainsSession(sessionId))
                 {
                     httpRequest.Session = this.httpSessionStorage.GetSession(sessionId);
                 }
             }
+
             if (httpRequest.Session == null)
             {
-                sessionId = Guid.NewGuid().ToString();
+                string sessionId = Guid.NewGuid().ToString();
 
                 httpRequest.Session = this.httpSessionStorage.GetSession(sessionId);
             }
@@ -131,9 +132,7 @@ namespace SIS.MvcFramework
             if (responseSession.IsNew)
             {
                 responseSession.IsNew = false;
-                httpResponse
-                    .AddCookie(new HttpCookie(HttpSessionStorage
-                        .SessionCookieKey, responseSession.Id));
+                httpResponse.AddCookie(new HttpCookie(HttpSessionStorage.SessionCookieKey, responseSession.Id));
             }
         }
 
@@ -148,10 +147,9 @@ namespace SIS.MvcFramework
         public async Task ProcessRequestAsync()
         {
             IHttpResponse httpResponse = null;
-
             try
             {
-                IHttpRequest httpRequest = await ReadRequestAsync();
+                IHttpRequest httpRequest = await this.ReadRequestAsync();
 
                 if (httpRequest != null)
                 {
@@ -172,7 +170,6 @@ namespace SIS.MvcFramework
             {
                 httpResponse = new TextResult(e.ToString(), HttpResponseStatusCode.InternalServerError);
             }
-
             this.PrepareResponse(httpResponse);
 
             this.client.Shutdown(SocketShutdown.Both);

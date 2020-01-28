@@ -36,7 +36,6 @@ namespace SIS.MvcFramework.DependencyContainer
 
             var parameters = constructor.GetParameters();
             var parameterInstances = new List<object>();
-
             foreach (var parameter in parameters)
             {
                 var parameterInstance = CreateInstance(parameter.ParameterType);
@@ -44,7 +43,6 @@ namespace SIS.MvcFramework.DependencyContainer
             }
 
             var obj = constructor.Invoke(parameterInstances.ToArray());
-
             return obj;
         }
     }
