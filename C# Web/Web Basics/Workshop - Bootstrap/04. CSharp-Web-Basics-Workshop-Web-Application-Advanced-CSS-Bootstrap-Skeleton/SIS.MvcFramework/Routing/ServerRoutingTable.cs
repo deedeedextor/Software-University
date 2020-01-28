@@ -9,10 +9,11 @@ namespace SIS.MvcFramework.Routing
 {
     public class ServerRoutingTable : IServerRoutingTable
     {
-        private Dictionary<HttpRequestMethod, Dictionary<string, Func<IHttpRequest, IHttpResponse>>> routingTable;
+        private readonly Dictionary<HttpRequestMethod, Dictionary<string, Func<IHttpRequest, IHttpResponse>>> routingTable;
+
         public ServerRoutingTable()
         {
-            routingTable = new Dictionary<HttpRequestMethod, Dictionary<string, Func<IHttpRequest, IHttpResponse>>>
+            this.routingTable = new Dictionary<HttpRequestMethod, Dictionary<string, Func<IHttpRequest, IHttpResponse>>>
             {
                 [HttpRequestMethod.Get] = new Dictionary<string, Func<IHttpRequest, IHttpResponse>>(),
                 [HttpRequestMethod.Post] = new Dictionary<string, Func<IHttpRequest, IHttpResponse>>(),
@@ -27,7 +28,7 @@ namespace SIS.MvcFramework.Routing
             path.ThrowIfNullOrEmpty(nameof(path));
             func.ThrowIfNull(nameof(func));
 
-            routingTable[method].Add(path, func);
+            this.routingTable[method].Add(path, func);
         }
 
         public bool Contains(HttpRequestMethod method, string path)
@@ -35,7 +36,7 @@ namespace SIS.MvcFramework.Routing
             method.ThrowIfNull(nameof(method));
             path.ThrowIfNullOrEmpty(nameof(path));
 
-            return routingTable.ContainsKey(method) && routingTable[method].ContainsKey(path);
+            return this.routingTable.ContainsKey(method) && this.routingTable[method].ContainsKey(path);
         }
 
         public Func<IHttpRequest, IHttpResponse> Get(HttpRequestMethod method, string path)
@@ -43,7 +44,7 @@ namespace SIS.MvcFramework.Routing
             method.ThrowIfNull(nameof(method));
             path.ThrowIfNullOrEmpty(nameof(path));
 
-            return routingTable[method][path];
+            return this.routingTable[method][path];
         }
     }
 }
