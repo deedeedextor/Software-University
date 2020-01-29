@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Web;
 using SIS.Common;
 using SIS.HTTP.Common;
 using SIS.HTTP.Cookies;
@@ -39,7 +40,7 @@ namespace SIS.HTTP.Requests
         public IHttpCookieCollection Cookies { get; }
 
         public HttpRequestMethod RequestMethod { get; private set; }
-        
+
         public IHttpSession Session { get; set; }
 
         private bool IsValidRequestLine(string[] requestLineParams)
@@ -93,7 +94,7 @@ namespace SIS.HTTP.Requests
 
         private void ParseRequestUrl(string[] requestLineParams)
         {
-            this.Url = requestLineParams[1];
+            this.Url = HttpUtility.UrlDecode(requestLineParams[1]);
         }
 
         private void ParseRequestPath()
