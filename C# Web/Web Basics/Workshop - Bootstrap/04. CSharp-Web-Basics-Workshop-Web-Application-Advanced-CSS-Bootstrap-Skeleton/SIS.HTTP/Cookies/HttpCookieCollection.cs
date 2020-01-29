@@ -19,10 +19,7 @@ namespace SIS.HTTP.Cookies
         {
             httpCookie.ThrowIfNull(nameof(httpCookie));
 
-            if (!this.ContainsCookie(httpCookie.Key))
-            {
-                this.httpCookies.Add(httpCookie.Key, httpCookie);
-            }
+            this.httpCookies.Add(httpCookie.Key, httpCookie);
         }
 
         public bool ContainsCookie(string key)
@@ -61,7 +58,7 @@ namespace SIS.HTTP.Cookies
             StringBuilder sb = new StringBuilder();
 
             foreach (var cookie in this.httpCookies.Values)
-            {                
+            {
                 sb.Append($"Set-Cookie: {cookie}").Append(GlobalConstants.HttpNewLine);
             }
 
