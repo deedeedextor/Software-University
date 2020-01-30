@@ -1,7 +1,25 @@
-﻿namespace SULS.App.Controllers
+﻿using SIS.MvcFramework;
+using SIS.MvcFramework.Attributes;
+using SIS.MvcFramework.Result;
+
+namespace SULS.App.Controllers
 {
-    public class UsersController
+    public class UsersController : Controller
     {
-        // TODO
+        public IActionResult Login()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        public IActionResult Login()
+        {
+            return this.View();
+        }
+
+        public IActionResult Register()
+        {
+            return this.View();
+        }
     }
 }

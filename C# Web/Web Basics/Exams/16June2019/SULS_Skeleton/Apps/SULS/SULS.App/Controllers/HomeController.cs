@@ -1,7 +1,20 @@
-﻿namespace SULS.App.Controllers
+﻿using SIS.MvcFramework;
+using SIS.MvcFramework.Attributes;
+using SIS.MvcFramework.Result;
+
+namespace SULS.App.Controllers
 {
-    public class HomeController
+    public class HomeController : Controller
     {
-        // TODO
+        [HttpGet(Url = "/")]
+        public IActionResult Index()
+        {
+            if (!IsLoggedIn())
+            {
+                return this.View();
+            }
+
+            return this.View("IndexLoggedIn");
+        }
     }
 }

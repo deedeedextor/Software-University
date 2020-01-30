@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -62,7 +62,6 @@
     <Folder Include="ViewModels\Home\" />
     <Folder Include="ViewModels\Problems\" />
     <Folder Include="ViewModels\Submissions\" />
-    <Folder Include="ViewModels\Users\" />
   </ItemGroup>
 
 </Project>
