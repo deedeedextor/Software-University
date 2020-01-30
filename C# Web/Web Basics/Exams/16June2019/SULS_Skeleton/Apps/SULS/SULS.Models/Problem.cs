@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace SULS.Models
 {
-    public class User
+    public class Problem
     {
-        public User()
+        public Problem()
         {
             this.Id = Guid.NewGuid().ToString();
             this.Submissions = new HashSet<Submission>();
@@ -15,15 +15,11 @@ namespace SULS.Models
         public string Id { get; set; }
 
         [RequiredSis]
-        [StringLengthSis(5, 20, "Invalid username length!")]
-        public string Username { get; set; }
+        [StringLengthSis(5, 20, "Invalid name length!")]
+        public string Name { get; set; }
 
-        [RequiredSis]
-        public string Email { get; set; }
-
-        [RequiredSis]
-        [StringLengthSis(6, 20, "Invalid password length!")]
-        public string Password { get; set; }
+        [RangeSis(50, 300, "Invalid range number!")]
+        public int Points { get; set; }
 
         public ICollection<Submission> Submissions { get; set; }
     }
