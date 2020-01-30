@@ -1,6 +1,6 @@
-﻿using SIS.MvcFramework.Attributes.Validation;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SULS.Models
 {
@@ -14,15 +14,15 @@ namespace SULS.Models
 
         public string Id { get; set; }
 
-        [RequiredSis]
-        [StringLengthSis(5, 20, "Invalid username length!")]
+        [Required]
+        [StringLength(20, MinimumLength = 5)]
         public string Username { get; set; }
 
-        [RequiredSis]
+        [Required]
         public string Email { get; set; }
 
-        [RequiredSis]
-        [StringLengthSis(6, 20, "Invalid password length!")]
+        [Required]
+        [StringLength(20, MinimumLength = 6)]
         public string Password { get; set; }
 
         public ICollection<Submission> Submissions { get; set; }

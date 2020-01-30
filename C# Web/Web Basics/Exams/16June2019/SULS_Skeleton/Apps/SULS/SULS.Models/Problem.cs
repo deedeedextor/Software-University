@@ -1,6 +1,6 @@
-﻿using SIS.MvcFramework.Attributes.Validation;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SULS.Models
 {
@@ -14,11 +14,11 @@ namespace SULS.Models
 
         public string Id { get; set; }
 
-        [RequiredSis]
-        [StringLengthSis(5, 20, "Invalid name length!")]
+        [Required]
+        [StringLength(20, MinimumLength = 5)]
         public string Name { get; set; }
 
-        [RangeSis(50, 300, "Invalid range number!")]
+        [Range(50, 300)]
         public int Points { get; set; }
 
         public ICollection<Submission> Submissions { get; set; }

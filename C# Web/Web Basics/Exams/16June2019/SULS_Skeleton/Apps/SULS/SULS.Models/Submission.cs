@@ -1,5 +1,5 @@
-﻿using SIS.MvcFramework.Attributes.Validation;
-using System;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace SULS.Models
 {
@@ -12,11 +12,11 @@ namespace SULS.Models
 
         public string Id { get; set; }
 
-        [RequiredSis]
-        [StringLengthSis(30, 800, "Invalid code length!")]
+        [Required]
+        [StringLength(800, MinimumLength = 30)]
         public string Code { get; set; }
 
-        [RangeSis(0, 300, "Invalid achieved result length!")]
+        [Range(0, 300)]
         public int AchievedResult { get; set; }
 
         public DateTime CreatedOn { get; set; }
