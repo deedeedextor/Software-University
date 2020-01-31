@@ -23,7 +23,7 @@ namespace SULS.Services
 
         public User GetUserByUsernameAndPassword(string username, string password)
         {
-            return this.context.Users.SingleOrDefault(user => user.Username == username && user.Password == password);
+            return this.context.Users.SingleOrDefault(user => (user.Username == username) && user.Password == password);
         }
     }
 }
