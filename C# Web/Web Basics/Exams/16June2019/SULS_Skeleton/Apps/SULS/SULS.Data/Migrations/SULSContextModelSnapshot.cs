@@ -24,7 +24,9 @@ namespace SULS.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20);
 
                     b.Property<int>("Points");
 
@@ -40,7 +42,9 @@ namespace SULS.Data.Migrations
 
                     b.Property<int>("AchievedResult");
 
-                    b.Property<string>("Code");
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(800);
 
                     b.Property<DateTime>("CreatedOn");
 
@@ -62,11 +66,16 @@ namespace SULS.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .IsRequired();
 
-                    b.Property<string>("Password");
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(20);
 
-                    b.Property<string>("Username");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(20);
 
                     b.HasKey("Id");
 
