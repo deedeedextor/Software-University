@@ -70,8 +70,7 @@ namespace SULS.Data.Migrations
                         .IsRequired();
 
                     b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(20);
+                        .IsRequired();
 
                     b.Property<string>("Username")
                         .IsRequired()
