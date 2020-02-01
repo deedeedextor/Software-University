@@ -20,10 +20,10 @@
     <None Update="Resources\css\bootstrap.min.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\css\reset-css.css">
+    <None Update="Resources\css\site.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\css\site.css">
+    <None Update="Resources\css\reset-css.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\css\text.css">
