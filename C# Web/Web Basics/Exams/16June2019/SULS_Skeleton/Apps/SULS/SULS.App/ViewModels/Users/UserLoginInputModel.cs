@@ -4,12 +4,15 @@ namespace SULS.App.ViewModels.Users
 {
     public class UserLoginInputModel
     {
+        private const string UsernameErrorMessage = "Username length must be between 5 and 20!";
+        private const string PasswordErrorMessage = "Password length must be between 6 and 20!";
+
         [RequiredSis]
-        [StringLengthSis(5, 20, "Username' length must be between 5 and 20!")]
+        [StringLengthSis(5, 20, UsernameErrorMessage)]
         public string Username { get; set; }
 
         [RequiredSis]
-        [StringLengthSis(6, 20, "Password's lengthmust be between 6 and 20!")]
+        [StringLengthSis(6, 20, PasswordErrorMessage)]
         public string Password { get; set; }
     }
 }
