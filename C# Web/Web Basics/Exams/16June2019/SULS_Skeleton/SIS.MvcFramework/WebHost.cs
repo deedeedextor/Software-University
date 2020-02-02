@@ -146,7 +146,7 @@ namespace SIS.MvcFramework
                                  i.GetGenericTypeDefinition() == typeof(IEnumerable<>)) &&
                             property.PropertyType != typeof(string))
                         {
-                            var propertyValue = (IList) Activator.CreateInstance(property.PropertyType);
+                            var propertyValue = (IList)Activator.CreateInstance(property.PropertyType);
 
                             foreach (var parameterElement in propertyHttpDataValue)
                             {
