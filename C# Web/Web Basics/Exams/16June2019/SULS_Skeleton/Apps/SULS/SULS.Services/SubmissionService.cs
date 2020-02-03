@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SULS.Data;
+﻿using SULS.Data;
 using SULS.Models;
 using System;
 using System.Linq;
@@ -59,8 +58,6 @@ namespace SULS.Services
 
         public IQueryable<Submission> GetSubmissionsForProblemById(string problemId)
             => this.context.Submissions
-            .Include(s => s.Problem)
-            .Include(s => s.User)
             .Where(s => s.ProblemId == problemId);
     }
 }
