@@ -1,4 +1,5 @@
 ﻿using SIS.MvcFramework;
+using SIS.MvcFramework.Attributes;
 using SIS.MvcFramework.Attributes.Security;
 using SIS.MvcFramework.Result;
 using SULS.App.ViewModels.Submissions;
@@ -26,6 +27,28 @@ namespace SULS.App.Controllers
             var result = new CreateSubmissionViewModel { Name = problem.Name, ProblemId = problem.Id };
 
             return this.View(result);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Create(CreateSubmissionInputModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.Create(model.ProblemId);
+            }
+
+            this.submissionService.CreateSubmission(model.Code, model.ProblemId, this.User.Id);
+
+            return this.Redirect("/");
+        }
+
+        [Authorize]
+        public IActionResult Delete(string id)
+        {
+            var submission = this.submissionService.DeleteById(id);
+
+            return this.Redirect("/");
         }
     }
 }
