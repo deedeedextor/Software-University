@@ -9,6 +9,7 @@ namespace SULS.App.ViewModels.Problems
         {
             this.Submissions = new List<DetailsSubmissionViewModel>();
         }
+
         public string Name { get; set; }
 
         public List<DetailsSubmissionViewModel> Submissions { get; set; }

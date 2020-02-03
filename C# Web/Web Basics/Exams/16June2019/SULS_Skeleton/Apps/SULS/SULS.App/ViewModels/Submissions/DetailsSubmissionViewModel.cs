@@ -16,7 +16,7 @@ namespace SULS.App.ViewModels.Submissions
         public int AchievedResult
         {
             get => int.Parse(Math.Round((this.achievedResult / (double)this.maxPoints) * 100).ToString());
-            set => this.maxPoints = value;
+            set => this.achievedResult = value;
         }
 
         public int MaxPoints
