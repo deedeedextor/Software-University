@@ -38,14 +38,14 @@
             else if (typeof(IEnumerable).IsAssignableFrom(destinationProperty.PropertyType))
             {
                 // TODO: Research if possible for other collections
-                
-                var originCollection = (IEnumerable) originProperty.GetValue(originInstance);
+
+                var originCollection = (IEnumerable)originProperty.GetValue(originInstance);
 
                 var destinationElementType = destinationProperty.GetValue(destinationInstance)
                     .GetType()
                     .GetGenericArguments()[0];
 
-                var destinationCollection = (IList) Activator.CreateInstance(destinationProperty.PropertyType);
+                var destinationCollection = (IList)Activator.CreateInstance(destinationProperty.PropertyType);
 
                 foreach (var originElement in originCollection)
                 {

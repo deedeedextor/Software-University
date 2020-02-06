@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,18 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\MUSACA.Services\MUSACA.Services.csproj" />
+    <ProjectReference Include="..\..\..\SIS.MvcFramework\SIS.MvcFramework.csproj" />
     <ProjectReference Include="..\MUSACA.Data\MUSACA.Data.csproj" />
-    <ProjectReference Include="..\SIS.MvcFramework\SIS.MvcFramework.csproj" />
+    <ProjectReference Include="..\MUSACA.Models\MUSACA.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resources\bootstrap.min.css">
+    <None Update="Resources\css\bootstrap.min.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\reset-css.css">
+    <None Update="Resources\css\reset-css.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\style.css">
+    <None Update="Resources\css\style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Views\Home\Index.html">
@@ -27,6 +29,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Views\Products\All.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Views\Shared\Validation\ValidationWidget.vwhtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Views\Users\Login.html">

@@ -1,7 +1,7 @@
 ﻿namespace MUSACA.Data
 {
-    public class Configuration
+    public static class Configuration
     {
-        public const string ConnestionString = @"Server=.\SQLExpress;Database=SulsDb;Integrated Security=true;";
+        public const string ConnestionString = @"Server=.\SQLExpress;Database=MUSACADb;Integrated Security=true;";
     }
 }
