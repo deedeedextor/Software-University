@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Apps\MUSACA\MUSACA.Data\MUSACA.Data.csproj" />
-    <ProjectReference Include="..\Apps\MUSACA\MUSACA.Models\MUSACA.Models.csproj" />
+    <ProjectReference Include="..\MUSACA.Data\MUSACA.Data.csproj" />
+    <ProjectReference Include="..\MUSACA.Models\MUSACA.Models.csproj" />
   </ItemGroup>
 
 </Project>

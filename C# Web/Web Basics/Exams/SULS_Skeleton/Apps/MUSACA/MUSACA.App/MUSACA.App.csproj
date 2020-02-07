@@ -8,8 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\MUSACA.Services\MUSACA.Services.csproj" />
     <ProjectReference Include="..\..\..\SIS.MvcFramework\SIS.MvcFramework.csproj" />
-    <ProjectReference Include="..\MUSACA.Data\MUSACA.Data.csproj" />
-    <ProjectReference Include="..\MUSACA.Models\MUSACA.Models.csproj" />
+    <ProjectReference Include="..\MUSACA.Services\MUSACA.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
