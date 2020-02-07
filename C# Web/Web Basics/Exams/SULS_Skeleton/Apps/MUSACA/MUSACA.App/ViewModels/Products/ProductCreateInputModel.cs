@@ -4,20 +4,17 @@ namespace MUSACA.App.ViewModels.Products
 {
     public class ProductCreateInputModel
     {
-        private const string NameErrorMessage = "Name length must be between 3 and 15!";
-        private const string PriceErrorMessage = "Price must be between 0.001 and 100000!";
+        private const string NameErrorMessage = "Product Name must be between 5 and 20 symbols long.";
+
+        private const string PriceErrorMessage = "Product Price must be greater than or equal to 0.01.";
 
         [RequiredSis]
-        [StringLengthSis(3, 15, NameErrorMessage)]
+        [StringLengthSis(5, 20, NameErrorMessage)]
         public string Name { get; set; }
 
-        [RequiredSis]
-        public string Price { get; set; }
 
         [RequiredSis]
-        public string Picture { get; set; }
-
-        [RequiredSis]
-        public string Barcode { get; set; }
+        [RangeSis(typeof(decimal), "0,01", "100000000", PriceErrorMessage)]
+        public decimal Price { get; set; }
     }
 }

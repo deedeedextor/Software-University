@@ -4,7 +4,8 @@ namespace MUSACA.App.ViewModels.Users
 {
     public class UserRegisterInputModel
     {
-        private const string UsernameErrorMessage = "Username length must be between 5 and 20!";
+        private const string UsernameErrorMessage = "Username length must be between 5 and 20!"; 
+        private const string EmailErrorMessage = "Email length must be between 5 and 50!";
         private const string PasswordErrorMessage = "Password length must be between 6 and 20!";
 
         [RequiredSis]
@@ -13,14 +14,14 @@ namespace MUSACA.App.ViewModels.Users
 
         [RequiredSis]
         [EmailSis]
+        [StringLengthSis(5, 50, EmailErrorMessage)]
         public string Email { get; set; }
 
         [RequiredSis]
-        [StringLengthSis(6, 20, PasswordErrorMessage)]
+        [PasswordSis(PasswordErrorMessage)]
         public string Password { get; set; }
 
         [RequiredSis]
-        [StringLengthSis(6, 20, PasswordErrorMessage)]
         public string ConfirmPassword { get; set; }
     }
 }
