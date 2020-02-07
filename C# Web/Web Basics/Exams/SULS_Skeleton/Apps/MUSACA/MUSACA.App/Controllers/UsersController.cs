@@ -1,23 +1,29 @@
 ﻿using MUSACA.App.ViewModels.Users;
 using MUSACA.Models;
+using MUSACA.Models.Enums;
 using MUSACA.Services;
 using SIS.MvcFramework;
 using SIS.MvcFramework.Attributes;
 using SIS.MvcFramework.Attributes.Action;
 using SIS.MvcFramework.Attributes.Security;
 using SIS.MvcFramework.Result;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using SIS.MvcFramework.Mapping;
+using MUSACA.App.ViewModels.Orders;
 
 namespace SULS.App.Controllers
 {
     public class UsersController : Controller
     {
         private readonly IUserService userService;
+        private readonly IOrderService orderService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IOrderService orderService)
         {
             this.userService = userService;
+            this.orderService = orderService;
         }
 
         public IActionResult Login()
@@ -67,8 +73,30 @@ namespace SULS.App.Controllers
             };
 
             this.userService.CreateUser(user);
+            this.orderService.CreateOrder(new Order { CashierId = user.Id });
 
             return this.Redirect("/Users/Login");
+        }
+
+        
+        public IActionResult Profile()
+        {
+            UserProfileViewModel userProfileViewModel = new UserProfileViewModel();
+
+            var completedOrders = this.orderService.GetAllCompletedOrdersByCashierId(this.User.Id);
+
+            userProfileViewModel.Orders = completedOrders.To<OrderProfileViewModel>().ToList();
+
+            foreach (var order in userProfileViewModel.Orders)
+            {
+                order.CashierName = this.User.Username;
+                order.Total = completedOrders.Where(co => co.Id == order.Id)
+                    .SelectMany(co => co.Products)
+                    .Sum(pr => pr.Product.Price).ToString();
+                order.IssuedOnDate = completedOrders.SingleOrDefault(co => co.Id == order.Id).IssuedOn.ToString("dd/MM/yyyy");
+            }
+
+            return this.View(userProfileViewModel);
         }
 
         [Authorize]

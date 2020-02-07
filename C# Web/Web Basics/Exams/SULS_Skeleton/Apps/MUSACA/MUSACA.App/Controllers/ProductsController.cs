@@ -13,10 +13,12 @@ namespace MUSACA.App.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductService productService;
+        private readonly IOrderService orderService;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductService productService, IOrderService orderService)
         {
             this.productService = productService;
+            this.orderService = orderService;
         }
 
         [Authorize]
@@ -51,12 +53,24 @@ namespace MUSACA.App.Controllers
             var product = new Product
             {
                 Name = model.Name,
-                Price = decimal.Parse(model.Price),
+                Price = model.Price,
             };
 
             this.productService.CreateProduct(product);
 
             return this.Redirect("/Products/All");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Order(ProductOrderViewModel model)
+        {
+            var productToOrder = this.productService
+                .GetByName(model.Product);
+
+            this.orderService.AddProductToCurrentActiveOrder(productToOrder.Id, this.User.Id);
+
+            return this.Redirect("/");
         }
     }
 }
