@@ -38,7 +38,7 @@ namespace MUSACA.Services
         public Order CompleteOrder(string userId, string orderId)
         {
             var order = this.context.Orders
-                .SingleOrDefault(o => o.CashierId == userId);
+                .SingleOrDefault(o => o.Id == orderId);
 
             order.IssuedOn = DateTime.UtcNow;
             order.Status = OrderStatus.Completed;
