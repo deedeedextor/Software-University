@@ -22,6 +22,12 @@
     <None Update="Resources\css\style.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\img\favicon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\img\product.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\js\bootstrap.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
