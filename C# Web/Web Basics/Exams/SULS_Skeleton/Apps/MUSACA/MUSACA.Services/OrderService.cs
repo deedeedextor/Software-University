@@ -35,7 +35,7 @@ namespace MUSACA.Services
             return true;
         }
 
-        public Order CompleteOrder(string userId, string orderId)
+        public Order CompleteOrder(string orderId, string userId)
         {
             var order = this.context.Orders
                 .SingleOrDefault(o => o.Id == orderId);

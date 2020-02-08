@@ -38,7 +38,11 @@ namespace MUSACA.App.Controllers
 
                 foreach (var orderProduct in order.Products)
                 {
-                    ProductHomeViewModel productHomeViewModel = orderProduct.To<ProductHomeViewModel>();
+                    ProductHomeViewModel productHomeViewModel = new ProductHomeViewModel()
+                    {
+                        Name = orderProduct.Product.Name,
+                        Price = orderProduct.Product.Price,
+                    };
                     orderHomeViewModel.Products.Add(productHomeViewModel);
                 }
             }

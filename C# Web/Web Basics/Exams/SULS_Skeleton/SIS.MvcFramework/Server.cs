@@ -39,7 +39,7 @@ namespace SIS.MvcFramework
             var connectionHandler = new ConnectionHandler(client, this.serverRoutingTable, this.httpSessionStorage);
             await connectionHandler.ProcessRequestAsync();
         }
-
+        
         public void Run()
         {
             this.tcpListener.Start();
