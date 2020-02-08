@@ -51,9 +51,7 @@ namespace AppViewCodeNamespace
             var Model = {(model == null ? "new {}" : "model as " + GetModelType(model))};
             var User = user;           
             var ModelState= modelState;
-
 	        var html = new StringBuilder();
-
             {csharpHtmlCode}
             
 	        return html.ToString();
@@ -219,10 +217,10 @@ namespace AppViewCodeNamespace
                 {
                     var errors = compilationResult.Diagnostics.Where(x => x.Severity == DiagnosticSeverity.Error);
                     var errorsHtml = new StringBuilder();
-                    errorsHtml.AppendLine($"<h1 class=\"text-danger\">{errors.Count()} errors:</h1>");
+                    errorsHtml.AppendLine($"<h1>{errors.Count()} errors:</h1>");
                     foreach (var error in errors)
                     {
-                        errorsHtml.AppendLine($"<div class=\"text-danger\">{error.Location} => {error.GetMessage()}</div class=\"text-danger\">");
+                        errorsHtml.AppendLine($"<div>{error.Location} => {error.GetMessage()}</div>");
                     }
 
                     errorsHtml.AppendLine($"<pre>{WebUtility.HtmlEncode(code)}</pre>");
