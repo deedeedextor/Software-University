@@ -19,9 +19,9 @@ namespace PANDA.App
 
         public void ConfigureServices(IServiceProvider serviceProvider)
         {
-            serviceProvider.Add<IUserService, UserService>();
-            serviceProvider.Add<IPackageService, PackageService>();
-            serviceProvider.Add<IReceiptService, ReceiptService>();
+            serviceProvider.Add<IUsersService, UsersService>();
+            serviceProvider.Add<IPackagesService, PackagesService>();
+            serviceProvider.Add<IReceiptsService, ReceiptsService>();
         }
     }
 }
