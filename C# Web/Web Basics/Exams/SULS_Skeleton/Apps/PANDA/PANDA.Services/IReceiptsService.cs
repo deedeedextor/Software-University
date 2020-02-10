@@ -1,6 +1,6 @@
 ﻿namespace PANDA.Services
 {
-    public interface IReceiptService
+    public interface IReceiptsService
     {
     }
 }
