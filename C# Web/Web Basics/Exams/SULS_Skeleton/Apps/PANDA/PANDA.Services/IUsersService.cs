@@ -10,6 +10,6 @@ namespace PANDA.Services
 
         User GetUserByUsernameAndPassword(string username, string password);
 
-        IEnumerable<string> GetUsername();
+        IEnumerable<string> GetUsernames();
     }
 }

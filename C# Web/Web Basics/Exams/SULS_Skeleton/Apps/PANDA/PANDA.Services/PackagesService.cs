@@ -8,10 +8,12 @@ namespace PANDA.Services
     public class PackagesService : IPackagesService
     {
         private readonly PANDAContext db;
+        private readonly IReceiptsService receiptsService;
 
-        public PackagesService(PANDAContext db)
+        public PackagesService(PANDAContext db, IReceiptsService receiptsService)
         {
             this.db = db;
+            this.receiptsService = receiptsService;
         }
 
         public void CreatePackage(string description, decimal weight, string shippingAddress, string recipient)
@@ -37,6 +39,30 @@ namespace PANDA.Services
 
             this.db.Packages.Add(package);
             this.db.SaveChanges();
+        }
+
+        public void Deliver(string id)
+        {
+            var package = this.db.Packages
+                .FirstOrDefault(p => p.Id == id);
+
+            if (package == null)
+            {
+                return;
+            }
+
+            package.Status = PackageStatus.Delivered;
+            this.db.SaveChanges();
+
+            this.receiptsService.CreateReceiptFromPackage(package.Weight, package.Id, package.RecepientId);
+        }
+
+        public IQueryable<Package> GetAllPackagesByStatus(PackageStatus status)
+        {
+            var packages = this.db.Packages
+            .Where(p => p.Status == status);
+
+            return packages;
         }
     }
 }

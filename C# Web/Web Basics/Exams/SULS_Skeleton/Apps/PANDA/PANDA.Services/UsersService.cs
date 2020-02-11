@@ -36,7 +36,7 @@ namespace PANDA.Services
             return this.db.Users.SingleOrDefault(user => (user.Username == username) && user.Password == this.HashPassword(password));
         }
 
-        public IEnumerable<string> GetUsername()
+        public IEnumerable<string> GetUsernames()
         {
             return this.db.Users.Select(u => u.Username).ToList();
         }

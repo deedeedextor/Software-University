@@ -9,11 +9,11 @@ namespace PANDA.App.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly IUsersService userService;
+        private readonly IUsersService usersService;
 
         public UsersController(IUsersService userService)
         {
-            this.userService = userService;
+            this.usersService = userService;
         }
 
         public IActionResult Login()
@@ -29,7 +29,7 @@ namespace PANDA.App.Controllers
                 return this.Redirect("/Users/Login");
             }
 
-            var userFromDb = this.userService
+            var userFromDb = this.usersService
                 .GetUserByUsernameAndPassword(model.Username, model.Password);
 
             if (userFromDb == null)
@@ -55,7 +55,7 @@ namespace PANDA.App.Controllers
                 return this.Redirect("/Users/Register");
             }
 
-            this.userService.CreateUser(model.Username, model.Email, model.Password);
+            this.usersService.CreateUser(model.Username, model.Email, model.Password);
 
             return this.Redirect("/Users/Login");
         }
