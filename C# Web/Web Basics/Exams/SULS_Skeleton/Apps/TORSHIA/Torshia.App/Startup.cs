@@ -11,8 +11,10 @@ namespace Torshia.App
     {
         public void Configure(IServerRoutingTable serverRoutingTable)
         {
-            using var db = new TORSHIAContext();
-            db.Database.Migrate();
+            using (var db = new TORSHIAContext())
+            {
+                db.Database.Migrate();
+            }
         }
 
         public void ConfigureServices(IServiceProvider serviceProvider)
