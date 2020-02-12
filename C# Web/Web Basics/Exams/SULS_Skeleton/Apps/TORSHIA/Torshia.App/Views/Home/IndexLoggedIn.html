@@ -1,0 +1,23 @@
+﻿<div>
+    <h4 class="text-torshia text-center">Welcome, @Model.Username!</h4>
+    <h4 class="text-torshia text-center">Have a nice tasking experience!</h4>
+</div>
+
+<hr class="hr-2 bg-torshia">
+<div class="tasks-holder mb-5">
+    @foreach(var task in Model.Tasks)
+    {
+    ﻿<div class="task-head">
+        <h1 class="text-center text-torshia">@task.Title</h1>
+    </div>
+    <hr class="hr-2 bg-torshia" />
+    <div class="task-main-data-holder w-75 mx-auto d-flex justify-content-between">
+        <h3 class="text-center text-torshia">Level: @task.Level</h3>
+    </div>
+    <hr class="hr-2 bg-torshia" />
+    <div class="button-holder mt-4 d-flex justify-content-between">
+        <button href="/Tasks/Report?id=@task.Id" class="btn bg-torshia text-white">Report</button>
+        <button href="/Tasks/Details?id=@task.Id" class="btn bg-torshia text-white">Details</button>
+    </div>
+    }
+</div>
