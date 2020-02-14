@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -17,11 +18,8 @@ namespace Torshia.Services
             this.db = db;
         }
 
-        public string Create(string title, string dueDate, string description, string participants, params object[] sectors)
+        public string Create(string title, string dueDate, string description, string participants, List<string> affectedSectors)
         {
-            //var sectorsString = sectors.Where(s //=> !string.IsNullOrWhiteSpace(s))
-            //    .ToArray();
-
             var task = new Task
             {
                 Title = title,
@@ -31,13 +29,16 @@ namespace Torshia.Services
                 Participants = participants
             };
 
-            foreach (var sectorStr in sectors)
+            if (affectedSectors.Count != 0)
             {
-                var validSector = Enum.TryParse<Sector>(sectorStr.ToString(), out Sector sector);
-
-                if (validSector)
+                foreach (var sectorStr in affectedSectors)
                 {
-                    task.AffectedSectors.Add(new TaskSector { Sector = sector });
+                    var validSector = Enum.TryParse<Sector>(sectorStr, out Sector sector);
+
+                    if (validSector)
+                    {
+                        task.AffectedSectors.Add(new TaskSector { Sector = sector });
+                    }
                 }
             }
 
@@ -47,10 +48,12 @@ namespace Torshia.Services
             return task.Id;
         }
 
-        public IQueryable<Task> GetAllByName()
-        {
-            return this.db.Tasks;
-        }
+        public ICollection<Task> GetAllUnreportedTasks()
+            => this.db
+                .Tasks
+                .Include(t => t.AffectedSectors)
+                .Where(t => t.IsReported == false)
+                .ToList();
 
         public Task GetTaskById(string id)
         {
