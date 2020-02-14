@@ -12,5 +12,7 @@ namespace Torshia.App.ViewModels.Tasks
         public string Description { get; set; }
 
         public string Participants { get; set; }
+
+        public List<string> AffectedSectors { get; set; }
     }
 }

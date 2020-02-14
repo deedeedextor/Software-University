@@ -12,7 +12,7 @@ namespace Torshia.Models
 
         public string Id { get; set; }
 
-        public ReportStatus Status { get; set; }
+        public Status Status { get; set; }
 
         public DateTime ReportedOn { get; set; }
 

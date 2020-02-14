@@ -26,15 +26,19 @@ namespace Torshia.App.Controllers
         {
             if (IsLoggedIn())
             {
-                var tasks = this.tasksService.GetAllByName()
+                var viewModel = new HomeViewModel
+                {
+                    Username = this.User.Username,
+                    Tasks = this.tasksService.GetAllUnreportedTasks()
                     .Select(t => new HomeTaskViewModel
                     {
                         Id = t.Id,
                         Title = t.Title,
                         Level = t.AffectedSectors.Count,
-                    }).ToList();
+                    }).ToList(),
+                };
 
-                return this.View(new HomeViewModel { Username = this.User.Username, Tasks = tasks}, "IndexLoggedIn");
+                return this.View(viewModel, "IndexLoggedIn");
             }
 
             return this.View();

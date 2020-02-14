@@ -26,14 +26,10 @@ namespace Torshia.App.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Create(TaskSectorViewModel model)
+        public IActionResult Create(TaskInputViewModel model)
         {
-            var sectorStrings = new string[] { model.Sector1, model.Sector2, model.Sector3, model.Sector4, model.Sector5 }
-               .Where(s => !string.IsNullOrWhiteSpace(s))
-               .ToArray(); 
-
             var taskId = this.tasksService
-                .Create(model.Title, model.DueDate, model.Description, model.Participants, sectorStrings);
+                .Create(model.Title, model.DueDate, model.Description, model.Participants, model.AffectedSectors);
 
             if (taskId == null)
             {
