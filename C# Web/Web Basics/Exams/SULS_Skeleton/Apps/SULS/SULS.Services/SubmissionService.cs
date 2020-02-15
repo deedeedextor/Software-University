@@ -57,7 +57,6 @@ namespace SULS.Services
             => this.context.Submissions.Count(s => s.ProblemId == id);
 
         public IQueryable<Submission> GetSubmissionsForProblemById(string problemId)
-            => this.context.Submissions
-            .Where(s => s.ProblemId == problemId);
+            => this.context.Submissions;
     }
 }

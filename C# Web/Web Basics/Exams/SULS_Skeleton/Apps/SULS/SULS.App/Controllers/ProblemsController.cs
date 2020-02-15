@@ -4,6 +4,7 @@ using SIS.MvcFramework.Attributes.Security;
 using SIS.MvcFramework.Result;
 using SULS.App.ViewModels.Problems;
 using SULS.App.ViewModels.Submissions;
+using SULS.Data;
 using SULS.Services;
 using System.Linq;
 
@@ -12,12 +13,12 @@ namespace SULS.App.Controllers
     public class ProblemsController : Controller
     {
         private readonly IProblemService problemService;
-        private readonly ISubmissionService submissionService;
+        private readonly SULSContext db;
 
-        public ProblemsController(IProblemService problemService, ISubmissionService submissionService)
+        public ProblemsController(IProblemService problemService, SULSContext db)
         {
             this.problemService = problemService;
-            this.submissionService = submissionService;
+            this.db = db;
         }
 
         [Authorize]
@@ -43,26 +44,23 @@ namespace SULS.App.Controllers
         [Authorize]
         public IActionResult Details(string id)
         {
-            var problem = this.problemService
-                .GetById(id);
-
-            var result = new DetailsProblemViewModel()
-            {
-                Name = problem.Name,
-                Submissions = this.submissionService.GetSubmissionsForProblemById(problem.Id)
-                .Select(s => new DetailsSubmissionViewModel
+            var viewModel = this.db.Problems
+                .Where(x => x.Id == id)
+                .Select(x => new DetailsViewModel
                 {
-                    Id = s.Id,
-                    AchievedResult = s.AchievedResult,
-                    CreatedOn = s.CreatedOn.ToString("dd/MM/yyyy"),
-                    MaxPoints = s.Problem.Points,
-                    FinalPoints = 100,
-                    Username = s.User.Username
-                })
-                .ToList()
-            };
+                    Name = x.Name,
+                    Problems = x.Submissions.Select(s =>
+                    new ProblemDetailsSubmissionViewModel
+                    {
+                        CreatedOn = s.CreatedOn,
+                        AchievedResult = s.AchievedResult,
+                        SubmissionId = s.Id,
+                        MaxPoints = x.Points,
+                        Username = s.User.Username,
+                    })
+                }).FirstOrDefault();
 
-            return this.View(result);
+            return this.View(viewModel);
         }
     }
 }
