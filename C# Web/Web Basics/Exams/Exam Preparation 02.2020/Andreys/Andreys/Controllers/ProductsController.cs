@@ -18,6 +18,11 @@ namespace Andreys.Controllers
         }
         public HttpResponse Add()
         {
+            if (!this.IsUserLoggedIn())
+            {
+                return this.Redirect("/Users/Login");
+            }
+
             return this.View();
         }
 
@@ -34,7 +39,7 @@ namespace Andreys.Controllers
                 return this.Error("Name must be at least 4 characters and at most 20");
             }
 
-            if (input.Description.Length > 10)
+            if (string.IsNullOrEmpty(input.Description) || input.Description.Length > 10)
             {
                 return this.Error("Description must be up to 10 characters");
             }
@@ -64,6 +69,11 @@ namespace Andreys.Controllers
 
         public HttpResponse Delete(int id)
         {
+            if (!IsUserLoggedIn())
+            {
+                return this.Redirect("Users/Login");
+            }
+
             this.productsService.Delete(id);
             return this.Redirect("/");
         }
